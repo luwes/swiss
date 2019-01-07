@@ -1,0 +1,30 @@
+{
+  "name": "augmentor",
+  "version": "0.0.1",
+  "description": "Definable hooks for the masses",
+  "module": "esm/index.js",
+  "main": "cjs/index.js",
+  "unpkg": "min.js",
+  "scripts": {
+    "build": "rollup --config rollup.config.js && npm run clean && npm run cjs && npm run min",
+    "clean": "cat index.js | sed 's/(exports)/()/' | sed 's/({})/()/' | sed 's/exports.default = augmentor;//' | sed 's/exports\\./augmentor./g' | sed 's/return exports;/return augmentor;/' > index.clean && mv index.clean index.js",
+    "cjs": "ascjs esm cjs",
+    "min": "uglifyjs index.js -m -c -o min.js"
+  },
+  "keywords": [
+    "hooks",
+    "configurable",
+    "extensible"
+  ],
+  "author": "Andrea Giammarchi",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "ascjs": "^2.5.1",
+    "rollup": "^1.0.2",
+    "rollup-plugin-babel": "^4.2.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
+    "uglify-js": "^3.4.9"
+  }
+}
