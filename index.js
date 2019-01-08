@@ -1,21 +1,21 @@
 var augmentor = (function () {
   'use strict';
 
-  function _typeof(obj) {
+  /*(obj) {
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function (obj) {
+      typeof = function (obj) {
         return typeof obj;
       };
     } else {
-      _typeof = function (obj) {
+      typeof = function (obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
       };
     }
 
-    return _typeof(obj);
+    return typeof(obj);
   }
 
-  var augmentor = (function (fn) {
+*/  var augmentor = (function (fn) {
     var current = runner($);
     each(setup, current);
     return $;
@@ -39,12 +39,14 @@ var augmentor = (function () {
     }
   });
   var $ = function $(value) {
-    return _typeof(value) === _typeof($) ? value() : value;
+    return typeof(value) === typeof($) ? value() : value;
   };
-  var now = null;
-  var current = function current() {
-    return now;
-  };
+  var now = null; // export const current = () => now; // needed at all ?
+
+  function diff(value, i) {
+    return value !== this[i];
+  }
+  var empty = [];
   var setup = [];
   var stacked = function stacked(id) {
     return function (runner) {
@@ -58,9 +60,23 @@ var augmentor = (function () {
       });
     };
   };
-  var id$1 = Math.random();
+  var unstacked = function unstacked(id) {
+    var _now = now,
+        state = _now[id],
+        update = _now.update;
+    var i = state.i,
+        stack = state.stack;
+    state.i++;
+    return {
+      i: i,
+      stack: stack,
+      update: update,
+      unknown: i === stack.length
+    };
+  };
+  var id$1 = 0;
   var uid = function uid() {
-    return --id$1 + '';
+    return '_$' + id$1++;
   };
 
   var runner = function runner($) {
@@ -91,14 +107,48 @@ var augmentor = (function () {
 
   var id$2 = uid();
   setup.push(stacked(id$2));
-  var useReducer = (function (reducer, value) {
-    var _current = current(),
-        state = _current[id$2],
-        update = _current.update;
+  function useMemo (callback, refs) {
+    var _unstacked = unstacked(id$2),
+        i = _unstacked.i,
+        stack = _unstacked.stack,
+        unknown = _unstacked.unknown;
 
-    var i = state.i,
-        stack = state.stack;
-    state.i = i < stack.length ? i + 1 : stack.push([$(value), function (action) {
+    var comp = refs || empty;
+    if (unknown) stack.push(create(callback, comp));
+    var _stack$i = stack[i],
+        filter = _stack$i.filter,
+        value = _stack$i.value,
+        fn = _stack$i.fn,
+        inputs = _stack$i.inputs;
+    return (filter ? inputs.some(diff, comp) : callback !== fn) ? (stack[i] = create(callback, comp))[0] : value;
+  }
+
+  var create = function create(fn, inputs) {
+    return {
+      filter: inputs !== empty,
+      value: fn(),
+      fn: fn,
+      inputs: inputs
+    };
+  };
+
+  var empty$1 = [];
+  var callback = (function (fn, inputs) {
+    return useMemo(function () {
+      return fn;
+    }, inputs || empty$1);
+  });
+
+  var id$3 = uid();
+  setup.push(stacked(id$3));
+  var useReducer = (function (reducer, value) {
+    var _unstacked = unstacked(id$3),
+        i = _unstacked.i,
+        stack = _unstacked.stack,
+        unknown = _unstacked.unknown,
+        update = _unstacked.update;
+
+    if (unknown) stack.push([$(value), function (action) {
       value = reducer(value, action);
       stack[i][0] = value;
       update();
@@ -106,15 +156,15 @@ var augmentor = (function () {
     return stack[i];
   });
 
-  var id$3 = uid();
-  setup.push(stacked(id$3));
+  var id$4 = uid();
+  setup.push(stacked(id$4));
   var ref = (function (value) {
-    var _current = current(),
-        state = _current[id$3];
+    var _unstacked = unstacked(id$4),
+        i = _unstacked.i,
+        stack = _unstacked.stack,
+        unknown = _unstacked.unknown;
 
-    var i = state.i,
-        stack = state.stack;
-    state.i = i < stack.length ? i + 1 : stack.push({
+    if (unknown) stack.push({
       current: $(value)
     });
     return stack[i];
@@ -127,6 +177,8 @@ var augmentor = (function () {
   });
 
   
+  augmentor.useCallback = callback;
+  augmentor.useMemo = useMemo;
   augmentor.useReducer = useReducer;
   augmentor.useRef = ref;
   augmentor.useState = state;

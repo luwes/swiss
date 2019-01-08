@@ -1,13 +1,13 @@
 'use strict';
-const {$, current, setup, stacked, uid} = require('../core.js');
+const {$, setup, stacked, unstacked, uid} = require('../core.js');
 
 const id = uid();
 
 setup.push(stacked(id));
 
-Object.defineProperty(exports, '__esModule', {value: true}).default = (value) => {
-  const {[id]: state} = current();
-  const {i, stack} = state;
-  state.i = i < stack.length ? (i + 1) : stack.push({current: $(value)});
+Object.defineProperty(exports, '__esModule', {value: true}).default = value => {
+  const {i, stack, unknown} = unstacked(id);
+  if (unknown)
+    stack.push({current: $(value)});
   return stack[i];
 };

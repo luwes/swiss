@@ -24,7 +24,13 @@ export default fn => {
 export const $ = value => typeof value === typeof $ ? value() : value;
 
 let now = null;
-export const current = () => now;
+// export const current = () => now; // needed at all ?
+
+export function diff(value, i) {
+  return value !== this[i];
+};
+
+export const empty = [];
 
 export const setup = [];
 
@@ -36,8 +42,15 @@ export const stacked = id => runner => {
   });
 };
 
-let id = Math.random();
-export const uid = () => --id + '';
+export const unstacked = id => {
+  const {[id]: state, update} = now;
+  const {i, stack} = state;
+  state.i++;
+  return {i, stack, update, unknown: i === stack.length};
+};
+
+let id = 0;
+export const uid = () => '_$' + id++;
 
 
 const runner = $ => {

@@ -7,7 +7,7 @@
   "unpkg": "min.js",
   "scripts": {
     "build": "rollup --config rollup.config.js && npm run clean && npm run cjs && npm run min",
-    "clean": "cat index.js | sed 's/(exports)/()/' | sed 's/({})/()/' | sed 's/exports.default = augmentor;//' | sed 's/exports\\./augmentor./g' | sed 's/return exports;/return augmentor;/' > index.clean && mv index.clean index.js",
+    "clean": "cat index.js | sed 's/function _typeof/\\/*/' | sed 's/  var augmentor/*\\/  var augmentor/' | sed 's/_typeof/typeof/g' | sed 's/(exports)/()/' | sed 's/({})/()/' | sed 's/exports.default = augmentor;//' | sed 's/exports\\./augmentor./g' | sed 's/return exports;/return augmentor;/' > index.clean && mv index.clean index.js",
     "cjs": "ascjs esm cjs",
     "min": "uglifyjs index.js -m -c -o min.js"
   },

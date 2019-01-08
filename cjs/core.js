@@ -26,8 +26,15 @@ const $ = value => typeof value === typeof $ ? value() : value;
 exports.$ = $;
 
 let now = null;
-const current = () => now;
-exports.current = current;
+// export const current = () => now; // needed at all ?
+
+function diff(value, i) {
+  return value !== this[i];
+}
+exports.diff = diff;
+
+const empty = [];
+exports.empty = empty;
 
 const setup = [];
 exports.setup = setup;
@@ -41,8 +48,16 @@ const stacked = id => runner => {
 };
 exports.stacked = stacked;
 
-let id = Math.random();
-const uid = () => --id + '';
+const unstacked = id => {
+  const {[id]: state, update} = now;
+  const {i, stack} = state;
+  state.i++;
+  return {i, stack, update, unknown: i === stack.length};
+};
+exports.unstacked = unstacked;
+
+let id = 0;
+const uid = () => '_$' + id++;
 exports.uid = uid;
 
 
