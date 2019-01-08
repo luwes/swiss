@@ -15,6 +15,8 @@ var augmentor = (function () {
     return typeof(obj);
   }
 
+  var now = null; // export const current = () => now; // not needed so far
+
 */  var augmentor = (function (fn) {
     var current = runner($);
     each(setup, current);
@@ -41,12 +43,9 @@ var augmentor = (function () {
   var $ = function $(value) {
     return typeof(value) === typeof($) ? value() : value;
   };
-  var now = null; // export const current = () => now; // needed at all ?
-
   function diff(value, i) {
     return value !== this[i];
   }
-  var empty = [];
   var setup = [];
   var stacked = function stacked(id) {
     return function (runner) {
@@ -79,6 +78,12 @@ var augmentor = (function () {
     return '_$' + id$1++;
   };
 
+  var each = function each(arr, value) {
+    for (var i = 0; i < arr.length; i++) {
+      arr[i](value);
+    }
+  };
+
   var runner = function runner($) {
     var _ = {
       c: null,
@@ -95,17 +100,12 @@ var augmentor = (function () {
     };
   };
 
-  function each(arr, value) {
-    for (var i = 0; i < arr.length; i++) {
-      arr[i](value);
-    }
-  }
-
   function on(type, fn) {
     this._[type].push(fn);
   }
 
   var id$2 = uid();
+  var empty = [];
   setup.push(stacked(id$2));
   function useMemo (callback, refs) {
     var _unstacked = unstacked(id$2),

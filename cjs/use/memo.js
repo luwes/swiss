@@ -1,7 +1,9 @@
 'use strict';
-const {diff, empty, setup, stacked, unstacked, uid} = require('../core.js');
+const {diff, setup, stacked, unstacked, uid} = require('../core.js');
 
 const id = uid();
+
+const empty = [];
 
 setup.push(stacked(id));
 

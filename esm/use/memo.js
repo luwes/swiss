@@ -1,6 +1,8 @@
-import {diff, empty, setup, stacked, unstacked, uid} from '../core.js';
+import {diff, setup, stacked, unstacked, uid} from '../core.js';
 
 const id = uid();
+
+const empty = [];
 
 setup.push(stacked(id));
 

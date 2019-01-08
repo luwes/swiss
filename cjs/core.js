@@ -1,4 +1,7 @@
 'use strict';
+let now = null;
+// export const current = () => now; // not needed so far
+
 Object.defineProperty(exports, '__esModule', {value: true}).default = fn => {
   const current = runner($);
   each(setup, current);
@@ -25,16 +28,10 @@ Object.defineProperty(exports, '__esModule', {value: true}).default = fn => {
 const $ = value => typeof value === typeof $ ? value() : value;
 exports.$ = $;
 
-let now = null;
-// export const current = () => now; // needed at all ?
-
 function diff(value, i) {
   return value !== this[i];
 }
 exports.diff = diff;
-
-const empty = [];
-exports.empty = empty;
 
 const setup = [];
 exports.setup = setup;
@@ -60,6 +57,10 @@ let id = 0;
 const uid = () => '_$' + id++;
 exports.uid = uid;
 
+const each = (arr, value) => {
+  for (let i = 0; i < arr.length; i++)
+    arr[i](value);
+};
 
 const runner = $ => {
   const _ = {
@@ -74,11 +75,6 @@ const runner = $ => {
     update: () => $.apply(_.c, _.a)
   };
 };
-
-function each(arr, value) {
-  for (let i = 0; i < arr.length; i++)
-    arr[i](value);
-}
 
 function on(type, fn) {
   this._[type].push(fn);

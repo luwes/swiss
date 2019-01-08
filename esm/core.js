@@ -1,3 +1,6 @@
+let now = null;
+// export const current = () => now; // not needed so far
+
 export default fn => {
   const current = runner($);
   each(setup, current);
@@ -23,14 +26,9 @@ export default fn => {
 
 export const $ = value => typeof value === typeof $ ? value() : value;
 
-let now = null;
-// export const current = () => now; // needed at all ?
-
 export function diff(value, i) {
   return value !== this[i];
 };
-
-export const empty = [];
 
 export const setup = [];
 
@@ -52,6 +50,10 @@ export const unstacked = id => {
 let id = 0;
 export const uid = () => '_$' + id++;
 
+const each = (arr, value) => {
+  for (let i = 0; i < arr.length; i++)
+    arr[i](value);
+};
 
 const runner = $ => {
   const _ = {
@@ -66,11 +68,6 @@ const runner = $ => {
     update: () => $.apply(_.c, _.a)
   };
 };
-
-function each(arr, value) {
-  for (let i = 0; i < arr.length; i++)
-    arr[i](value);
-}
 
 function on(type, fn) {
   this._[type].push(fn);
