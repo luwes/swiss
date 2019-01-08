@@ -13,7 +13,7 @@ const test = (el) => {
     if (firstTime)
       setFirstTime(false);
     setActivated(!activated);
-  });
+  }, []);
 
   const handler = useRef({
     onmouseover(event) {

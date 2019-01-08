@@ -120,7 +120,7 @@ var augmentor = (function () {
         value = _stack$i.value,
         fn = _stack$i.fn,
         inputs = _stack$i.inputs;
-    return (filter ? inputs.some(diff, comp) : callback !== fn) ? (stack[i] = create(callback, comp))[0] : value;
+    return (filter ? inputs.some(diff, comp) : callback !== fn) ? (stack[i] = create(callback, comp)).value : value;
   }
 
   var create = function create(fn, inputs) {
@@ -132,11 +132,10 @@ var augmentor = (function () {
     };
   };
 
-  var empty$1 = [];
   var callback = (function (fn, inputs) {
     return useMemo(function () {
       return fn;
-    }, inputs || empty$1);
+    }, inputs);
   });
 
   var id$3 = uid();

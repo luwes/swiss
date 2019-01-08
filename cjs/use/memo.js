@@ -11,8 +11,8 @@ Object.defineProperty(exports, '__esModule', {value: true}).default = function (
   if (unknown)
     stack.push(create(callback, comp));
   const {filter, value, fn, inputs} = stack[i];
-  return (filter ? inputs.some(diff, comp) : callback !== fn) ?
-          (stack[i] = create(callback, comp))[0] :
+  return (filter ? inputs.some(diff, comp) : (callback !== fn)) ?
+          (stack[i] = create(callback, comp)).value :
           value;
 };
 
