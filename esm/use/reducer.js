@@ -11,9 +11,10 @@ export default (reducer, value) => {
       $(value),
       action => {
         value = reducer(value, action);
-        stack[i][0] = value;
+        pair[0] = value;
         update();
       }
     ]);
-  return stack[i];
+  const pair = stack[i];
+  return pair;
 };

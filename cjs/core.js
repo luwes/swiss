@@ -1,49 +1,29 @@
 'use strict';
 let now = null;
-// export const current = () => now; // not needed so far
 
-Object.defineProperty(exports, '__esModule', {value: true}).default = fn => {
-  const current = runner($);
-  each(setup, current);
-  return $;
-  function $() {
-    const prev = now;
-    now = current;
-    let result;
-    try {
-      const _ = now._;
-      each(_.before, now);
-      result = fn.apply(_.c = this, _.a = arguments);
-      each(_.after, now);
-    }
-    catch (o_O) {
-      console.error(o_O);
-    }
-    now = prev;
-    return result;
-  }
-};
-
+const empty = [];
+exports.empty = empty;
+const setup = [];
+exports.setup = setup;
 
 const $ = value => typeof value === typeof $ ? value() : value;
 exports.$ = $;
 
-function diff(value, i) {
-  return value !== this[i];
-}
+const diff = (a, b) => (a.length !== b.length || a.some(diverse, b));
 exports.diff = diff;
-
-const setup = [];
-exports.setup = setup;
 
 const stacked = id => runner => {
   const state = {i: 0, stack: []};
   runner[id] = state;
-  runner.on('before', () => {
+  runner.before.push(() => {
     state.i = 0;
   });
 };
 exports.stacked = stacked;
+
+let id = 0;
+const uid = () => '_$' + id++;
+exports.uid = uid;
 
 const unstacked = id => {
   const {[id]: state, update} = now;
@@ -53,9 +33,34 @@ const unstacked = id => {
 };
 exports.unstacked = unstacked;
 
-let id = 0;
-const uid = () => '_$' + id++;
-exports.uid = uid;
+Object.defineProperty(exports, '__esModule', {value: true}).default = fn => {
+  const current = runner($);
+  each(setup, current);
+  $.reset = () => {
+    each(current.reset, current);
+    for (const key in current) {
+      if (/^_\$/.test(key))
+        current[key].stack.splice(0);
+    }
+  };
+  return $;
+  function $() {
+    const prev = now;
+    now = current;
+    let result;
+    try {
+      const {_, before, after} = now;
+      each(before, now);
+      result = fn.apply(_.c = this, _.a = arguments);
+      each(after, now);
+    }
+    catch (o_O) {
+      console.error(o_O);
+    }
+    now = prev;
+    return result;
+  }
+};
 
 const each = (arr, value) => {
   for (let i = 0; i < arr.length; i++)
@@ -65,17 +70,17 @@ const each = (arr, value) => {
 const runner = $ => {
   const _ = {
     c: null,
-    a: null,
-    before: [],
-    after: []
+    a: null
   };
   return {
     _: _,
-    on: on,
+    before: [],
+    after: [],
+    reset: [],
     update: () => $.apply(_.c, _.a)
   };
 };
 
-function on(type, fn) {
-  this._[type].push(fn);
+function diverse(value, i) {
+  return value !== this[i];
 }

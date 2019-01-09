@@ -1,0 +1,15 @@
+{
+  "extends": "eslint:recommended",
+  "globals": {
+    "setTimeout": true,
+    "clearTimeout": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-case-declarations": 0,
+    "no-fallthrough": 0,
+    "no-console": 0
+  }
+}

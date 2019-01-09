@@ -1,7 +1,12 @@
 // import the library and its hooks
-import augmentor, {useCallback, useRef, useState} from '../esm/index.js';
+import augmentor, {useCallback, useEffect, useRef, useState} from '../esm/index.js';
 
-const test = (el) => {
+const test = el => {
+
+  useEffect(() => {
+    console.log('after');
+    return () => console.log('before');
+  });
 
   const counter = useRef(0);
 
@@ -15,14 +20,7 @@ const test = (el) => {
     setActivated(!activated);
   }, []);
 
-  const handler = useRef({
-    onmouseover(event) {
-      console.log('over', event.currentTarget.id);
-    },
-    handleEvent(event) {
-      this['on' + event.type](event);
-    }
-  });
+  const handler = useRef(Handler.new);
 
   el.innerHTML = `
     <strong>#${el.id}</strong><br>
@@ -36,9 +34,22 @@ const test = (el) => {
 
 };
 
+class Handler {
+  static new() {
+    return new Handler;
+  }
+  onmouseover(event) {
+    console.log('over', event.currentTarget.id);
+  }
+  handleEvent(event) {
+    this['on' + event.type](event);
+  }
+}
+
 const [one, two] = [test, test].map(augmentor);
 
 addEventListener('load', () => {
   one(first);
   two(second);
+  setTimeout(one.reset, 5000);
 });
