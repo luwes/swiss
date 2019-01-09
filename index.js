@@ -1,21 +1,9 @@
 var augmentor = (function () {
   'use strict';
 
-  /*(obj) {
-    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      typeof = function (obj) {
-        return typeof obj;
-      };
-    } else {
-      typeof = function (obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-      };
-    }
+  
 
-    return typeof(obj);
-  }
-
-  */var now = null;
+  var now = null;
   var current = function current() {
     return now;
   };

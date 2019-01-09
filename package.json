@@ -7,7 +7,7 @@
   "unpkg": "min.js",
   "scripts": {
     "build": "rollup --config rollup.config.js && npm run clean && npm run cjs && npm run min && npm run size",
-    "clean": "cat index.js | sed 's/function _typeof/\\/*/;s/  var now = null;/  *\\/var now = null;/;s/_typeof/typeof/g;s/(exports)/()/;s/({})/()/;s/exports.default = augmentor;//;s/exports\\./augmentor./g;s/return exports;/return augmentor;/' > index.clean && mv index.clean index.js",
+    "clean": "cat index.js | sed 's/(exports)/()/;s/({})/()/;s/exports.default = augmentor;//;s/exports\\./augmentor./g;s/return exports;/return augmentor;/' > index.clean && mv index.clean index.js && drop-babel-typeof index.js",
     "cjs": "ascjs esm cjs",
     "min": "uglifyjs index.js -m -c -o min.js",
     "size": "cat index.js | wc -c;cat min.js | wc -c;gzip -c9 min.js | wc -c;cat min.js | brotli | wc -c"
@@ -23,6 +23,7 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "ascjs": "^2.5.1",
+    "drop-babel-typeof": "^1.0.0",
     "rollup": "^1.0.2",
     "rollup-plugin-babel": "^4.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
