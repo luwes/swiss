@@ -1,5 +1,5 @@
 'use strict';
-const {current, diff, empty, setup, stacked, unstacked, uid} = require('../core.js');
+const {current, diff, empty, setup, unstacked, uid} = require('../core.js');
 
 const id = uid();
 

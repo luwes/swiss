@@ -1,4 +1,4 @@
-import {current, diff, empty, setup, stacked, unstacked, uid} from '../core.js';
+import {current, diff, empty, setup, unstacked, uid} from '../core.js';
 
 const id = uid();
 
