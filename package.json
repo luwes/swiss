@@ -6,7 +6,7 @@
   "main": "cjs/index.js",
   "unpkg": "min.js",
   "scripts": {
-    "build": "rollup --config rollup.config.js && npm run clean && npm run cjs && npm run min",
+    "build": "rollup --config rollup.config.js && npm run clean && npm run cjs && npm run min && npm run size",
     "clean": "cat index.js | sed 's/function _typeof/\\/*/;s/  var now = null;/  *\\/var now = null;/;s/_typeof/typeof/g;s/(exports)/()/;s/({})/()/;s/exports.default = augmentor;//;s/exports\\./augmentor./g;s/return exports;/return augmentor;/' > index.clean && mv index.clean index.js",
     "cjs": "ascjs esm cjs",
     "min": "uglifyjs index.js -m -c -o min.js",

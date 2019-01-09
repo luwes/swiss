@@ -1,4 +1,5 @@
 let now = null;
+export const current = () => now;
 
 export const empty = [];
 export const setup = [];
@@ -41,10 +42,12 @@ export default fn => {
     now = current;
     let result;
     try {
-      const {_, before, after} = now;
-      each(before, now);
+      const {_, before, after, external} = current;
+      each(before, current);
       result = fn.apply(_.c = this, _.a = arguments);
-      each(after, now);
+      each(after, current);
+      if (external.length)
+        each(external.splice(0), result);
     }
     catch (o_O) {
       console.error(o_O);
@@ -55,8 +58,10 @@ export default fn => {
 };
 
 const each = (arr, value) => {
-  for (let i = 0; i < arr.length; i++)
-    arr[i](value);
+  const {length} = arr;
+  let i = 0;
+  while (i < length)
+    arr[i++](value);
 };
 
 const runner = $ => {
@@ -68,6 +73,7 @@ const runner = $ => {
     _: _,
     before: [],
     after: [],
+    external: [],
     reset: [],
     update: () => $.apply(_.c, _.a)
   };

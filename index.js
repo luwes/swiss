@@ -16,6 +16,9 @@ var augmentor = (function () {
   }
 
   */var now = null;
+  var current = function current() {
+    return now;
+  };
   var empty = [];
   var setup = [];
   var $ = function $(value) {
@@ -74,13 +77,14 @@ var augmentor = (function () {
       var result;
 
       try {
-        var _now2 = now,
-            _ = _now2._,
-            before = _now2.before,
-            after = _now2.after;
-        each(before, now);
+        var _ = current._,
+            before = current.before,
+            after = current.after,
+            external = current.external;
+        each(before, current);
         result = fn.apply(_.c = this, _.a = arguments);
-        each(after, now);
+        each(after, current);
+        if (external.length) each(external.splice(0), result);
       } catch (o_O) {
         console.error(o_O);
       }
@@ -91,8 +95,11 @@ var augmentor = (function () {
   });
 
   var each = function each(arr, value) {
-    for (var i = 0; i < arr.length; i++) {
-      arr[i](value);
+    var length = arr.length;
+    var i = 0;
+
+    while (i < length) {
+      arr[i++](value);
     }
   };
 
@@ -105,6 +112,7 @@ var augmentor = (function () {
       _: _,
       before: [],
       after: [],
+      external: [],
       reset: [],
       update: function update() {
         return $.apply(_.c, _.a);
@@ -117,49 +125,33 @@ var augmentor = (function () {
   }
 
   var id$2 = uid();
+  var cancel, request;
 
-  var set$1 = function set(info, clean) {
-    info.t = 0;
-    info.clean = clean;
+  try {
+    cancel = cancelAnimationFrame;
+    request = requestAnimationFrame;
+  } catch (o_O) {
+    // i.e. if you run this in NodeJS
+    cancel = clearTimeout;
+    request = setTimeout;
+  }
+
+  var create = function create(always, check, inputs, raf, fn) {
+    return {
+      always: always,
+      check: check,
+      inputs: inputs,
+      raf: raf,
+      fn: fn,
+      clean: null,
+      t: 0,
+      update: check
+    };
   };
 
-  setup.push(function (runner) {
-    stacked(id$2)(runner);
-
-    var reset = function reset() {
-      var stack = runner[id$2].stack;
-
-      for (var i = 0; i < stack.length; i++) {
-        var _stack$i = stack[i],
-            clean = _stack$i.clean,
-            raf = _stack$i.raf,
-            t = _stack$i.t;
-        if (raf && t) cancelAnimationFrame(t);else if (clean) clean();
-        set$1(stack[i], null);
-      }
-    };
-
-    runner.reset.push(reset);
-    runner.before.push(reset);
-    runner.after.push(function () {
-      var stack = runner[id$2].stack;
-
-      for (var i = 0; i < stack.length; i++) {
-        var _stack$i2 = stack[i],
-            fn = _stack$i2.fn,
-            raf = _stack$i2.raf,
-            update = _stack$i2.update;
-
-        if (update) {
-          if (raf) stack[i].t = requestAnimationFrame(fn);else stack[i].clean = fn();
-        }
-      }
-    });
-  });
-
-  var effect = function effect(id, raf) {
+  var effect = function effect(raf) {
     return function (callback, refs) {
-      var _unstacked = unstacked(id),
+      var _unstacked = unstacked(id$2),
           i = _unstacked.i,
           stack = _unstacked.stack,
           unknown = _unstacked.unknown;
@@ -168,24 +160,23 @@ var augmentor = (function () {
 
       if (unknown) {
         var always = comp === empty;
-        var check = !raf || 0 < comp.length || always;
 
-        stack.push({
-          always: always,
-          check: check,
-          clean: null,
-          fn: function fn() {
-            return set$1(stack[i], callback());
-          },
-          inputs: comp,
-          raf: raf,
-          t: 0,
-          update: check
-        });
+        var check = always || !raf || typeof(comp) !== typeof(effect);
+
+        if (always || !raf || typeof(comp) !== typeof(effect)) {
+          stack.push(create(always, check, comp, raf, function () {
+            set$1(stack[i], callback());
+          }));
+        } else {
+          current().external.push(function (result) {
+            return refs(callback, result);
+          });
+          stack.push(create(always, always, empty, raf, effect));
+        }
       } else {
         var info = stack[i];
-        var _always = info.always,
-            _check = info.check,
+        var _check = info.check,
+            _always = info.always,
             inputs = info.inputs;
 
         if (_check && (_always || diff(inputs, comp))) {
@@ -196,8 +187,53 @@ var augmentor = (function () {
     };
   };
 
-  var useEffect = effect(id$2, true);
-  var useLayoutEffect = effect(id$2, false);
+  var set$1 = function set(info, clean) {
+    info.t = 0;
+    info.clean = clean;
+  };
+
+  setup.push(function (runner) {
+    var stack = [];
+    var state = {
+      i: 0,
+      stack: stack
+    };
+    runner[id$2] = state;
+
+    var reset = function reset() {
+      state.i = 0;
+
+      for (var length = stack.length, i = 0; i < length; i++) {
+        var _stack$i = stack[i],
+            check = _stack$i.check,
+            clean = _stack$i.clean,
+            raf = _stack$i.raf,
+            t = _stack$i.t;
+
+        if (check) {
+          if (raf && t) cancel(t);else if (clean) clean();
+          set$1(stack[i], null);
+        }
+      }
+    };
+
+    runner.reset.push(reset);
+    runner.before.push(reset);
+    runner.after.push(function () {
+      for (var length = stack.length, i = 0; i < length; i++) {
+        var _stack$i2 = stack[i],
+            fn = _stack$i2.fn,
+            raf = _stack$i2.raf,
+            update = _stack$i2.update;
+
+        if (update) {
+          if (raf) stack[i].t = request(fn);else stack[i].clean = fn();
+        }
+      }
+    });
+  });
+  var useEffect = effect(true);
+  var useLayoutEffect = effect(false);
 
   var id$3 = uid();
   setup.push(stacked(id$3));
@@ -246,16 +282,16 @@ var augmentor = (function () {
         unknown = _unstacked.unknown;
 
     var comp = refs || empty;
-    if (unknown) stack.push(create(callback, comp));
+    if (unknown) stack.push(create$1(callback, comp));
     var _stack$i = stack[i],
         filter = _stack$i.filter,
         value = _stack$i.value,
         fn = _stack$i.fn,
         inputs = _stack$i.inputs;
-    return (filter ? diff(inputs, comp) : callback !== fn) ? (stack[i] = create(callback, comp)).value : value;
+    return (filter ? diff(inputs, comp) : callback !== fn) ? (stack[i] = create$1(callback, comp)).value : value;
   });
 
-  var create = function create(fn, inputs) {
+  var create$1 = function create(fn, inputs) {
     return {
       filter: inputs !== empty,
       value: fn(),

@@ -8,6 +8,12 @@ const test = el => {
     return () => console.log('before');
   });
 
+  useEffect(() => {
+    console.error('THIS SHOULD NOT HAPPEN');
+  }, (callback, result) => {
+    console.log(result);
+  });
+
   const counter = useRef(0);
 
   const [activated,  setActivated] = useState(() => false);
@@ -31,6 +37,8 @@ const test = el => {
 
   el.addEventListener('click', onclick);
   el.addEventListener('mouseover', handler.current);
+
+  return Math.random();
 
 };
 
