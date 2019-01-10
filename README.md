@@ -83,3 +83,54 @@ You can see this mechanism in practice applied through the [neverland](https://g
 ### About `useContext` and `useImperativeMethods`
 
 These two hooks are strictly _React_ oriented and have no meaning in current _augmentor_ world.
+
+
+### Create your own hook
+
+The _augmentor_ core provides various utilities to make your own hook and export these like any other.
+
+Following a `useUpdate` example.
+
+```js
+import {setup, stacked, unstacked, uid} from 'augmentor/core.js';
+
+// create a unique identifier for this hook
+const id = uid();
+
+// add to each runner setup a new stack for this hook
+setup.push(stacked(id));
+
+// export the updater
+export const useUpdate = value => {
+  const {i, stack, update, unknown} = unstacked(id);
+  // if unknown, add this this hook stack any value
+  // this could be also the update function itself
+  // which will re-invoke the callback any time it's used
+  if (unknown)
+    stack.push(update);
+  // return the current stack position at index `i`
+  return stack[i];
+};
+```
+
+Now import the code in your project, and see every time an updater is invoked the whole callback is re-executed.
+
+```js
+import augmentor from 'augmentor';
+import { useUpdate } from './use-update.js';
+
+const zero = augmentor(increment);
+
+zero({value: 0});
+
+function increment(ref) {
+  // used to invoke again the augmented function
+  const update = useUpdate();
+  setTimeout(update, 1000);
+
+ // log and increment the reference value
+  console.log(ref.value++);
+}
+```
+
+You can test both files, as CJS version, through the [example](./example) folder.
