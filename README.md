@@ -47,7 +47,9 @@ setTimeout(effected.reset, 5000);
 
 This behavior might be OK in some well orchestrated case, but it's quite unpractical in the real world.
 
-To help developers define whenever effects should run, or cleanup, instead of passing an empty array one can pass a callback which will be executed right _after_ the augmented function is invoked, receiving effect callback, and its returned value. In this case, the _augmentor_ will invoke such callback once and never again for the whole augmented lifecycle (unless forced via explicit `.reset()`).
+To help developers define whenever effects should run, or cleanup, instead of passing an empty array one can pass a callback which will be executed right _after_ the augmented function is invoked, receiving effect callback, and the augmented function returned value.
+
+In this case, the _augmentor_ will invoke such callback once, and never again, for the whole augmented lifecycle (unless forced via explicit `.reset()`), so that it's safe to setup an effect behavior within the provided effects handler.
 
 ```js
 import augmentor, {useEffect} from 'augmentor';
@@ -75,7 +77,7 @@ function lifecycleHandler(callback, result) {
 }
 ```
 
-You can see this mechanism in practice applied through the [neverland](https://github.com/WebReflection/neverland) library.
+You can see this mechanism in practice applied through the [neverland](https://github.com/WebReflection/neverland) library, where passing an empty array will implicitly result into observing nodes through the DOM.
 
 
 ### About `useContext` and `useImperativeMethods`
