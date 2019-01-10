@@ -4,6 +4,34 @@ Extensible, general purpose, React like [hooks](https://reactjs.org/docs/hooks-r
 
 Code Pen **[playground](https://codepen.io/WebReflection/pen/qLMyOM?editors=0010)**.
 
+## example
+
+You can test this example [directly on Code Pen](https://codepen.io/WebReflection/pen/zymKBb?editors=0011).
+
+```js
+import augmentor, {useState} from 'augmentor';
+
+// augment any function once
+const a = augmentor(test);
+a();
+
+// ... or many times ...
+const [b, c] = [test, test].map(augmentor);
+b();
+c();
+
+function test() {
+
+  const [count, setCount] = useState(0);
+
+  // log current count value
+  console.log(count);
+
+  // will invoke this augmented function each second
+  setTimeout(() => setCount(count + 1), 1000);
+}
+```
+
 ## Available Hooks
 
 All hooks behave as close as possible to their _React_ counter part, with a notable difference for `useEffect`.
