@@ -62,7 +62,6 @@ var augmentor = (function () {
     function $() {
       var prev = now;
       now = current;
-      var result;
 
       try {
         var _ = current._,
@@ -70,15 +69,13 @@ var augmentor = (function () {
             after = current.after,
             external = current.external;
         each(before, current);
-        result = fn.apply(_.c = this, _.a = arguments);
+        var result = fn.apply(_.c = this, _.a = arguments);
         each(after, current);
         if (external.length) each(external.splice(0), result);
-      } catch (o_O) {
-        console.error(o_O);
+        return result;
+      } finally {
+        now = prev;
       }
-
-      now = prev;
-      return result;
     }
   });
 

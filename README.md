@@ -47,6 +47,11 @@ All hooks behave as close as possible to their _React_ counter part, with a nota
     * [useLayoutEffect](https://reactjs.org/docs/hooks-reference.html#uselayouteffect)
 
 
+### A DOM oriented `useEffect`
+
+If you'd like to have DOM nodes `connect/disconnect` hooks, similarly to how _React_ mount and unmount work, consider using **[dom-augmentor](https://github.com/WebReflection/dom-augmentor)** or keep reading to understand how to write your own.
+
+
 ### What's different in `useEffect`
 
 With React components, when you pass an empty array to `useEffect` the effects, and their cleanup, would run only on component mounted or unmounted.

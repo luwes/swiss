@@ -40,20 +40,18 @@ export default fn => {
   function $() {
     const prev = now;
     now = current;
-    let result;
     try {
       const {_, before, after, external} = current;
       each(before, current);
-      result = fn.apply(_.c = this, _.a = arguments);
+      const result = fn.apply(_.c = this, _.a = arguments);
       each(after, current);
       if (external.length)
         each(external.splice(0), result);
+      return result;
     }
-    catch (o_O) {
-      console.error(o_O);
+    finally {
+      now = prev;
     }
-    now = prev;
-    return result;
   }
 };
 
