@@ -1,5 +1,12 @@
-// import the library and its hooks
-import augmentor, {useCallback, useEffect, useRef, useState} from '../esm/index.js';
+require('basichtml').init();
+const {
+  default: augmentor,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState
+} = require('../cjs');
 
 const test = el => {
 
@@ -7,6 +14,10 @@ const test = el => {
     console.log('after');
     return () => console.log('before');
   });
+
+  useEffect(() => {
+    console.log('again');
+  }, random());
 
   useEffect(() => {
     console.error('THIS SHOULD NOT HAPPEN');
@@ -30,6 +41,15 @@ const test = el => {
     console.log(event.type, event.currentTarget.id);
   }, [counter.current]);
 
+  const onshenanigans = useCallback((event) => {
+    console.log(event.type, event.currentTarget.id);
+  });
+
+  useLayoutEffect(() => {
+    console.log('current changed', counter.current);
+    return () => console.log('current changed', counter.current);
+  });
+
   const handler = useRef(Handler.new);
 
   el.innerHTML = `
@@ -42,8 +62,9 @@ const test = el => {
   el.addEventListener('click', onclick);
   el.addEventListener('mouseover', onmouseover);
   el.addEventListener('mouseover', handler.current);
+  el.addEventListener('shenanigans', onshenanigans);
 
-  return Math.random();
+  return random().shift();
 
 };
 
@@ -61,8 +82,20 @@ class Handler {
 
 const [one, two] = [test, test].map(augmentor);
 
-addEventListener('load', () => {
-  one(first);
-  two(second);
-  setTimeout(one.reset, 5000);
-});
+document.body.innerHTML = `
+  <div id="first"></div>
+  <div id="second"></div>
+`;
+
+const [first, second] = [
+  document.querySelector('#first'),
+  document.querySelector('#second')
+];
+one(first);
+two(second);
+first.click();
+setTimeout(one.reset, 500);
+
+function random() {
+  return [Math.random()];
+}
