@@ -1,8 +1,17 @@
 # augmentor
 
+[![Build Status](https://travis-ci.com/WebReflection/augmentor.svg?branch=master)](https://travis-ci.com/WebReflection/augmentor) [![Coverage Status](https://coveralls.io/repos/github/WebReflection/augmentor/badge.svg?branch=master)](https://coveralls.io/github/WebReflection/augmentor?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/WebReflection/augmentor.svg)](https://greenkeeper.io/) ![WebReflection status](https://offline.report/status/webreflection.svg)
+
 Extensible, general purpose, React like [hooks](https://reactjs.org/docs/hooks-reference.html) for the masses.
 
 Code Pen **[playground](https://codepen.io/WebReflection/pen/qLMyOM?editors=0010)**.
+
+Include via:
+
+  * CDN as global utility, via https://unpkg.com/domtagger
+  * CJS via `const domtagger = require('domtagger')`
+  * ESM via `import domtagger from 'domtagger'`
+  * ESM CDN via `import domtagger from 'https://unpkg.com/domtagger?module'`
 
 ## example
 
