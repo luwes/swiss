@@ -8,10 +8,10 @@ Code Pen **[playground](https://codepen.io/WebReflection/pen/qLMyOM?editors=0010
 
 Include via:
 
-  * CDN as global utility, via https://unpkg.com/domtagger
-  * CJS via `const domtagger = require('domtagger')`
-  * ESM via `import domtagger from 'domtagger'`
-  * ESM CDN via `import domtagger from 'https://unpkg.com/domtagger?module'`
+  * CDN as global utility, via https://unpkg.com/augmentor
+  * CJS via `const {default: augmentor, useState} = require('augmentor')`
+  * ESM via `import augmentor, {useState} from 'augmentor'`
+  * ESM CDN via `import augmentor, {useState} from 'https://unpkg.com/augmentor?module'`
 
 ## example
 
