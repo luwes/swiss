@@ -129,12 +129,15 @@ These two hooks are strictly _React_ oriented and have no meaning in current _au
 
 ### Create your own hook
 
-The _augmentor_ core provides various utilities to make your own hook and export these like any other.
+Beside using any of the already implemented hooks to create your own would work just fine,
+you could also take advantage of internals used to create other hooks.
 
-Following a `useUpdate` example.
+The _augmentor_ core provides indeed utilities to make your own hook, for your own library, and export these like any other.
+
+Following a `useUpdate` example based on these internals.
 
 ```js
-import {setup, stacked, unstacked, uid} from 'augmentor/core.js';
+import {setup, stacked, unstacked, uid} from 'augmentor/esm/core.js';
 
 // create a unique identifier for this hook
 const id = uid();
