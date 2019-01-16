@@ -76,6 +76,7 @@ setup.push(runner => {
     for (let {length} = stack, i = 0; i < length; i++) {
       const {fn, raf, update} = stack[i];
       if (update) {
+        stack[i].update = false;
         if (raf)
           stack[i].t = request(fn);
         else

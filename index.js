@@ -212,6 +212,7 @@ var augmentor = (function () {
             update = _stack$i2.update;
 
         if (update) {
+          stack[i].update = false;
           if (raf) stack[i].t = request(fn);else stack[i].clean = fn();
         }
       }

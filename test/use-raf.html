@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="../index.js"></script>
+</head>
+<body>
+<script>
+const {useLayoutEffect, useRef, useState} = augmentor;
+const a = augmentor(test)
+a()
+
+function test() {
+  const elapsed = useRaf(5000, 1000) // 🔥 will lock your browser!
+  console.log(elapsed)
+}
+
+function useRaf (ms, delay) {
+  const [elapsed, set] = useState(0);
+  useRef(() => {
+    console.log('layout in');
+    setTimeout(set, delay, elapsed + 1);
+    return () => {
+      console.log('layout out');
+    };
+  }, [ms, delay]);
+  return elapsed
+}
+</script>
+</body>
+</html>
