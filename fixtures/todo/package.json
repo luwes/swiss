@@ -1,0 +1,16 @@
+{
+  "name": "swiss-element-todo",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node scripts/start"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.24.6"
+  },
+  "dependencies": {
+    "lighterhtml": "^0.3.7",
+    "lit-html": "^1.0.0-rc.2",
+    "swiss-element": "0.0.1"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "name": "swiss-element",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Functional custom element library",
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "fixtures/*"
+    ],
+    "nohoist": [
+      "**/swiss-**"
+    ]
+  },
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint packages/*/src",
+    "build": "rollup -c scripts/rollup/config.js",
+    "watch": "rollup -wc scripts/rollup/config.js"
+  },
+  "esm": {
+    "mainFields": [
+      "module",
+      "main"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luwes/swiss-element.git"
+  },
+  "keywords": [
+    "functional",
+    "custom",
+    "element"
+  ],
+  "author": {
+    "name": "Wesley Luyten",
+    "email": "me@wesleyluyten.com",
+    "url": "wesleyluyten.com"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/luwes/swiss-element/issues"
+  },
+  "homepage": "https://github.com/luwes/swiss-element#readme",
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-syntax-export-default-from": "^7.0.0",
+    "@babel/plugin-transform-object-assign": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "@babel/runtime": "^7.0.0",
+    "eslint": "^5.4.0",
+    "eslint-plugin-import": "^2.14.0",
+    "ramda": "^0.25.0",
+    "rollup": "^0.65.2",
+    "rollup-plugin-babel": "^4.0.3",
+    "rollup-plugin-bundle-size": "^1.0.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-terser": "^4.0.2",
+    "rollup-plugin-uglify": "^5.0.2"
+  }
+}
