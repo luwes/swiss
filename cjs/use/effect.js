@@ -81,7 +81,7 @@ setup.push(runner => {
         if (raf)
           stack[i].t = request(fn);
         else
-          stack[i].clean = fn();
+          fn();
       }
     }
   });

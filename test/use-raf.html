@@ -19,14 +19,33 @@ function test() {
 }
 
 function useRaf (ms, delay) {
-  const [elapsed, set] = useState(0);
-  useRef(() => {
-    console.log('layout in');
-    setTimeout(set, delay, elapsed + 1);
+  const [elapsed, set] = useState(0)
+  useLayoutEffect(() => {
+    let raf, timerStop, start
+    const onFrame = () => {
+      const time = Math.min(1, (Date.now() - start) / ms)
+      set(time)
+      loop()
+    }
+    const loop = () => {
+      raf = requestAnimationFrame(onFrame)
+    }
+    const onStart = () => {
+      timerStop = setTimeout(() => {
+        cancelAnimationFrame(raf)
+        set(1)
+      }, ms)
+      start = Date.now()
+      loop()
+    }
+    const timerDelay = setTimeout(onStart, delay)
     return () => {
-      console.log('layout out');
+      clearTimeout(timerStop)
+      clearTimeout(timerDelay)
+      cancelAnimationFrame(raf)
     };
-  }, [ms, delay]);
+  }, [ms, delay])
+
   return elapsed
 }
 </script>

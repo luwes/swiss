@@ -213,7 +213,7 @@ var augmentor = (function () {
 
         if (update) {
           stack[i].update = false;
-          if (raf) stack[i].t = request(fn);else stack[i].clean = fn();
+          if (raf) stack[i].t = request(fn);else fn();
         }
       }
     });
