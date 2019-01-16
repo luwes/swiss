@@ -48,6 +48,7 @@ All hooks behave as close as possible to their _React_ counter part, with a nota
   * Basic Hooks
     * [useState](https://reactjs.org/docs/hooks-reference.html#usestate)
     * [useEffect](https://reactjs.org/docs/hooks-reference.html#useeffect)
+    * [useContext](https://reactjs.org/docs/hooks-reference.html#usecontext) **experimental**
   * Additional Hooks
     * [useReducer](https://reactjs.org/docs/hooks-reference.html#usereducer)
     * [useCallback](https://reactjs.org/docs/hooks-reference.html#usecallback)
@@ -122,9 +123,9 @@ function lifecycleHandler(callback, result) {
 You can see this mechanism in practice applied through the [neverland](https://github.com/WebReflection/neverland) library, where passing an empty array will implicitly result into observing nodes through the DOM.
 
 
-### About `useContext` and `useImperativeMethods`
+### About `useImperativeMethods`
 
-These two hooks are strictly _React_ oriented and have no meaning in current _augmentor_ world.
+This hook is strictly _React_ oriented and have no meaning in current _augmentor_ world.
 
 
 ### Create your own hook
