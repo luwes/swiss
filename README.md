@@ -13,6 +13,28 @@ Include via:
   * ESM via `import augmentor, {useState} from 'augmentor'`
   * ESM CDN via `import augmentor, {useState} from 'https://unpkg.com/augmentor?module'`
 
+
+## Available Hooks
+
+All hooks behave as close as possible to their _React_ counter part, with a notable difference for `useEffect`.
+
+  * Basic Hooks
+    * [useState](https://reactjs.org/docs/hooks-reference.html#usestate)
+    * [useEffect](https://reactjs.org/docs/hooks-reference.html#useeffect)
+    * [useContext](https://reactjs.org/docs/hooks-reference.html#usecontext) **experimental**
+  * Additional Hooks
+    * [useReducer](https://reactjs.org/docs/hooks-reference.html#usereducer)
+    * [useCallback](https://reactjs.org/docs/hooks-reference.html#usecallback)
+    * [useMemo](https://reactjs.org/docs/hooks-reference.html#usememo)
+    * [useRef](https://reactjs.org/docs/hooks-reference.html#useref)
+    * [useLayoutEffect](https://reactjs.org/docs/hooks-reference.html#uselayouteffect)
+
+
+### A DOM oriented `useEffect`
+
+If you'd like to have DOM nodes `connect/disconnect` hooks, similarly to how _React_ mount and unmount work, consider using **[dom-augmentor](https://github.com/WebReflection/dom-augmentor)** or keep reading to understand how to write your own.
+
+
 ## example
 
 You can test this example [directly on Code Pen](https://codepen.io/WebReflection/pen/zymKBb?editors=0011).
@@ -40,26 +62,6 @@ function test() {
   setTimeout(() => setCount(count + 1), 1000);
 }
 ```
-
-## Available Hooks
-
-All hooks behave as close as possible to their _React_ counter part, with a notable difference for `useEffect`.
-
-  * Basic Hooks
-    * [useState](https://reactjs.org/docs/hooks-reference.html#usestate)
-    * [useEffect](https://reactjs.org/docs/hooks-reference.html#useeffect)
-    * [useContext](https://reactjs.org/docs/hooks-reference.html#usecontext) **experimental**
-  * Additional Hooks
-    * [useReducer](https://reactjs.org/docs/hooks-reference.html#usereducer)
-    * [useCallback](https://reactjs.org/docs/hooks-reference.html#usecallback)
-    * [useMemo](https://reactjs.org/docs/hooks-reference.html#usememo)
-    * [useRef](https://reactjs.org/docs/hooks-reference.html#useref)
-    * [useLayoutEffect](https://reactjs.org/docs/hooks-reference.html#uselayouteffect)
-
-
-### A DOM oriented `useEffect`
-
-If you'd like to have DOM nodes `connect/disconnect` hooks, similarly to how _React_ mount and unmount work, consider using **[dom-augmentor](https://github.com/WebReflection/dom-augmentor)** or keep reading to understand how to write your own.
 
 
 ### What's different in `useEffect`
