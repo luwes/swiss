@@ -238,14 +238,9 @@ var augmentor = (function () {
         stack = _unstacked.stack,
         unknown = _unstacked.unknown;
 
-    if (unknown) {
-      var info = {
-        current: null
-      };
-      stack.push(info);
-      info.current = $(value);
-    }
-
+    if (unknown) stack.push({
+      current: $(value)
+    });
     return stack[i];
   });
 
@@ -258,24 +253,19 @@ var augmentor = (function () {
         unknown = _unstacked.unknown;
 
     var comp = refs || empty;
-
-    if (unknown) {
-      stack.push(create$1(callback, comp));
-      stack[i].value = callback();
-    }
-
+    if (unknown) stack.push(create$1(callback, comp));
     var _stack$i = stack[i],
         filter = _stack$i.filter,
         value = _stack$i.value,
         fn = _stack$i.fn,
         inputs = _stack$i.inputs;
-    return (filter ? diff(inputs, comp) : callback !== fn) ? (stack[i] = create$1(callback, comp)).value = callback() : value;
+    return (filter ? diff(inputs, comp) : callback !== fn) ? stack[i] = create$1(callback, comp) : value;
   });
 
   var create$1 = function create(fn, inputs) {
     return {
       filter: inputs !== empty,
-      value: null,
+      value: fn(),
       fn: fn,
       inputs: inputs
     };
@@ -296,16 +286,11 @@ var augmentor = (function () {
         unknown = _unstacked.unknown,
         update = _unstacked.update;
 
-    if (unknown) {
-      var info = [null, function (action) {
-        value = reducer(value, action);
-        pair[0] = value;
-        update();
-      }];
-      stack.push(info);
-      info[0] = $(value);
-    }
-
+    if (unknown) stack.push([$(value), function (action) {
+      value = reducer(value, action);
+      pair[0] = value;
+      update();
+    }]);
     var pair = stack[i];
     return pair;
   });
