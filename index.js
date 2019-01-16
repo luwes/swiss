@@ -301,8 +301,46 @@ var augmentor = (function () {
     }, value);
   });
 
+  var all = new WeakMap();
+  var id$6 = uid();
+  setup.push(stacked(id$6));
+  var createContext = function createContext() {
+    var context = {
+      value: void 0,
+      provide: provide
+    };
+    all.set(context, []);
+    return context;
+  };
+  var useContext = function useContext(context) {
+    var _unstacked = unstacked(id$6),
+        i = _unstacked.i,
+        stack = _unstacked.stack,
+        unknown = _unstacked.unknown,
+        update = _unstacked.update;
+
+    if (unknown) {
+      all.get(context).push(update);
+      stack.push(context);
+    }
+
+    return stack[i].value;
+  };
+
+  function provide(value) {
+    if (this.value !== value) {
+      this.value = value;
+
+      for (var arr = all.get(this), length = arr.length, i = 0; i < length; i++) {
+        arr[i]();
+      }
+    }
+  }
+
   
+  augmentor.createContext = createContext;
   augmentor.useCallback = callback;
+  augmentor.useContext = useContext;
   augmentor.useEffect = useEffect;
   augmentor.useLayoutEffect = useLayoutEffect;
   augmentor.useMemo = useMemo;

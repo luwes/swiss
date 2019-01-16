@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>augmentor useContext</title>
+  <script src="../index.js"></script>
+</head>
+<body>
+<script>
+
+const {createContext, useContext, useRef, useState} = augmentor;
+
+const AuthCtx = createContext();
+
+const App = augmentor(() => {
+  const {current: div} = useRef(Div);
+  const [username, setUser] = useState(null);
+  let authState = {
+    username,
+    setUser
+  };
+  AuthCtx.provide(authState);
+  div.textContent = '';
+  div.appendChild(UserDisplay());
+  return div;
+});
+
+const Login = augmentor(() => {
+  const {current: btn} = useRef(Button);
+  const authInfo = useContext(AuthCtx);
+  btn.onclick = () => {
+    authInfo.setUser("Andrea");
+  };
+  return btn;
+});
+
+const Profile = augmentor((username) => {
+  const {current: p} = useRef(Paragraph);
+  p.textContent = `Hello ${username}!`;
+  return p;
+});
+
+const UserDisplay = augmentor(() => {
+  const authInfo = useContext(AuthCtx);
+  return authInfo.username == null
+    ? Login()
+    : Profile(authInfo.username);
+});
+
+document.body.appendChild(App());
+
+function Button() {
+  const btn = document.createElement('button');
+  btn.textContent = 'Login';
+  return btn;
+}
+
+function Div() {
+  return document.createElement('div');
+}
+
+function Paragraph() {
+  return document.createElement('p');
+}
+
+</script>
+</body>
+</html>

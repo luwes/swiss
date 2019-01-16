@@ -1,6 +1,8 @@
 require('basichtml').init();
 const {
   default: augmentor,
+  createContext,
+  useContext,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -110,3 +112,62 @@ const App = augmentor(() => {
 });
 
 console.assert(App() === 1, 'no races');
+const AuthCtx = createContext();
+
+const ContextApp = augmentor(() => {
+  const {current: div} = useRef(Div);
+  const [username, setUser] = useState(null);
+  let authState = {
+    username,
+    setUser
+  };
+  AuthCtx.provide(authState);
+  // doubled for code coverage sake
+  AuthCtx.provide(authState);
+  div.textContent = '';
+  div.appendChild(UserDisplay());
+  return div;
+});
+
+const Login = augmentor(() => {
+  const {current: btn} = useRef(Button);
+  const authInfo = useContext(AuthCtx);
+  btn.onclick = () => {
+    authInfo.setUser("Andrea");
+  };
+  return btn;
+});
+
+const Profile = augmentor((username) => {
+  const {current: p} = useRef(Paragraph);
+  p.textContent = `Hello ${username}!`;
+  return p;
+});
+
+const UserDisplay = augmentor(() => {
+  const authInfo = useContext(AuthCtx);
+  return authInfo.username == null
+    ? Login()
+    : Profile(authInfo.username);
+});
+
+document.body.appendChild(App());
+
+function Button() {
+  const btn = document.createElement('button');
+  btn.textContent = 'Login';
+  return btn;
+}
+
+function Div() {
+  return document.createElement('div');
+}
+
+function Paragraph() {
+  return document.createElement('p');
+}
+
+const result = ContextApp();
+console.assert(result.firstChild.textContent === 'Login');
+result.firstChild.onclick();
+console.assert(result.firstChild.textContent === 'Hello Andrea!');

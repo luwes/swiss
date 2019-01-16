@@ -10,9 +10,13 @@ import useCallback from './use/callback.js';
 import useReducer from './use/reducer.js';
 import useState from './use/state.js';
 
+import {createContext, useContext} from './use/context.js';
+
 export default augmentor;
 export {
+  createContext,
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useMemo,
