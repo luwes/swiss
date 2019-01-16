@@ -6,7 +6,10 @@ setup.push(stacked(id));
 
 export default value => {
   const {i, stack, unknown} = unstacked(id);
-  if (unknown)
-    stack.push({current: $(value)});
+  if (unknown) {
+    const info = {current: null};
+    stack.push(info);
+    info.current = $(value);
+  }
   return stack[i];
 };

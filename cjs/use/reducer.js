@@ -7,15 +7,18 @@ setup.push(stacked(id));
 
 Object.defineProperty(exports, '__esModule', {value: true}).default = (reducer, value) => {
   const {i, stack, unknown, update} = unstacked(id);
-  if (unknown)
-    stack.push([
-      $(value),
+  if (unknown) {
+    const info = [
+      null,
       action => {
         value = reducer(value, action);
         pair[0] = value;
         update();
       }
-    ]);
+    ];
+    stack.push(info);
+    info[0] = $(value);
+  }
   const pair = stack[i];
   return pair;
 };

@@ -40,16 +40,21 @@ export default fn => {
   function $() {
     const prev = now;
     now = current;
+    const {_, before, after, external} = current;
     try {
-      const {_, before, after, external} = current;
-      each(before, current);
-      const result = fn.apply(_.c = this, _.a = arguments);
-      each(after, current);
-      if (external.length)
-        each(external.splice(0), result);
+      let result;
+      do {
+        _.$ = _._ = false;
+        each(before, current);
+        result = fn.apply(_.c = this, _.a = arguments);
+        each(after, current);
+        if (external.length)
+          each(external.splice(0), result);
+      } while (_._);
       return result;
     }
     finally {
+      _.$ = true;
       now = prev;
     }
   }
@@ -64,6 +69,8 @@ const each = (arr, value) => {
 
 const runner = $ => {
   const _ = {
+    _: true,
+    $: true,
     c: null,
     a: null
   };
@@ -73,7 +80,7 @@ const runner = $ => {
     after: [],
     external: [],
     reset: [],
-    update: () => $.apply(_.c, _.a)
+    update: () => _.$ ? $.apply(_.c, _.a) : (_._ = true)
   };
 };
 

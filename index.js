@@ -62,18 +62,25 @@ var augmentor = (function () {
     function $() {
       var prev = now;
       now = current;
+      var _ = current._,
+          before = current.before,
+          after = current.after,
+          external = current.external;
 
       try {
-        var _ = current._,
-            before = current.before,
-            after = current.after,
-            external = current.external;
-        each(before, current);
-        var result = fn.apply(_.c = this, _.a = arguments);
-        each(after, current);
-        if (external.length) each(external.splice(0), result);
+        var result;
+
+        do {
+          _.$ = _._ = false;
+          each(before, current);
+          result = fn.apply(_.c = this, _.a = arguments);
+          each(after, current);
+          if (external.length) each(external.splice(0), result);
+        } while (_._);
+
         return result;
       } finally {
+        _.$ = true;
         now = prev;
       }
     }
@@ -90,6 +97,8 @@ var augmentor = (function () {
 
   var runner = function runner($) {
     var _ = {
+      _: true,
+      $: true,
       c: null,
       a: null
     };
@@ -100,7 +109,7 @@ var augmentor = (function () {
       external: [],
       reset: [],
       update: function update() {
-        return $.apply(_.c, _.a);
+        return _.$ ? $.apply(_.c, _.a) : _._ = true;
       }
     };
   };
@@ -229,58 +238,44 @@ var augmentor = (function () {
         stack = _unstacked.stack,
         unknown = _unstacked.unknown;
 
-    if (unknown) stack.push({
-      current: $(value)
-    });
+    if (unknown) {
+      var info = {
+        current: null
+      };
+      stack.push(info);
+      info.current = $(value);
+    }
+
     return stack[i];
   });
 
   var id$4 = uid();
   setup.push(stacked(id$4));
-  var useReducer = (function (reducer, value) {
-    var _unstacked = unstacked(id$4),
-        i = _unstacked.i,
-        stack = _unstacked.stack,
-        unknown = _unstacked.unknown,
-        update = _unstacked.update;
-
-    if (unknown) stack.push([$(value), function (action) {
-      value = reducer(value, action);
-      pair[0] = value;
-      update();
-    }]);
-    var pair = stack[i];
-    return pair;
-  });
-
-  var state = (function (value) {
-    return useReducer(function (_, value) {
-      return value;
-    }, value);
-  });
-
-  var id$5 = uid();
-  setup.push(stacked(id$5));
   var useMemo = (function (callback, refs) {
-    var _unstacked = unstacked(id$5),
+    var _unstacked = unstacked(id$4),
         i = _unstacked.i,
         stack = _unstacked.stack,
         unknown = _unstacked.unknown;
 
     var comp = refs || empty;
-    if (unknown) stack.push(create$1(callback, comp));
+
+    if (unknown) {
+      stack.push(create$1(callback, comp));
+      stack[i].value = callback();
+    }
+
     var _stack$i = stack[i],
         filter = _stack$i.filter,
         value = _stack$i.value,
         fn = _stack$i.fn,
         inputs = _stack$i.inputs;
-    return (filter ? diff(inputs, comp) : callback !== fn) ? (stack[i] = create$1(callback, comp)).value : value;
+    return (filter ? diff(inputs, comp) : callback !== fn) ? (stack[i] = create$1(callback, comp)).value = callback() : value;
   });
 
   var create$1 = function create(fn, inputs) {
     return {
       filter: inputs !== empty,
-      value: fn(),
+      value: null,
       fn: fn,
       inputs: inputs
     };
@@ -290,6 +285,35 @@ var augmentor = (function () {
     return useMemo(function () {
       return fn;
     }, inputs);
+  });
+
+  var id$5 = uid();
+  setup.push(stacked(id$5));
+  var useReducer = (function (reducer, value) {
+    var _unstacked = unstacked(id$5),
+        i = _unstacked.i,
+        stack = _unstacked.stack,
+        unknown = _unstacked.unknown,
+        update = _unstacked.update;
+
+    if (unknown) {
+      var info = [null, function (action) {
+        value = reducer(value, action);
+        pair[0] = value;
+        update();
+      }];
+      stack.push(info);
+      info[0] = $(value);
+    }
+
+    var pair = stack[i];
+    return pair;
+  });
+
+  var state = (function (value) {
+    return useReducer(function (_, value) {
+      return value;
+    }, value);
   });
 
   

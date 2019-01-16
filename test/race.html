@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="../index.js"></script>
+</head>
+<body>
+<script>
+const {useMemo, useRef, useState} = augmentor;
+
+const App = augmentor(() => {
+  const [state, update_state] = useState(0);
+  const {current: btn} = useRef(Button);
+
+  useMemo(() => {
+    update_state(state + 1);
+  }, []);
+
+  btn.onclick = () => {
+    alert(state);
+  };
+
+  return btn;
+});
+
+function Button() {
+  const btn = document.createElement('button');
+  btn.textContent = 'Show Count';
+  return btn;
+}
+
+document.body.appendChild(App());
+
+</script>
+</body>
+</html>

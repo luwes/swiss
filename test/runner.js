@@ -4,6 +4,7 @@ const {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState
 } = require('../cjs');
@@ -99,3 +100,13 @@ setTimeout(one.reset, 500);
 function random() {
   return [Math.random()];
 }
+
+const App = augmentor(() => {
+  const [state, update] = useState(0);
+  useMemo(() => {
+    update(state + 1);
+  }, []);
+  return () => state;
+});
+
+console.assert(App() === 1, 'no races');
