@@ -40,16 +40,21 @@ var augmentor = fn => {
   function $() {
     const prev = now;
     now = current;
+    const {_, before, after, external} = current;
     try {
-      const {_, before, after, external} = current;
-      each(before, current);
-      const result = fn.apply(_.c = this, _.a = arguments);
-      each(after, current);
-      if (external.length)
-        each(external.splice(0), result);
+      let result;
+      do {
+        _.$ = _._ = false;
+        each(before, current);
+        result = fn.apply(_.c = this, _.a = arguments);
+        each(after, current);
+        if (external.length)
+          each(external.splice(0), result);
+      } while (_._);
       return result;
     }
     finally {
+      _.$ = true;
       now = prev;
     }
   }
@@ -64,6 +69,8 @@ const each = (arr, value) => {
 
 const runner = $ => {
   const _ = {
+    _: true,
+    $: true,
     c: null,
     a: null
   };
@@ -73,7 +80,7 @@ const runner = $ => {
     after: [],
     external: [],
     reset: [],
-    update: () => $.apply(_.c, _.a)
+    update: () => _.$ ? $.apply(_.c, _.a) : (_._ = true)
   };
 };
 
@@ -157,10 +164,11 @@ setup.push(runner => {
     for (let {length} = stack, i = 0; i < length; i++) {
       const {fn, raf, update} = stack[i];
       if (update) {
+        stack[i].update = false;
         if (raf)
           stack[i].t = request(fn);
         else
-          stack[i].clean = fn();
+          fn();
       }
     }
   });
@@ -183,8 +191,32 @@ const id$3 = uid();
 
 setup.push(stacked(id$3));
 
+var useMemo = (callback, refs) => {
+  const {i, stack, unknown} = unstacked(id$3);
+  const comp = refs || empty;
+  if (unknown)
+    stack.push(create$1(callback, comp));
+  const {filter, value, fn, inputs} = stack[i];
+  return (filter ? diff(inputs, comp) : (callback !== fn)) ?
+          (stack[i] = create$1(callback, comp)) :
+          value;
+};
+
+const create$1 = (fn, inputs) => ({
+  filter: inputs !== empty,
+  value: fn(),
+  fn,
+  inputs
+});
+
+var callback = (fn, inputs) => useMemo(() => fn, inputs);
+
+const id$4 = uid();
+
+setup.push(stacked(id$4));
+
 var useReducer = (reducer, value) => {
-  const {i, stack, unknown, update} = unstacked(id$3);
+  const {i, stack, unknown, update} = unstacked(id$4);
   if (unknown)
     stack.push([
       $(value),
@@ -203,29 +235,9 @@ var state = value => useReducer(
   value
 );
 
-const id$4 = uid();
+const id$5 = uid();
 
-setup.push(stacked(id$4));
-
-var useMemo = (callback, refs) => {
-  const {i, stack, unknown} = unstacked(id$4);
-  const comp = refs || empty;
-  if (unknown)
-    stack.push(create$1(callback, comp));
-  const {filter, value, fn, inputs} = stack[i];
-  return (filter ? diff(inputs, comp) : (callback !== fn)) ?
-          (stack[i] = create$1(callback, comp)).value :
-          value;
-};
-
-const create$1 = (fn, inputs) => ({
-  filter: inputs !== empty,
-  value: fn(),
-  fn,
-  inputs
-});
-
-var callback = (fn, inputs) => useMemo(() => fn, inputs);
+setup.push(stacked(id$5));
 
 function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
@@ -363,6 +375,14 @@ function enhancedElement(renderFn, enhancer, options) {
     return this;
   }
 
+  function renderer(root, html) {
+    root.innerHTML = html();
+  }
+
+  function render() {
+    return renderFn.call(this, this);
+  }
+
   function update() {
     updates.get(this).call(this);
   }
@@ -374,14 +394,6 @@ function enhancedElement(renderFn, enhancer, options) {
 
   function disconnectedCallback() {
     this.dispatchEvent(new CustomEvent(DISCONNECTED));
-  }
-
-  function renderer(root, html) {
-    root.innerHTML = html();
-  }
-
-  function render() {
-    return renderFn.call(this, this);
   }
 
   function attributeChangedCallback(name, oldValue, newValue) {

@@ -465,7 +465,7 @@ const applyDiff = (
           futureStart++,
           futureStart,
           currentIndex < currentLength ?
-            get(currentNodes[currentIndex], 1) :
+            get(currentNodes[currentIndex], 0) :
             before
         );
         break;
@@ -1271,6 +1271,13 @@ const hyperProperty = (node, name) => {
   };
 };
 
+// special hooks helpers
+const hyperRef = node => {
+  return ref => {
+    ref.current = node;
+  };
+};
+
 // list of attributes that should not be directly assigned
 const readOnly = /^(?:form|list)$/i;
 
@@ -1297,12 +1304,15 @@ Tagger.prototype = {
   attribute(node, name, original) {
     const isSVG = OWNER_SVG_ELEMENT in node;
     switch (true) {
+      case name.slice(0, 2) === 'on':
+        return hyperEvent(node, name);
       case name === 'style':
         return hyperStyle(node, original, isSVG);
-      case /^on/.test(name):
-        return hyperEvent(node, name);
-      case /^(?:data|props)$/.test(name) ||
-            (!isSVG && name in node && !readOnly.test(name)):
+      case name === 'ref':
+        return hyperRef(node, original, isSVG);
+      case name === 'data':
+      case name === 'props':
+      case !isSVG && name in node && !readOnly.test(name):
         return hyperProperty(node, name);
       default:
         return hyperAttribute(node, original.cloneNode(true));
@@ -1376,7 +1386,10 @@ Tagger.prototype = {
                 case 'string':
                 case 'number':
                 case 'boolean':
-                  anyContent({text: value});
+                  anyContent(String(value));
+                  break;
+                case 'function':
+                  anyContent(value.map(invoke, node));
                   break;
                 case 'object':
                   if (isArray(value[0])) {
@@ -1457,6 +1470,10 @@ Tagger.prototype = {
   }
 };
 
+function invoke(callback) {
+  return callback(this);
+}
+
 const wm = new WeakMap;
 const templateType = 0;
 
@@ -1485,23 +1502,6 @@ function asNode$1(result) {
   return result.nodeType === wireType ? result.valueOf(true) : result;
 }
 
-function getWire(type, args) {
-  const {i, length, stack} = current;
-  current.i++;
-  if (i < length) {
-    const {tagger, wire} = stack[i];
-    tagger.apply(null, unrollArray(args, 1));
-    return wire;
-  }
-  else {
-    const tagger = new Tagger(type);
-    const stacked = {tagger, wire: null};
-    current.length = stack.push(stacked);
-    stacked.wire = wireContent(tagger.apply(null, unrollArray(args, 1)));
-    return stacked.wire;
-  }
-}
-
 function outer$1($) {
   return function () {
     const _ = tta.apply(null, arguments);
@@ -1527,7 +1527,20 @@ function setTemplate(template) {
 
 function unroll(template) {
   const {$, _} = template;
-  return getWire($, _);
+  const {i, length, stack} = current;
+  current.i++;
+  if (i < length) {
+    const {tagger, wire} = stack[i];
+    tagger.apply(null, unrollArray(_, 1));
+    return wire;
+  }
+  else {
+    const tagger = new Tagger($);
+    const stacked = {tagger, wire: null};
+    current.length = stack.push(stacked);
+    stacked.wire = wireContent(tagger.apply(null, unrollArray(_, 1)));
+    return stacked.wire;
+  }
 }
 
 function unrollArray(array, i) {
@@ -1622,16 +1635,21 @@ var augmentor = fn => {
   function $() {
     const prev = now;
     now = current;
+    const {_, before, after, external} = current;
     try {
-      const {_, before, after, external} = current;
-      each(before, current);
-      const result = fn.apply(_.c = this, _.a = arguments);
-      each(after, current);
-      if (external.length)
-        each(external.splice(0), result);
+      let result;
+      do {
+        _.$ = _._ = false;
+        each(before, current);
+        result = fn.apply(_.c = this, _.a = arguments);
+        each(after, current);
+        if (external.length)
+          each(external.splice(0), result);
+      } while (_._);
       return result;
     }
     finally {
+      _.$ = true;
       now = prev;
     }
   }
@@ -1646,6 +1664,8 @@ const each = (arr, value) => {
 
 const runner = $ => {
   const _ = {
+    _: true,
+    $: true,
     c: null,
     a: null
   };
@@ -1655,7 +1675,7 @@ const runner = $ => {
     after: [],
     external: [],
     reset: [],
-    update: () => $.apply(_.c, _.a)
+    update: () => _.$ ? $.apply(_.c, _.a) : (_._ = true)
   };
 };
 
@@ -1700,10 +1720,11 @@ setup.push(runner => {
     for (let {length} = stack, i = 0; i < length; i++) {
       const {fn, raf, update} = stack[i];
       if (update) {
+        stack[i].update = false;
         if (raf)
           stack[i].t = request(fn);
         else
-          stack[i].clean = fn();
+          fn();
       }
     }
   });
@@ -1717,8 +1738,12 @@ const id$3 = uid();
 
 setup.push(stacked(id$3));
 
+const id$4 = uid();
+
+setup.push(stacked(id$4));
+
 var useReducer = (reducer, value) => {
-  const {i, stack, unknown, update} = unstacked(id$3);
+  const {i, stack, unknown, update} = unstacked(id$4);
   if (unknown)
     stack.push([
       $(value),
@@ -1737,9 +1762,9 @@ var state = value => useReducer(
   value
 );
 
-const id$4 = uid();
+const id$5 = uid();
 
-setup.push(stacked(id$4));
+setup.push(stacked(id$5));
 
 function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
@@ -1877,6 +1902,14 @@ function enhancedElement(renderFn, enhancer, options) {
     return this;
   }
 
+  function renderer(root, html) {
+    root.innerHTML = html();
+  }
+
+  function render() {
+    return renderFn.call(this, this);
+  }
+
   function update() {
     updates.get(this).call(this);
   }
@@ -1888,14 +1921,6 @@ function enhancedElement(renderFn, enhancer, options) {
 
   function disconnectedCallback() {
     this.dispatchEvent(new CustomEvent(DISCONNECTED));
-  }
-
-  function renderer(root, html) {
-    root.innerHTML = html();
-  }
-
-  function render() {
-    return renderFn.call(this, this);
   }
 
   function attributeChangedCallback(name, oldValue, newValue) {

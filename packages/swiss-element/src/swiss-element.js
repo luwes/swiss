@@ -76,6 +76,14 @@ function enhancedElement(renderFn, enhancer, options) {
     return this;
   }
 
+  function renderer(root, html) {
+    root.innerHTML = html();
+  }
+
+  function render() {
+    return renderFn.call(this, this);
+  }
+
   function update() {
     updates.get(this).call(this);
   }
@@ -87,14 +95,6 @@ function enhancedElement(renderFn, enhancer, options) {
 
   function disconnectedCallback() {
     this.dispatchEvent(new CustomEvent(DISCONNECTED));
-  }
-
-  function renderer(root, html) {
-    root.innerHTML = html();
-  }
-
-  function render() {
-    return renderFn.call(this, this);
   }
 
   function attributeChangedCallback(name, oldValue, newValue) {
