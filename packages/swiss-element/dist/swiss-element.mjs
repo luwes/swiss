@@ -312,6 +312,7 @@ function enhancedElement(renderFn, enhancer, options) {
       const enhancerRef = enhancer;
       enhancer = undefined;
       const element = enhancerRef(CustomElement)(options);
+      init.call(element);
       enhancer = enhancerRef;
       return element;
     }
@@ -319,6 +320,7 @@ function enhancedElement(renderFn, enhancer, options) {
     if (!(this instanceof CustomElement)) {
       return new CustomElement();
     }
+
     if (typeof Reflect !== 'undefined') {
       return Reflect.construct(Native, [], this.constructor);
     }
@@ -350,11 +352,19 @@ function enhancedElement(renderFn, enhancer, options) {
     );
   });
 
-  const update = augmentor(requestUpdate);
+  const updates = new WeakMap;
+
+  function init() {
+    updates.set(this, augmentor(requestUpdate));
+  }
 
   function requestUpdate() {
     this.renderer(this.renderRoot, render.bind(this));
     return this;
+  }
+
+  function update() {
+    updates.get(this).call(this);
   }
 
   function connectedCallback() {
