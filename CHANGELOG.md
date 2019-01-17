@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.1.0 - 2019-01-17
+
+### Fixed
+
+- Made the `applyMiddleware` enhancer properly work.
+
 ## 0.0.3 - 2019-01-17
 
 ### Changed
