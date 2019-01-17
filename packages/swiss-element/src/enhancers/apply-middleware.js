@@ -4,21 +4,21 @@ export default function applyMiddleware(...middlewares) {
   return createElement => (...args) => {
     const element = createElement(...args);
 
-    let renderer = () => {
+    let render = () => {
       throw new Error(
         `Rendering while constructing your middleware is not allowed. ` +
-          `Other middleware would not be applied to this renderer.`
+          `Other middleware would not be applied to this render.`
       );
     };
 
     const middlewareAPI = {
-      renderer: (...args) => renderer(...args)
+      render: (...args) => render(...args)
     };
 
     const chain = middlewares.map(middleware => middleware(middlewareAPI));
-    renderer = compose(...chain)(element.renderer.bind(element));
+    render = compose(...chain)(element.render.bind(element));
 
-    element.renderer = renderer;
+    element.render = render;
     return element;
   };
 }

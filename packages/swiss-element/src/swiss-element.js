@@ -5,16 +5,16 @@ export const CONNECTED = 'connected';
 export const DISCONNECTED = 'dis' + CONNECTED;
 
 export function element(...enhancers) {
-  let enhancer = compose(...enhancers);
-  return (renderFn, options) => enhancedElement(renderFn, enhancer, options);
+  return (component, enhancer, options) => {
+    if (typeof enhancer !== 'function' && typeof options === 'undefined') {
+      options = enhancer;
+      enhancer = undefined;
+    }
+    return enhancedElement(component, compose(enhancer, ...enhancers), options);
+  };
 }
 
-function enhancedElement(renderFn, enhancer, options) {
-  if (typeof enhancer !== 'function' && typeof options === 'undefined') {
-    options = enhancer;
-    enhancer = undefined;
-  }
-
+function enhancedElement(component, enhancer, options) {
   const Native = getNativeConstructor(options && options.extends);
   function SwissElement() {
     if (typeof enhancer !== 'undefined') {
@@ -66,22 +66,34 @@ function enhancedElement(renderFn, enhancer, options) {
   });
 
   const updates = new WeakMap;
+  let isRendering = false;
 
   function init() {
-    updates.set(this, augmentor(requestUpdate));
+    updates.set(this, augmentor(patch.bind(this)));
   }
 
-  function requestUpdate() {
-    this.renderer(this.renderRoot, render.bind(this));
-    return this;
+  function patch() {
+    const fragment = component.call(this, this);
+    return this.render.call(this, fragment);
+  }
+
+  function render(fragment) {
+    if (isRendering) {
+      throw new Error('Render loop.');
+    }
+
+    try {
+      isRendering = true;
+      this.renderer(this.renderRoot, () => fragment);
+    } finally {
+      isRendering = false;
+    }
+
+    return fragment;
   }
 
   function renderer(root, html) {
     root.innerHTML = html();
-  }
-
-  function render() {
-    return renderFn.call(this, this);
   }
 
   function update() {
@@ -113,6 +125,7 @@ function enhancedElement(renderFn, enhancer, options) {
     attributeChangedCallback,
     shouldUpdate,
     renderer,
+    render,
     get renderRoot() {
       return this.shadowRoot || this._shadowRoot || this;
     }

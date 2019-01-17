@@ -304,16 +304,16 @@ const CONNECTED = 'connected';
 const DISCONNECTED = 'dis' + CONNECTED;
 
 function element(...enhancers) {
-  let enhancer = compose(...enhancers);
-  return (renderFn, options) => enhancedElement(renderFn, enhancer, options);
+  return (component, enhancer, options) => {
+    if (typeof enhancer !== 'function' && typeof options === 'undefined') {
+      options = enhancer;
+      enhancer = undefined;
+    }
+    return enhancedElement(component, compose(enhancer, ...enhancers), options);
+  };
 }
 
-function enhancedElement(renderFn, enhancer, options) {
-  if (typeof enhancer !== 'function' && typeof options === 'undefined') {
-    options = enhancer;
-    enhancer = undefined;
-  }
-
+function enhancedElement(component, enhancer, options) {
   const Native = getNativeConstructor(options && options.extends);
   function SwissElement() {
     if (typeof enhancer !== 'undefined') {
@@ -365,22 +365,34 @@ function enhancedElement(renderFn, enhancer, options) {
   });
 
   const updates = new WeakMap;
+  let isRendering = false;
 
   function init() {
-    updates.set(this, augmentor(requestUpdate));
+    updates.set(this, augmentor(patch.bind(this)));
   }
 
-  function requestUpdate() {
-    this.renderer(this.renderRoot, render.bind(this));
-    return this;
+  function patch() {
+    const fragment = component.call(this, this);
+    return this.render.call(this, fragment);
+  }
+
+  function render(fragment) {
+    if (isRendering) {
+      throw new Error('Render loop.');
+    }
+
+    try {
+      isRendering = true;
+      this.renderer(this.renderRoot, () => fragment);
+    } finally {
+      isRendering = false;
+    }
+
+    return fragment;
   }
 
   function renderer(root, html) {
     root.innerHTML = html();
-  }
-
-  function render() {
-    return renderFn.call(this, this);
   }
 
   function update() {
@@ -412,6 +424,7 @@ function enhancedElement(renderFn, enhancer, options) {
     attributeChangedCallback,
     shouldUpdate,
     renderer,
+    render,
     get renderRoot() {
       return this.shadowRoot || this._shadowRoot || this;
     }
@@ -468,21 +481,21 @@ function applyMiddleware(...middlewares) {
   return createElement => (...args) => {
     const element = createElement(...args);
 
-    let renderer = () => {
+    let render = () => {
       throw new Error(
         `Rendering while constructing your middleware is not allowed. ` +
-          `Other middleware would not be applied to this renderer.`
+          `Other middleware would not be applied to this render.`
       );
     };
 
     const middlewareAPI = {
-      renderer: (...args) => renderer(...args)
+      render: (...args) => render(...args)
     };
 
     const chain = middlewares.map(middleware => middleware(middlewareAPI));
-    renderer = compose(...chain)(element.renderer.bind(element));
+    render = compose(...chain)(element.render.bind(element));
 
-    element.renderer = renderer;
+    element.render = render;
     return element;
   };
 }

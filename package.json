@@ -7,9 +7,6 @@
     "packages": [
       "packages/*",
       "fixtures/*"
-    ],
-    "nohoist": [
-      "**/swiss-**"
     ]
   },
   "main": "index.js",
