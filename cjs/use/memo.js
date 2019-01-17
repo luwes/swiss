@@ -12,7 +12,7 @@ Object.defineProperty(exports, '__esModule', {value: true}).default = (callback,
     stack.push(create(callback, comp));
   const {filter, value, fn, inputs} = stack[i];
   return (filter ? diff(inputs, comp) : (callback !== fn)) ?
-          (stack[i] = create(callback, comp)) :
+          (stack[i] = create(callback, comp)).value :
           value;
 };
 
