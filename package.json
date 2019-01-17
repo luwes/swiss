@@ -15,6 +15,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint packages/*/src",
+    "test": "yarn lint",
     "build": "rollup -c scripts/rollup/config.js",
     "watch": "rollup -wc scripts/rollup/config.js"
   },
