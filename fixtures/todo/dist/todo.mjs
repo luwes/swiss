@@ -1831,16 +1831,16 @@ const CONNECTED = 'connected';
 const DISCONNECTED = 'dis' + CONNECTED;
 
 function element(...enhancers) {
-  let enhancer = compose(...enhancers);
-  return (renderFn, options) => enhancedElement(renderFn, enhancer, options);
+  return (component, enhancer, options) => {
+    if (typeof enhancer !== 'function' && typeof options === 'undefined') {
+      options = enhancer;
+      enhancer = undefined;
+    }
+    return enhancedElement(component, compose(enhancer, ...enhancers), options);
+  };
 }
 
-function enhancedElement(renderFn, enhancer, options) {
-  if (typeof enhancer !== 'function' && typeof options === 'undefined') {
-    options = enhancer;
-    enhancer = undefined;
-  }
-
+function enhancedElement(component, enhancer, options) {
   const Native = getNativeConstructor(options && options.extends);
   function SwissElement() {
     if (typeof enhancer !== 'undefined') {
@@ -1892,22 +1892,34 @@ function enhancedElement(renderFn, enhancer, options) {
   });
 
   const updates = new WeakMap;
+  let isRendering = false;
 
   function init() {
-    updates.set(this, augmentor(requestUpdate));
+    updates.set(this, augmentor(patch.bind(this)));
   }
 
-  function requestUpdate() {
-    this.renderer(this.renderRoot, render.bind(this));
-    return this;
+  function patch() {
+    const fragment = component.call(this, this);
+    return this.render.call(this, fragment);
+  }
+
+  function render(fragment) {
+    if (isRendering) {
+      throw new Error('Render loop.');
+    }
+
+    try {
+      isRendering = true;
+      this.renderer(this.renderRoot, () => fragment);
+    } finally {
+      isRendering = false;
+    }
+
+    return fragment;
   }
 
   function renderer(root, html) {
     root.innerHTML = html();
-  }
-
-  function render() {
-    return renderFn.call(this, this);
   }
 
   function update() {
@@ -1939,6 +1951,7 @@ function enhancedElement(renderFn, enhancer, options) {
     attributeChangedCallback,
     shouldUpdate,
     renderer,
+    render,
     get renderRoot() {
       return this.shadowRoot || this._shadowRoot || this;
     }
@@ -1959,17 +1972,67 @@ function rndrr(renderer = defaultRenderer) {
   };
 }
 
+function applyMiddleware(...middlewares) {
+  return createElement => (...args) => {
+    const element = createElement(...args);
+
+    let render = () => {
+      throw new Error(
+        `Rendering while constructing your middleware is not allowed. ` +
+          `Other middleware would not be applied to this render.`
+      );
+    };
+
+    const middlewareAPI = {
+      render: (...args) => render(...args)
+    };
+
+    const chain = middlewares.map(middleware => middleware(middlewareAPI));
+    render = compose(...chain)(element.render.bind(element));
+
+    element.render = render;
+    return element;
+  };
+}
+
+function createThunkMiddleware(extraArgument) {
+  return ({ render: render$$1 }) => {
+    return next => fragment => {
+      if (typeof fragment === 'function') {
+        return fragment(render$$1, extraArgument);
+      }
+
+      return next(fragment);
+    };
+  };
+}
+
+const logger = element$$1 => next => (fragment) => {
+  console.log(element$$1, fragment);
+  console.log(1, 'logger');
+  const result = next(fragment);
+  console.log(2, 'logger');
+  return result;
+};
+
+
 const lighterElement = element(rndrr(render));
 
 function TodoApp(element$$1) {
   const [count, setCount] = state(0);
 
-  return html`
-    <a href="#" onclick="${() => setCount(count + 1)}">
-      Check this out ${count} ${element$$1.value}
-    </a>`;
+  return function(render$$1) {
+    return Promise.resolve().then(() => {
+      setTimeout(() => {
+        render$$1(html`
+          <a href="#" onclick="${() => setCount(count + 1)}">
+            Check this out ${count} ${element$$1.value}
+          </a>`);
+      }, 1000);
+    });
+  };
 }
 
-customElements.define('todo-app', lighterElement(TodoApp, {
+customElements.define('todo-app', lighterElement(TodoApp, applyMiddleware(logger, createThunkMiddleware()), {
   observedAttributes: ['value']
 }));

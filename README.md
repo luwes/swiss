@@ -54,7 +54,7 @@ Returns a function to create a Swiss Element with.
 
 _`Function`_ A custom element creator function.
 
-## `element()(renderFn, options)`
+## `element()(component, options)`
 
 Returns a custom element which can be passed in `customElements.define`
 
