@@ -315,7 +315,7 @@ function enhancedElement(renderFn, enhancer, options) {
   }
 
   const Native = getNativeConstructor(options && options.extends);
-  function CustomElement() {
+  function SwissElement() {
     if (typeof enhancer !== 'undefined') {
       if (typeof enhancer !== 'function') {
         throw new Error('Expected the enhancer to be a function.');
@@ -323,14 +323,14 @@ function enhancedElement(renderFn, enhancer, options) {
 
       const enhancerRef = enhancer;
       enhancer = undefined;
-      const element = enhancerRef(CustomElement)(options);
+      const element = enhancerRef(SwissElement)(options);
       init.call(element);
       enhancer = enhancerRef;
       return element;
     }
 
-    if (!(this instanceof CustomElement)) {
-      return new CustomElement();
+    if (!(this instanceof SwissElement)) {
+      return new SwissElement();
     }
 
     if (typeof Reflect !== 'undefined') {
@@ -339,11 +339,11 @@ function enhancedElement(renderFn, enhancer, options) {
     return Native.call(this);
   }
 
-  const proto = CustomElement.prototype = Object.create(Native.prototype);
-  proto.constructor = CustomElement;
+  const proto = SwissElement.prototype = Object.create(Native.prototype);
+  proto.constructor = SwissElement;
 
-  CustomElement.observedAttributes = options && options.observedAttributes || [];
-  CustomElement.observedAttributes.forEach(name => {
+  SwissElement.observedAttributes = options && options.observedAttributes || [];
+  SwissElement.observedAttributes.forEach(name => {
     // it is possible to redefine the behavior at any time
     // simply overwriting get prop() and set prop(value)
     if (!(name in proto)) Object.defineProperty(
@@ -417,7 +417,7 @@ function enhancedElement(renderFn, enhancer, options) {
     }
   });
 
-  return CustomElement;
+  return SwissElement;
 }
 
 function useEffect$1(fn, inputs = []) {
