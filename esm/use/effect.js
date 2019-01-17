@@ -8,40 +8,44 @@ try {
   cancel = cancelAnimationFrame;
   request = requestAnimationFrame;
 } catch (o_O) {
-  // i.e. if you run this in NodeJS
   cancel = clearTimeout;
   request = setTimeout;
 }
 
-const create = (always, check, inputs, raf, fn) => ({
-  always,
-  check,
-  inputs,
-  raf,
-  fn,
-  clean: null,
-  t: 0,
-  update: check
-});
+const create = (always, check, inputs, raf, cb, stack, i) => {
+  const info = {
+    always,
+    cb,
+    check,
+    clean: null,
+    inputs,
+    raf,
+    t: 0,
+    update: check,
+    fn: () => {
+      set(stack[i], info.cb());
+    }
+  };
+  return info;
+};
 
-const effect = raf => (callback, refs) => {
+const effect = raf => (cb, refs) => {
   const {i, stack, unknown} = unstacked(id);
   const comp = refs || empty;
   if (unknown) {
     const always = comp === empty;
     const check = always || !raf || typeof comp !== typeof effect;
     if (always || !raf || typeof comp !== typeof effect) {
-      stack.push(create(always, check, comp, raf, () => {
-        set(stack[i], callback());
-      }));
+      stack.push(create(always, check, comp, raf, cb, stack, i));
     } else {
-      current().external.push(result => refs(callback, result));
-      stack.push(create(always, always, empty, raf, effect));
+      current().external.push(result => refs(cb, result));
+      stack.push(create(always, always, empty, raf, effect, stack, i));
     }
   } else {
     const info = stack[i];
     const {check, always, inputs} = info;
     if (check && (always || diff(inputs, comp))) {
+      info.cb = cb;
       info.inputs = comp;
       info.update = true;
     }
@@ -74,11 +78,12 @@ setup.push(runner => {
   runner.before.push(reset);
   runner.after.push(() => {
     for (let {length} = stack, i = 0; i < length; i++) {
-      const {fn, raf, update} = stack[i];
+      const current = stack[i];
+      const {fn, raf, update} = current;
       if (update) {
-        stack[i].update = false;
+        current.update = false;
         if (raf)
-          stack[i].t = request(fn);
+          current.t = request(fn);
         else
           fn();
       }
