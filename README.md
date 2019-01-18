@@ -1,10 +1,10 @@
-<p align="center">
-<a href="https://github.com/luwes/swiss-element">
-  
-![SwissElement](./media/swiss-element.svg "SwissElement")
 
-</a>
-</p>
+# <a href="https://github.com/luwes/swiss-element">![SwissElement](./media/swiss-element.svg "SwissElement")</a>
+
+[![Build Status](https://img.shields.io/travis/luwes/swiss-element/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/swiss-element)
+[![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=$VERSION)](https://codecov.io/gh/luwes/swiss-element)
+![Badge size](http://img.badgesize.io/luwes/swiss-element/master/packages/swiss-element/dist/swiss-element.js.svg?style=flat-square&compression=gzip&version=$VERSION)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 **npm**: `npm install swiss-element --save`  
 **cdn**: https://unpkg.com/swiss-element@latest/dist/swiss-element.js  
@@ -16,7 +16,6 @@ Swiss Element provides a functional way of defining custom elements.
 - React-like [hooks](https://reactjs.org/docs/hooks-intro.html) (useEffect, useState, useCallback, useMemo, useReducer, useRef)
 - Extend the custom element with composition via enhancers
 - Choose your own renderer
-- Tiny in size (2.5kB)
 
 ### Example
 
