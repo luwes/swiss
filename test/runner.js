@@ -108,7 +108,7 @@ const App = augmentor(() => {
   useMemo(() => {
     update(state + 1);
   }, []);
-  return () => state;
+  return state;
 });
 
 console.assert(App() === 1, 'no races');
