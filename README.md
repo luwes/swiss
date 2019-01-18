@@ -89,7 +89,7 @@ Middleware is the suggested way to extend Swiss Element with custom functionalit
 
 ### Why another dude?
 
-There are dozens of custom element libraries out there, sorry to say, I didn't find one that fit the my exact requirements.
+There are dozens of custom element libraries out there, sorry to say, I didn't find one that fit my exact requirements.
 
 - No ES6 classes and classical inheritance ~~hyperHTML-element, lit-element, skatejs~~
 - Choose your own render engine ~~neverland, hybrids~~

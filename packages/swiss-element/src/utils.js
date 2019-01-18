@@ -16,7 +16,7 @@ export function getNativeConstructor(ext) {
  * from right to left. For example, compose(f, g, h) is identical to doing
  * (...args) => f(g(h(...args))).
  */
-export const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x);
+export const compose = (...fns) => x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
 
 export const camel = name => name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 

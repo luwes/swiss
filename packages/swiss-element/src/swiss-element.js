@@ -1,4 +1,4 @@
-import augmentor from 'augmentor';
+import augmentor from './augmentor.js';
 import { camel, compose, completeAssign, CustomEvent, getNativeConstructor } from './utils.js';
 
 export const CONNECTED = 'connected';

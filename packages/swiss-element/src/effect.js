@@ -1,4 +1,4 @@
-import { useEffect as effect } from 'augmentor';
+import { useEffect as effect } from './augmentor.js';
 import { CONNECTED, DISCONNECTED } from './swiss-element.js';
 
 export function useEffect(fn, inputs = []) {

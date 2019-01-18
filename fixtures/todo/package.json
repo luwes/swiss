@@ -2,9 +2,6 @@
   "name": "swiss-element-todo",
   "private": true,
   "version": "0.0.1",
-  "workspaces": {
-    "nohoist": ["**"]
-  },
   "scripts": {
     "start": "node scripts/start"
   },
@@ -14,6 +11,6 @@
   "dependencies": {
     "lighterhtml": "^0.5.0",
     "lit-html": "^1.0.0-rc.2",
-    "swiss-element": "0.0.3"
+    "swiss-element": "0.1.0"
   }
 }

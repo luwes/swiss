@@ -5,7 +5,7 @@ export {
   useReducer,
   useRef,
   useState
-} from 'augmentor';
+} from './augmentor.js';
 
 export * from './swiss-element.js';
 export { useEffect } from './effect.js';
