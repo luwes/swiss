@@ -1,4 +1,3 @@
-
 import { element } from '../src/swiss-element.js';
 import renderer from '../src/enhancers/renderer.js';
 
@@ -6,34 +5,33 @@ it('element returns a function', function() {
   element().should.be.a('function');
 });
 
-// test('element creator returns a function', function(t) {
-//   const SwissElement = element()(() => `Say cheese`);
-//   t.is(typeof SwissElement, 'function');
-// });
+it('element creator returns a function', function() {
+  const SwissElement = element()(() => `Say cheese`);
+  SwissElement.should.be.a('function');
+});
 
-// test('element creator has an api', function(t) {
-//   const SwissElement = element()(() => `Say cheese`);
-//   const proto = SwissElement.prototype;
+it('element creator has an api', function() {
+  const SwissElement = element()(() => `Say cheese`);
+  const proto = SwissElement.prototype;
 
-//   t.true('connectedCallback' in proto);
-//   t.true('disconnectedCallback' in proto);
-//   t.true('attributeChangedCallback' in proto);
-//   t.true('shouldUpdate' in proto);
-//   t.true('renderer' in proto);
-//   t.true('render' in proto);
-//   t.true('renderRoot' in proto);
-// });
+  expect('connectedCallback' in proto).to.be.true;
+  expect('disconnectedCallback' in proto).to.be.true;
+  expect('attributeChangedCallback' in proto).to.be.true;
+  expect('shouldUpdate' in proto).to.be.true;
+  expect('renderer' in proto).to.be.true;
+  expect('render' in proto).to.be.true;
+  expect('renderRoot' in proto).to.be.true;
+});
 
-// test('element can be enhanced', async function(t) {
-//   const customRender = (root, html) => root.appendChild(html());
+it('element can be enhanced', function() {
+  const customRender = sinon.spy((root, html) => root.innerHTML = html());
 
-//   const SwissElement = element(renderer(customRender))(() => `Say cheese`);
-//   window.customElements.define('swiss-element', SwissElement);
+  const SwissElement = element(renderer(customRender))(() => `Say cheese`);
+  window.customElements.define('swiss-element', SwissElement);
 
-//   const swissElement = document.createElement('swiss-element');
-//   document.body.appendChild(swissElement);
+  const swissElement = document.createElement('swiss-element');
+  document.body.appendChild(swissElement);
 
-//   console.log(swissElement.innerHTML);
-
-//   t.pass();
-// });
+  expect(swissElement.innerHTML).to.equal('Say cheese');
+  expect(customRender).to.have.been.calledOnce;
+});
