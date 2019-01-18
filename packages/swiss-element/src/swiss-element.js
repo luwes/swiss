@@ -1,5 +1,11 @@
 import augmentor from './augmentor.js';
-import { camel, compose, completeAssign, CustomEvent, getNativeConstructor } from './utils.js';
+import {
+  camel,
+  compose,
+  completeAssign,
+  CustomEvent,
+  getNativeConstructor
+} from './utils.js';
 
 export const CONNECTED = 'connected';
 export const DISCONNECTED = 'dis' + CONNECTED;
@@ -10,7 +16,14 @@ export function element(...enhancers) {
       options = enhancer;
       enhancer = undefined;
     }
-    return enhancedElement(component, compose(enhancer, ...enhancers), options);
+    return enhancedElement(
+      component,
+      compose(
+        enhancer,
+        ...enhancers
+      ),
+      options
+    );
   };
 }
 
@@ -40,32 +53,28 @@ function enhancedElement(component, enhancer, options) {
     return Native.call(this);
   }
 
-  const proto = SwissElement.prototype = Object.create(Native.prototype);
+  const proto = (SwissElement.prototype = Object.create(Native.prototype));
   proto.constructor = SwissElement;
 
-  SwissElement.observedAttributes = options && options.observedAttributes || [];
+  SwissElement.observedAttributes =
+    (options && options.observedAttributes) || [];
   SwissElement.observedAttributes.forEach(name => {
     // it is possible to redefine the behavior at any time
     // simply overwriting get prop() and set prop(value)
-    if (!(name in proto)) Object.defineProperty(
-      proto,
-      camel(name),
-      {
+    if (!(name in proto))
+      Object.defineProperty(proto, camel(name), {
         configurable: true,
         get() {
           return this.getAttribute(name);
         },
         set(value) {
-          if (value == null)
-            this.removeAttribute(name);
-          else
-            this.setAttribute(name, value);
+          if (value == null) this.removeAttribute(name);
+          else this.setAttribute(name, value);
         }
-      }
-    );
+      });
   });
 
-  const updates = new WeakMap;
+  const updates = new WeakMap();
   let isRendering = false;
 
   function init() {

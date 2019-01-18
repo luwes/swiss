@@ -1,4 +1,3 @@
-
 function defaultRenderer(root, html) {
   root.innerHTML = html();
 }

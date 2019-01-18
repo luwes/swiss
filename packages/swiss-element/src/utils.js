@@ -1,4 +1,3 @@
-
 export function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
 }
@@ -16,9 +15,11 @@ export function getNativeConstructor(ext) {
  * from right to left. For example, compose(f, g, h) is identical to doing
  * (...args) => f(g(h(...args))).
  */
-export const compose = (...fns) => x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
+export const compose = (...fns) => x =>
+  fns.filter(Boolean).reduceRight((y, f) => f(y), x);
 
-export const camel = name => name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
+export const camel = name =>
+  name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 
 /**
  * Create a complete assign function with custom descriptors.
@@ -26,15 +27,15 @@ export const camel = name => name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCas
  * @return {Function}
  */
 export function createCompleteAssign(options) {
-    return (target, ...sources) => {
-        sources.forEach((source) => {
-            for (const prop in source) {
-                const descriptor = Object.getOwnPropertyDescriptor(source, prop);
-                Object.defineProperty(target, prop, Object.assign(descriptor, options));
-            }
-        });
-        return target;
-    };
+  return (target, ...sources) => {
+    sources.forEach(source => {
+      for (const prop in source) {
+        const descriptor = Object.getOwnPropertyDescriptor(source, prop);
+        Object.defineProperty(target, prop, Object.assign(descriptor, options));
+      }
+    });
+    return target;
+  };
 }
 
 /**
@@ -45,9 +46,9 @@ export function createCompleteAssign(options) {
  * @return {Object} The target with assigned properties
  */
 export const completeAssign = createCompleteAssign({
-    enumerable: false,
-    configurable: true,
-    writeable: false
+  enumerable: false,
+  configurable: true,
+  writeable: false
 });
 
 export function CustomEvent(name, params = {}) {

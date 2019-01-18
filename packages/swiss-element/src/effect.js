@@ -27,8 +27,7 @@ function onconnected() {
 }
 
 function ondisconnected() {
-  const {_} = this;
+  const { _ } = this;
   this._ = null;
-  if (_)
-    _();
+  if (_) _();
 }

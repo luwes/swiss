@@ -1,5 +1,4 @@
-
-# <a href="https://github.com/luwes/swiss-element">![SwissElement](./media/swiss-element.svg "SwissElement")</a>
+# <a href="https://github.com/luwes/swiss-element">![SwissElement](./media/swiss-element.svg 'SwissElement')</a>
 
 [![Build Status](https://img.shields.io/travis/luwes/swiss-element/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/swiss-element)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=$VERSION)](https://codecov.io/gh/luwes/swiss-element)
@@ -7,7 +6,7 @@
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 **npm**: `npm install swiss-element --save`  
-**cdn**: https://unpkg.com/swiss-element@latest/dist/swiss-element.js  
+**cdn**: https://unpkg.com/swiss-element@latest/dist/swiss-element.js
 
 ### Intro
 
@@ -31,7 +30,8 @@ function Counter(element) {
   return html`
     <a href="#" onclick="${() => setCount(count + 1)}">
       Clicked ${count} times
-    </a>`;
+    </a>
+  `;
 }
 
 customElements.define('s-counter', lighterElement(Counter));
@@ -97,7 +97,7 @@ There are dozens of custom element libraries out there, sorry to say, I didn't f
 
 SwissElement doesn't use ES6 classes, Proxy, Shadow DOM (can be configured), etc because IE11 should still be easy to support. The only needed polyfill is the one for `window.customElements`.
 
-```html 
+```html
 <script src="https://unpkg.com/@webcomponents/custom-elements"></script>
 ```
 
@@ -105,4 +105,4 @@ SwissElement doesn't use ES6 classes, Proxy, Shadow DOM (can be configured), etc
 
 - [Augmentor](https://github.com/WebReflection/augmentor) the only dependency that provides the hooks
 - [React](https://reactjs.org/) for the hooks concept
-- [Redux](https://redux.js.org/) for concepts and adapted docs (writings docs is hard (:) 
+- [Redux](https://redux.js.org/) for concepts and adapted docs (writings docs is hard (:)

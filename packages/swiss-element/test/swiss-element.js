@@ -24,7 +24,7 @@ it('element creator has an api', function() {
 });
 
 it('element can be enhanced', function() {
-  const customRender = sinon.spy((root, html) => root.innerHTML = html());
+  const customRender = sinon.spy((root, html) => (root.innerHTML = html()));
 
   const SwissElement = element(renderer(customRender))(() => `Say cheese`);
   window.customElements.define('swiss-element', SwissElement);
