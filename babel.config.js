@@ -6,7 +6,6 @@ module.exports = {
       {
         modules: false,
         loose: true,
-        shippedProposals: true,
         targets: {
           browsers: ['ie >= 11']
         }

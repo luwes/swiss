@@ -1,5 +1,5 @@
 import { html, render } from 'lighterhtml';
-import { applyMiddleware, element, renderer, useState } from 'swiss-element';
+import { applyMiddleware, compose, element, renderer, useState } from 'swiss-element';
 
 
 function createThunkMiddleware(extraArgument) {
@@ -22,9 +22,6 @@ const logger = element => next => (fragment) => {
   return result;
 };
 
-
-const lighterElement = element(renderer(render));
-
 function TodoApp(element) {
   const [count, setCount] = useState(0);
 
@@ -40,6 +37,11 @@ function TodoApp(element) {
   };
 }
 
-customElements.define('todo-app', lighterElement(TodoApp, applyMiddleware(logger, createThunkMiddleware()), {
+const enhance = compose(
+  renderer(render),
+  applyMiddleware(logger, createThunkMiddleware())
+);
+
+element('todo-app', TodoApp, enhance, {
   observedAttributes: ['value']
-}));
+});

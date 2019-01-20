@@ -20,6 +20,9 @@ function getConfig({ global, input, format }) {
   const [base, name] = input.split('/');
   return {
     input,
+    watch: {
+      clearScreen: false,
+    },
     output: {
       format,
       file: path.join(base, name, `dist/${name}${formatOptions[format].ext}`),
@@ -30,7 +33,14 @@ function getConfig({ global, input, format }) {
       format === UMD && babel(),
       format === UMD && terser(),
       bundleSize(),
-    ].filter(Boolean)
+    ].filter(Boolean),
+    onwarn: function (warning) {
+      // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
+      if (warning.code === 'THIS_IS_UNDEFINED')
+        return;
+
+      console.error(warning.message);
+    }
   };
 }
 

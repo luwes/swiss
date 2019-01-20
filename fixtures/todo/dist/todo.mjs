@@ -151,10 +151,10 @@ var createContent = (function (document) {  var FRAGMENT = 'fragment';
 }(document));
 
 /*! (c) Andrea Giammarchi - ISC */
-var self = undefined || /* istanbul ignore next */ {};
-try { self.Map = Map; }
+var self$1 = undefined || /* istanbul ignore next */ {};
+try { self$1.Map = Map; }
 catch (Map) {
-  self.Map = function Map() {
+  self$1.Map = function Map() {
     var i = 0;
     var k = [];
     var v = [];
@@ -184,7 +184,7 @@ catch (Map) {
     }
   };
 }
-var Map$1 = self.Map;
+var Map$1 = self$1.Map;
 
 const append = (get, parent, children, start, end, before) => {
   if ((end - start) < 2)
@@ -773,12 +773,12 @@ const domdiff = (
 };
 
 /*! (c) Andrea Giammarchi - ISC */
-var self$1 = undefined || /* istanbul ignore next */ {};
-try { self$1.WeakMap = WeakMap; }
+var self$2 = undefined || /* istanbul ignore next */ {};
+try { self$2.WeakMap = WeakMap; }
 catch (WeakMap) {
   // this could be better but 90% of the time
   // it's everything developers need as fallback
-  self$1.WeakMap = (function (id, Object) {    var dP = Object.defineProperty;
+  self$2.WeakMap = (function (id, Object) {    var dP = Object.defineProperty;
     var hOP = Object.hasOwnProperty;
     var proto = WeakMap.prototype;
     proto.delete = function (key) {
@@ -805,7 +805,7 @@ catch (WeakMap) {
     }
   }(Math.random(), Object));
 }
-var WeakMap$1 = self$1.WeakMap;
+var WeakMap$1 = self$2.WeakMap;
 
 /*! (c) Andrea Giammarchi - ISC */
 var importNode = (function (
@@ -1766,6 +1766,10 @@ const id$5 = uid();
 
 setup.push(stacked(id$5));
 
+function isFunction(value) {
+  return typeof value === 'function';
+}
+
 function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
 }
@@ -1783,11 +1787,21 @@ function getNativeConstructor(ext) {
  * from right to left. For example, compose(f, g, h) is identical to doing
  * (...args) => f(g(h(...args))).
  */
-const compose = (...fns) => x =>
-  fns.filter(Boolean).reduceRight((y, f) => f(y), x);
+function compose(...fns) {
+  return x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
+}
 
-const camel = name =>
-  name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
+function camelCase(name) {
+  return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
+}
+
+function kebabCase(name) {
+  return name.replace(/([a-zA-Z])(?=[A-Z])/g, '$1-').toLowerCase();
+}
+
+function hasDash(name) {
+  return name && name.indexOf('-') !== -1;
+}
 
 /**
  * Create a complete assign function with custom descriptors.
@@ -1820,71 +1834,194 @@ const completeAssign = createCompleteAssign({
 });
 
 function CustomEvent(name, params = {}) {
-  if ('CustomEvent' in window && typeof window.CustomEvent === 'function') {
-    return new window.CustomEvent(name, params);
-  } else {
-    var newEvent = document.createEvent('CustomEvent');
-    newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
-    return newEvent;
+  if ('CustomEvent' in self && isFunction(self.CustomEvent)) {
+    return new self.CustomEvent(name, params);
   }
+
+  var newEvent = document.createEvent('CustomEvent');
+  newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
+  return newEvent;
+}
+
+function extend(Base, init) {
+  function Class(...args) {
+    if (!(this instanceof Class)) {
+      return new Class(...args);
+    }
+    this._super = (...args) => {
+      return typeof Reflect !== 'undefined'
+        ? Reflect.construct(Base, args, this.constructor)
+        : Base.apply(this, args);
+    };
+    return init.apply(this, args);
+  }
+
+  Class.prototype = Object.create(Base.prototype);
+  Class.prototype.constructor = Class;
+  return Class;
+}
+
+function define(name, Element, options) {
+  if (name) {
+    self.customElements.define(name, Element, options);
+  }
+}
+
+function findFreeTagName(name, suffix = null) {
+  name = name || 's';
+  const tag = kebabCase(suffix ? `${name}-${suffix}` : name);
+  return isFreeTagName(tag) ? tag : findFreeTagName(tag, uniqueId());
+}
+
+function isFreeTagName(name) {
+  return hasDash(name) && !self.customElements.get(name);
+}
+
+/**
+ * Generates a unique ID. If `prefix` is given, the ID is appended to it.
+ *
+ * @param {string} prefix The value to prefix the ID with.
+ * @return {string} Returns the unique ID.
+ * @example
+ *
+ *    uniqueId('contact_');
+ *    // => 'contact_104'
+ *
+ *    uniqueId();
+ *    // => '105'
+ */
+let idCounter = 0;
+function uniqueId(prefix = '') {
+  var id = ++idCounter;
+  return `${prefix}${id}`;
 }
 
 const CONNECTED = 'connected';
-const DISCONNECTED = 'dis' + CONNECTED;
+const DISCONNECTED = 'disconnected';
 
-function element(...enhancers) {
-  return (component, enhancer, options) => {
-    if (typeof enhancer !== 'function' && typeof options === 'undefined') {
-      options = enhancer;
-      enhancer = undefined;
+function createElement(options, enhancer) {
+  if (typeof enhancer !== 'undefined') {
+    if (!isFunction(enhancer)) {
+      throw new Error('Expected the enhancer to be a function.');
     }
-    return enhancedElement(
-      component,
-      compose(
-        enhancer,
-        ...enhancers
-      ),
-      options
-    );
+
+    return enhancer(createElement)(options);
+  }
+
+  const { el, component } = options;
+
+  const update = augmentor(() => {
+    const fragment = component.call(el, el);
+    return el.render.call(el, fragment);
+  });
+
+  function render(fragment) {
+    el.renderer(el.renderRoot, () => fragment);
+    return fragment;
+  }
+
+  function renderer(root, html) {
+    root.innerHTML = html();
+  }
+
+  function connectedCallback() {
+    update.call(el);
+    el.dispatchEvent(new CustomEvent(CONNECTED));
+  }
+
+  function disconnectedCallback() {
+    el.dispatchEvent(new CustomEvent(DISCONNECTED));
+  }
+
+  function attributeChangedCallback(name, oldValue, newValue) {
+    if (el.shouldUpdate(oldValue, newValue)) {
+      update.call(el);
+    }
+  }
+
+  function shouldUpdate(oldValue, newValue) {
+    return oldValue !== newValue;
+  }
+
+  return {
+    render,
+    renderer,
+    connectedCallback,
+    disconnectedCallback,
+    attributeChangedCallback,
+    shouldUpdate,
+    get renderRoot() {
+      return el.shadowRoot || el._shadowRoot || el;
+    }
   };
 }
 
-function enhancedElement(component, enhancer, options) {
-  const Native = getNativeConstructor(options && options.extends);
-  function SwissElement() {
-    if (typeof enhancer !== 'undefined') {
-      if (typeof enhancer !== 'function') {
-        throw new Error('Expected the enhancer to be a function.');
-      }
-
-      const enhancerRef = enhancer;
-      enhancer = undefined;
-      const element = enhancerRef(SwissElement)(options);
-      init.call(element);
-      enhancer = enhancerRef;
-      return element;
-    }
-
-    if (!(this instanceof SwissElement)) {
-      return new SwissElement();
-    }
-
-    if (typeof Reflect !== 'undefined') {
-      return Reflect.construct(Native, [], this.constructor);
-    }
-    return Native.call(this);
+/**
+ * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
+ *
+ * @param  {string} name The tag name for the custom element.
+ * @param  {Function} component The component that is rendered in the element.
+ * @param  {Function} [enhancer] The element enhancer. You may optionally specify it to enhance the element with third-party capabilities such as middleware, custom renderer, public API, etc. The only element enhancers that ship with Swiss Element are `applyMiddleware` and `renderer`.
+ * @param  {Object} [options] An options object with 2 optional properties `observedAttributes` and `extends` (e.g. `extends: 'button'`).
+ The options object is also passed to all the enhancers.
+ *
+ * @return {HTMLElement}
+ */
+function element(name, component, enhancer, options) {
+  if (isFunction(name)) {
+    options = enhancer;
+    enhancer = component;
+    component = name;
+    name = undefined;
   }
 
-  const proto = (SwissElement.prototype = Object.create(Native.prototype));
-  proto.constructor = SwissElement;
+  if (!isFunction(enhancer) && typeof options === 'undefined') {
+    options = enhancer;
+    enhancer = undefined;
+  }
 
-  SwissElement.observedAttributes =
-    (options && options.observedAttributes) || [];
-  SwissElement.observedAttributes.forEach(name => {
+  options = options || {};
+  name = options.name = findFreeTagName(name || options.name);
+
+  const Native = getNativeConstructor(options && options.extends);
+  const SwissElement = extend(Native, function() {
+    const el = this._super();
+    const opts = { ...options, component, el };
+    const api = createElement(opts, enhancer);
+    return completeAssign(el, api);
+  });
+
+  // Callbacks have to be on the prototype before construction.
+  forwardCallbacks(SwissElement.prototype, [
+    'connectedCallback',
+    'disconnectedCallback',
+    'attributeChangedCallback',
+    'adoptedCallback'
+  ]);
+
+  SwissElement.observedAttributes = options.observedAttributes || [];
+  addPropsToAttrs(SwissElement.prototype, SwissElement.observedAttributes);
+
+  define(name, SwissElement, options);
+  return SwissElement;
+}
+
+function forwardCallbacks(proto, callbacks) {
+  callbacks.forEach(cb => {
+    proto[cb] = function(...args) {
+      if (cb in this) {
+        this[cb](...args);
+      }
+    };
+  });
+}
+
+function addPropsToAttrs(proto, attributes) {
+  attributes.forEach(name => {
     // it is possible to redefine the behavior at any time
     // simply overwriting get prop() and set prop(value)
-    if (!(name in proto))
-      Object.defineProperty(proto, camel(name), {
+    if (!(name in proto)) {
+      Object.defineProperty(proto, camelCase(name), {
         configurable: true,
         get() {
           return this.getAttribute(name);
@@ -1894,90 +2031,37 @@ function enhancedElement(component, enhancer, options) {
           else this.setAttribute(name, value);
         }
       });
-  });
-
-  const updates = new WeakMap();
-  let isRendering = false;
-
-  function init() {
-    updates.set(this, augmentor(patch.bind(this)));
-  }
-
-  function patch() {
-    const fragment = component.call(this, this);
-    return this.render.call(this, fragment);
-  }
-
-  function render(fragment) {
-    if (isRendering) {
-      throw new Error('Render loop.');
-    }
-
-    try {
-      isRendering = true;
-      this.renderer(this.renderRoot, () => fragment);
-    } finally {
-      isRendering = false;
-    }
-
-    return fragment;
-  }
-
-  function renderer(root, html) {
-    root.innerHTML = html();
-  }
-
-  function update() {
-    updates.get(this).call(this);
-  }
-
-  function connectedCallback() {
-    update.call(this);
-    this.dispatchEvent(new CustomEvent(CONNECTED));
-  }
-
-  function disconnectedCallback() {
-    this.dispatchEvent(new CustomEvent(DISCONNECTED));
-  }
-
-  function attributeChangedCallback(name, oldValue, newValue) {
-    if (this.shouldUpdate(oldValue, newValue)) {
-      update.call(this);
-    }
-  }
-
-  function shouldUpdate(oldValue, newValue) {
-    return oldValue !== newValue;
-  }
-
-  completeAssign(proto, {
-    connectedCallback,
-    disconnectedCallback,
-    attributeChangedCallback,
-    shouldUpdate,
-    renderer,
-    render,
-    get renderRoot() {
-      return this.shadowRoot || this._shadowRoot || this;
     }
   });
-
-  return SwissElement;
 }
 
 function defaultRenderer(root, html) {
   root.innerHTML = html();
 }
 
-function rndrr(renderer = defaultRenderer) {
+/**
+ * Adds a simple way to define your own renderer.
+ *
+ * @param  {Function} customRenderer A function that takes the custom element root and a function `html` which once executed renders the created dom nodes to the root node of the custom element.
+ *
+ * @return {Function}
+ */
+function renderer(customRenderer = defaultRenderer) {
   return createElement => (...args) => {
     const element = createElement(...args);
-    element.renderer = renderer;
+    element.renderer = customRenderer;
     return element;
   };
 }
 
-function applyMiddleware(...middlewares) {
+/**
+ * Middleware is the suggested way to extend Swiss Element with custom functionality. Middleware lets you wrap the element's render method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
+ *
+ * @param  {...Function} middleware Functions that conform to the Swiss Element _middleware_ API. Each middleware receives `SwissElement`'s `render` function as a named argument, and returns a function. That function will be given the `next` middleware's render method, and is expected to return a function of `fragment` calling `next(fragment)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in the chain will receive the real element's `render` method as the `next` parameter, thus ending the chain. So, the middleware signature is `({ render }) => next => fragment`.
+ *
+ * @return {Function}
+ */
+function applyMiddleware(...middleware) {
   return createElement => (...args) => {
     const element = createElement(...args);
 
@@ -1992,7 +2076,7 @@ function applyMiddleware(...middlewares) {
       render: (...args) => render(...args)
     };
 
-    const chain = middlewares.map(middleware => middleware(middlewareAPI));
+    const chain = middleware.map(mw => mw(middlewareAPI));
     render = compose(...chain)(element.render.bind(element));
 
     element.render = render;
@@ -2020,9 +2104,6 @@ const logger = element$$1 => next => (fragment) => {
   return result;
 };
 
-
-const lighterElement = element(rndrr(render));
-
 function TodoApp(element$$1) {
   const [count, setCount] = state(0);
 
@@ -2038,6 +2119,11 @@ function TodoApp(element$$1) {
   };
 }
 
-customElements.define('todo-app', lighterElement(TodoApp, applyMiddleware(logger, createThunkMiddleware()), {
+const enhance = compose(
+  renderer(render),
+  applyMiddleware(logger, createThunkMiddleware())
+);
+
+element('todo-app', TodoApp, enhance, {
   observedAttributes: ['value']
-}));
+});

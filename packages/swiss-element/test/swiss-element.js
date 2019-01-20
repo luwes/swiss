@@ -6,32 +6,54 @@ it('element returns a function', function() {
 });
 
 it('element creator returns a function', function() {
-  const SwissElement = element()(() => `Say cheese`);
+  const SwissElement = element(() => `Say cheese`);
   SwissElement.should.be.a('function');
 });
 
-it('element creator has an api', function() {
-  const SwissElement = element()(() => `Say cheese`);
-  const proto = SwissElement.prototype;
+it('custom element lifecycle callbacks work', function() {
+  const customLifecycle = createElement => options => {
+    const el = createElement(options);
+    el.connectedCallback = sinon.spy();
+    el.disconnectedCallback = sinon.spy();
+    el.attributeChangedCallback = sinon.spy();
+    return el;
+  };
 
-  expect('connectedCallback' in proto).to.be.true;
-  expect('disconnectedCallback' in proto).to.be.true;
-  expect('attributeChangedCallback' in proto).to.be.true;
-  expect('shouldUpdate' in proto).to.be.true;
-  expect('renderer' in proto).to.be.true;
-  expect('render' in proto).to.be.true;
-  expect('renderRoot' in proto).to.be.true;
+  const cheese = element('s-cheese', () => `Say cheese`, customLifecycle, {
+    observedAttributes: ['hole']
+  })();
+
+  document.body.appendChild(cheese);
+  cheese.setAttribute('hole', 1);
+  cheese.remove();
+
+  expect(cheese.connectedCallback).to.have.been.calledOnce;
+  expect(cheese.disconnectedCallback).to.have.been.calledOnce;
+  expect(cheese.attributeChangedCallback).to.have.been.calledOnce;
 });
 
 it('element can be enhanced', function() {
   const customRender = sinon.spy((root, html) => (root.innerHTML = html()));
 
-  const SwissElement = element(renderer(customRender))(() => `Say cheese`);
-  window.customElements.define('swiss-element', SwissElement);
+  element('swiss-element', () => `Say cheese`, renderer(customRender));
 
   const swissElement = document.createElement('swiss-element');
   document.body.appendChild(swissElement);
 
   expect(swissElement.innerHTML).to.equal('Say cheese');
   expect(customRender).to.have.been.calledOnce;
+});
+
+it('element can extend a native', function() {
+  function RenderButton() {
+    return `I am button`;
+  }
+
+  const customRender = sinon.spy((root, html) => (root.innerHTML = html()));
+
+  const button = element(RenderButton, renderer(customRender))();
+  document.body.appendChild(button);
+
+  expect(button.innerHTML).to.equal('I am button');
+  expect(button instanceof HTMLElement).to.be.true;
 });

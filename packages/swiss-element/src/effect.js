@@ -1,5 +1,5 @@
 import { useEffect as effect } from './augmentor.js';
-import { CONNECTED, DISCONNECTED } from './swiss-element.js';
+import { CONNECTED, DISCONNECTED } from './create-element.js';
 
 export function useEffect(fn, inputs = []) {
   const args = [fn];

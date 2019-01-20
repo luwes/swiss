@@ -22,8 +22,6 @@ Swiss Element provides a functional way of defining custom elements.
 import { html, render } from 'lighterhtml';
 import { element, renderer, useState } from 'swiss-element';
 
-const lighterElement = element(renderer(render));
-
 function Counter(element) {
   const [count, setCount] = useState(0);
 
@@ -34,56 +32,64 @@ function Counter(element) {
   `;
 }
 
-customElements.define('s-counter', lighterElement(Counter));
+element('s-counter', Counter, renderer(render));
 ```
 
 A starter app is available at https://codesandbox.io/s/github/luwes/swiss-element-starter-app/tree/master/
 
 # API
 
-## `element([...enhancers])`
+<a name="element"></a>
 
-Returns a function to create a Swiss Element with.
+### element(name, component, [enhancer], [options]) ⇒ <code>HTMLElement</code>
 
-#### Arguments
+Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
 
-1. `[...enhancers]` _(Function)_: The element enhancer. You may optionally specify it to enhance the element with third-party capabilities such as middleware, custom renderer, public API, etc. The only element enhancers that ship with Swiss Element are `applyMiddleware` and `renderer`.
+**Kind**: global function
 
-#### Returns
+| Param      | Type                  | Description                                                                                                                                                                                                                                                  |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| name       | <code>string</code>   | The tag name for the custom element.                                                                                                                                                                                                                         |
+| component  | <code>function</code> | The component that is rendered in the element.                                                                                                                                                                                                               |
+| [enhancer] | <code>function</code> | The element enhancer. You may optionally specify it to enhance the element with third-party capabilities such as middleware, custom renderer, public API, etc. The only element enhancers that ship with Swiss Element are `applyMiddleware` and `renderer`. |
+| [options]  | <code>Object</code>   | An options object with 2 optional properties `observedAttributes` and `extends` (e.g. `extends: 'button'`). The options object is also passed to all the enhancers.                                                                                          |
 
-_`Function`_ A custom element creator function.
-
-## `element()(component, options)`
-
-Returns a custom element which can be passed in `customElements.define`
-
-#### Arguments
-
-1. `component` _(Function)_: The functional component.
-
-2. `options` _(Object)_: An options object with 2 optional properties `observedAttributes` and `extends` (e.g. `extends: 'button'`). The options object is also passed to all the enhancers.
-
-#### Returns
-
-_`SwissElement`_ A custom element.
+---
 
 # Enhancers
 
-## `renderer(render)`
+###
 
-Adds a simple way to define your own renderer.
+- [applyMiddleware(...middleware)](#applyMiddleware) ⇒ <code>function</code>
+- [renderer(customRenderer)](#renderer) ⇒ <code>function</code>
 
-#### Arguments
+<a name="applyMiddleware"></a>
 
-1. `render(root, html)` _(Function)_: A function that takes the custom element root and a function `html` which once executed renders the created dom nodes to the root node of the custom element.
-
-## `applyMiddleware(...middleware)`
+### applyMiddleware(...middleware) ⇒ <code>function</code>
 
 Middleware is the suggested way to extend Swiss Element with custom functionality. Middleware lets you wrap the element's render method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
 
-#### Arguments
+**Kind**: global function
 
-1. `...middleware` _(arguments)_: Functions that conform to the Swiss Element _middleware_ API. Each middleware receives `SwissElement`'s `render` function as a named argument, and returns a function. That function will be given the `next` middleware's render method, and is expected to return a function of `fragment` calling `next(fragment)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in the chain will receive the real element's `render` method as the `next` parameter, thus ending the chain. So, the middleware signature is `({ render }) => next => fragment`.
+| Param         | Type                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ...middleware | <code>function</code> | Functions that conform to the Swiss Element _middleware_ API. Each middleware receives `SwissElement`'s `render` function as a named argument, and returns a function. That function will be given the `next` middleware's render method, and is expected to return a function of `fragment` calling `next(fragment)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in the chain will receive the real element's `render` method as the `next` parameter, thus ending the chain. So, the middleware signature is `({ render }) => next => fragment`. |
+
+---
+
+<a name="renderer"></a>
+
+### renderer(customRenderer) ⇒ <code>function</code>
+
+Adds a simple way to define your own renderer.
+
+**Kind**: global function
+
+| Param          | Type                  | Description                                                                                                                                                   |
+| -------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| customRenderer | <code>function</code> | A function that takes the custom element root and a function `html` which once executed renders the created dom nodes to the root node of the custom element. |
+
+---
 
 # FAQ
 

@@ -16,16 +16,12 @@
   "scripts": {
     "lint": "eslint packages/*/src",
     "format": "prettier --write \"packages/*/{src,test}/**/*.js\" \"**/*.md\"",
-    "test": "karma start --single-run",
+    "test": "karma start",
     "coverage": "codecov",
     "build": "rollup -c scripts/rollup/config.js",
-    "watch": "rollup -wc scripts/rollup/config.js"
-  },
-  "esm": {
-    "mainFields": [
-      "module",
-      "main"
-    ]
+    "watch": "rollup -wc scripts/rollup/config.js",
+    "docs": "node scripts/docs.js && npm run format:docs",
+    "format:docs": "prettier --write \"**/*.md\""
   },
   "repository": {
     "type": "git",
@@ -55,12 +51,14 @@
     "@babel/preset-env": "^7.2.3",
     "@babel/runtime": "^7.2.0",
     "@webcomponents/custom-elements": "^1.2.1",
+    "ansi-colors": "^3.2.3",
     "chai": "^4.2.0",
     "codecov": "^3.1.0",
     "eslint": "^5.12.0",
     "eslint-plugin-import": "^2.14.0",
+    "fs-extra": "^7.0.1",
+    "jsdoc-to-markdown": "^4.0.1",
     "karma": "^3.1.4",
-    "karma-babel-preprocessor": "^8.0.0-beta.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.2",
@@ -69,8 +67,6 @@
     "karma-sinon": "^1.0.5",
     "karma-sinon-chai": "^2.0.2",
     "mocha": "^5.2.0",
-    "mutationobserver-shim": "^0.3.3",
-    "nyc": "^13.1.0",
     "prettier": "^1.15.3",
     "puppeteer": "^1.11.0",
     "ramda": "^0.26.1",
