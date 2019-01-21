@@ -298,11 +298,12 @@ function camelCase(name) {
   return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 }
 
-const CustomEvent = self.CustomEvent || ((name, params = {}) => {
-  var newEvent = document.createEvent('CustomEvent');
-  newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
-  return newEvent;
-});
+const CustomEvent = (isFunction(self.CustomEvent) && self.CustomEvent) ||
+  ((name, params = {}) => {
+    var newEvent = document.createEvent('CustomEvent');
+    newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
+    return newEvent;
+  });
 
 /**
  * Generates a unique ID. If `prefix` is given, the ID is appended to it.
