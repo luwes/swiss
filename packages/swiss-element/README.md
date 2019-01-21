@@ -1,3 +1,1 @@
-# `swiss-element`
-
-> Functional custom element library
+### [`swiss-element`](../../README.md)
