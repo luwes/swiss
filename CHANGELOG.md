@@ -2,6 +2,15 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.3.0 - 2019-01-21
+
+### Changed
+
+- Made `renderer` enhancer a little more forgiving in the type signature of the
+passed `render` function.
+- The `createElement` function passed to the enhancers will now actually return
+the created instance of the custom element.
+
 ## 0.2.2 - 2019-01-20
 
 ### Changed

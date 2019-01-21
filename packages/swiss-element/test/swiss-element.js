@@ -41,7 +41,7 @@ it('element can be enhanced', function() {
   document.body.appendChild(swissElement);
 
   expect(swissElement.innerHTML).to.equal('Say cheese');
-  expect(customRender).to.have.been.calledOnce;
+  expect(customRender).to.have.been.called;
 });
 
 it('element can extend a native', function() {
