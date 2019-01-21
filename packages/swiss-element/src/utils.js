@@ -2,37 +2,84 @@ export function isFunction(value) {
   return typeof value === 'function';
 }
 
+export function isUndefined(value) {
+  return typeof value === 'undefined';
+}
+
 export function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
 }
 
-/**
- * Composes single-argument functions from right to left. The rightmost
- * function can take multiple arguments as it provides the signature for
- * the resulting composite function.
- *
- * **Note:** The result of compose is not automatically curried.
- *
- * @func
- * @param {...Function} fns - The functions to compose.
- * @return {Function} A function obtained by composing the argument functions
- * from right to left. For example, compose(f, g, h) is identical to doing
- * (...args) => f(g(h(...args))).
- */
+export function define(name, Element, options) {
+  if (name) {
+    self.customElements.define(name, Element, options);
+  }
+}
+
+export function findFreeTagName(name, suffix = null) {
+  name = name || 's';
+  const tag = suffix ? `${name}-${suffix}` : name;
+  return isFreeTagName(tag) ? tag : findFreeTagName(tag, uniqueId());
+}
+
+export function isFreeTagName(name) {
+  return hasDash(name) && !self.customElements.get(name);
+}
+
+export function hasDash(name) {
+  return name && /.-./.test(name);
+}
+
 export function compose(...fns) {
-  return x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
+  return x => fns.reduceRight((y, f) => f(y), x);
 }
 
 export function camelCase(name) {
   return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 }
 
-export function kebabCase(name) {
-  return name.replace(/([a-zA-Z])(?=[A-Z])/g, '$1-').toLowerCase();
+export function CustomEvent(name, params = {}) {
+  if ('CustomEvent' in self && isFunction(self.CustomEvent)) {
+    return new self.CustomEvent(name, params);
+  }
+
+  var newEvent = document.createEvent('CustomEvent');
+  newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
+  return newEvent;
 }
 
-export function hasDash(name) {
-  return name && name.indexOf('-') !== -1;
+/**
+ * Generates a unique ID. If `prefix` is given, the ID is appended to it.
+ *
+ * @param {string} prefix The value to prefix the ID with.
+ * @return {string} Returns the unique ID.
+ * @example
+ *
+ *    uniqueId('contact_');
+ *    // => 'contact_104'
+ *
+ *    uniqueId();
+ *    // => '105'
+ */
+let idCounter = 0;
+function uniqueId(prefix = '') {
+  var id = ++idCounter;
+  return `${prefix}${id}`;
+}
+
+export function extend(Base, init) {
+  function Class() {
+    this._super = () => {
+      return typeof Reflect !== 'undefined'
+        ? Reflect.construct(Base, [], this.constructor)
+        : Base.call(this);
+    };
+    return init.call(this);
+  }
+
+  Class.prototype = Object.create(Base.prototype);
+  Class.prototype.constructor = Class;
+  return Class;
 }
 
 /**
@@ -64,66 +111,3 @@ export const completeAssign = createCompleteAssign({
   configurable: true,
   writeable: false
 });
-
-export function CustomEvent(name, params = {}) {
-  if ('CustomEvent' in self && isFunction(self.CustomEvent)) {
-    return new self.CustomEvent(name, params);
-  }
-
-  var newEvent = document.createEvent('CustomEvent');
-  newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
-  return newEvent;
-}
-
-export function extend(Base, init) {
-  function Class(...args) {
-    if (!(this instanceof Class)) {
-      return new Class(...args);
-    }
-    this._super = (...args) => {
-      return typeof Reflect !== 'undefined'
-        ? Reflect.construct(Base, args, this.constructor)
-        : Base.apply(this, args);
-    };
-    return init.apply(this, args);
-  }
-
-  Class.prototype = Object.create(Base.prototype);
-  Class.prototype.constructor = Class;
-  return Class;
-}
-
-export function define(name, Element, options) {
-  if (name) {
-    self.customElements.define(name, Element, options);
-  }
-}
-
-export function findFreeTagName(name, suffix = null) {
-  name = name || 's';
-  const tag = kebabCase(suffix ? `${name}-${suffix}` : name);
-  return isFreeTagName(tag) ? tag : findFreeTagName(tag, uniqueId());
-}
-
-export function isFreeTagName(name) {
-  return hasDash(name) && !self.customElements.get(name);
-}
-
-/**
- * Generates a unique ID. If `prefix` is given, the ID is appended to it.
- *
- * @param {string} prefix The value to prefix the ID with.
- * @return {string} Returns the unique ID.
- * @example
- *
- *    uniqueId('contact_');
- *    // => 'contact_104'
- *
- *    uniqueId();
- *    // => '105'
- */
-let idCounter = 0;
-function uniqueId(prefix = '') {
-  var id = ++idCounter;
-  return `${prefix}${id}`;
-}

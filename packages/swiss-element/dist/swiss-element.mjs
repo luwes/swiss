@@ -96,40 +96,44 @@ try {
   cancel = cancelAnimationFrame;
   request = requestAnimationFrame;
 } catch (o_O) {
-  // i.e. if you run this in NodeJS
   cancel = clearTimeout;
   request = setTimeout;
 }
 
-const create = (always, check, inputs, raf, fn) => ({
-  always,
-  check,
-  inputs,
-  raf,
-  fn,
-  clean: null,
-  t: 0,
-  update: check
-});
+const create = (always, check, inputs, raf, cb, stack, i) => {
+  const info = {
+    always,
+    cb,
+    check,
+    clean: null,
+    inputs,
+    raf,
+    t: 0,
+    update: check,
+    fn: () => {
+      set(stack[i], info.cb());
+    }
+  };
+  return info;
+};
 
-const effect = raf => (callback, refs) => {
+const effect = raf => (cb, refs) => {
   const {i, stack, unknown} = unstacked(id$1);
   const comp = refs || empty;
   if (unknown) {
     const always = comp === empty;
     const check = always || !raf || typeof comp !== typeof effect;
     if (always || !raf || typeof comp !== typeof effect) {
-      stack.push(create(always, check, comp, raf, () => {
-        set(stack[i], callback());
-      }));
+      stack.push(create(always, check, comp, raf, cb, stack, i));
     } else {
-      current().external.push(result => refs(callback, result));
-      stack.push(create(always, always, empty, raf, effect));
+      current().external.push(result => refs(cb, result));
+      stack.push(create(always, always, empty, raf, effect, stack, i));
     }
   } else {
     const info = stack[i];
     const {check, always, inputs} = info;
     if (check && (always || diff(inputs, comp))) {
+      info.cb = cb;
       info.inputs = comp;
       info.update = true;
     }
@@ -162,11 +166,12 @@ setup.push(runner => {
   runner.before.push(reset);
   runner.after.push(() => {
     for (let {length} = stack, i = 0; i < length; i++) {
-      const {fn, raf, update} = stack[i];
+      const current$$1 = stack[i];
+      const {fn, raf, update} = current$$1;
       if (update) {
-        stack[i].update = false;
+        current$$1.update = false;
         if (raf)
-          stack[i].t = request(fn);
+          current$$1.t = request(fn);
         else
           fn();
       }
@@ -182,8 +187,11 @@ setup.push(stacked(id$2));
 
 var ref = value => {
   const {i, stack, unknown} = unstacked(id$2);
-  if (unknown)
-    stack.push({current: $(value)});
+  if (unknown) {
+    const info = {current: null};
+    stack.push(info);
+    info.current = $(value);
+  }
   return stack[i];
 };
 
@@ -195,19 +203,27 @@ var useMemo = (callback, refs) => {
   const {i, stack, unknown} = unstacked(id$3);
   const comp = refs || empty;
   if (unknown)
-    stack.push(create$1(callback, comp));
+    create$1(stack, -1, callback, comp);
   const {filter, value, fn, inputs} = stack[i];
   return (filter ? diff(inputs, comp) : (callback !== fn)) ?
-          (stack[i] = create$1(callback, comp)) :
+          create$1(stack, i, callback, comp) :
           value;
 };
 
-const create$1 = (fn, inputs) => ({
-  filter: inputs !== empty,
-  value: fn(),
-  fn,
-  inputs
-});
+const create$1 = (stack, i, fn, inputs) => {
+  const info = {
+    filter: inputs !== empty,
+    value: null,
+    fn,
+    inputs
+  };
+  if (i < 0)
+    stack.push(info);
+  else
+    stack[i] = info;
+  info.value = fn();
+  return info.value;
+};
 
 var callback = (fn, inputs) => useMemo(() => fn, inputs);
 
@@ -217,17 +233,16 @@ setup.push(stacked(id$4));
 
 var useReducer = (reducer, value) => {
   const {i, stack, unknown, update} = unstacked(id$4);
-  if (unknown)
-    stack.push([
-      $(value),
-      action => {
-        value = reducer(value, action);
-        pair[0] = value;
-        update();
-      }
-    ]);
-  const pair = stack[i];
-  return pair;
+  if (unknown) {
+    const info = [null, action => {
+      value = reducer(value, action);
+      info[0] = value;
+      update();
+    }];
+    stack.push(info);
+    info[0] = $(value);
+  }
+  return stack[i];
 };
 
 var state = value => useReducer(
@@ -239,41 +254,92 @@ const id$5 = uid();
 
 setup.push(stacked(id$5));
 
+function renderer(root, html) {
+  root.innerHTML = html();
+}
+
 function isFunction(value) {
   return typeof value === 'function';
+}
+
+function isUndefined(value) {
+  return typeof value === 'undefined';
 }
 
 function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
 }
 
-/**
- * Composes single-argument functions from right to left. The rightmost
- * function can take multiple arguments as it provides the signature for
- * the resulting composite function.
- *
- * **Note:** The result of compose is not automatically curried.
- *
- * @func
- * @param {...Function} fns - The functions to compose.
- * @return {Function} A function obtained by composing the argument functions
- * from right to left. For example, compose(f, g, h) is identical to doing
- * (...args) => f(g(h(...args))).
- */
+function define(name, Element, options) {
+  if (name) {
+    self.customElements.define(name, Element, options);
+  }
+}
+
+function findFreeTagName(name, suffix = null) {
+  name = name || 's';
+  const tag = suffix ? `${name}-${suffix}` : name;
+  return isFreeTagName(tag) ? tag : findFreeTagName(tag, uniqueId());
+}
+
+function isFreeTagName(name) {
+  return hasDash(name) && !self.customElements.get(name);
+}
+
+function hasDash(name) {
+  return name && /.-./.test(name);
+}
+
 function compose(...fns) {
-  return x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
+  return x => fns.reduceRight((y, f) => f(y), x);
 }
 
 function camelCase(name) {
   return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 }
 
-function kebabCase(name) {
-  return name.replace(/([a-zA-Z])(?=[A-Z])/g, '$1-').toLowerCase();
+function CustomEvent(name, params = {}) {
+  if ('CustomEvent' in self && isFunction(self.CustomEvent)) {
+    return new self.CustomEvent(name, params);
+  }
+
+  var newEvent = document.createEvent('CustomEvent');
+  newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
+  return newEvent;
 }
 
-function hasDash(name) {
-  return name && name.indexOf('-') !== -1;
+/**
+ * Generates a unique ID. If `prefix` is given, the ID is appended to it.
+ *
+ * @param {string} prefix The value to prefix the ID with.
+ * @return {string} Returns the unique ID.
+ * @example
+ *
+ *    uniqueId('contact_');
+ *    // => 'contact_104'
+ *
+ *    uniqueId();
+ *    // => '105'
+ */
+let idCounter = 0;
+function uniqueId(prefix = '') {
+  var id = ++idCounter;
+  return `${prefix}${id}`;
+}
+
+function extend(Base, init) {
+  function Class() {
+    this._super = () => {
+      return typeof Reflect !== 'undefined'
+        ? Reflect.construct(Base, [], this.constructor)
+        : Base.call(this);
+    };
+    return init.call(this);
+  }
+
+  Class.prototype = Object.create(Base.prototype);
+  Class.prototype.constructor = Class;
+  return Class;
 }
 
 /**
@@ -306,86 +372,22 @@ const completeAssign = createCompleteAssign({
   writeable: false
 });
 
-function CustomEvent(name, params = {}) {
-  if ('CustomEvent' in self && isFunction(self.CustomEvent)) {
-    return new self.CustomEvent(name, params);
-  }
-
-  var newEvent = document.createEvent('CustomEvent');
-  newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
-  return newEvent;
-}
-
-function extend(Base, init) {
-  function Class(...args) {
-    if (!(this instanceof Class)) {
-      return new Class(...args);
-    }
-    this._super = (...args) => {
-      return typeof Reflect !== 'undefined'
-        ? Reflect.construct(Base, args, this.constructor)
-        : Base.apply(this, args);
-    };
-    return init.apply(this, args);
-  }
-
-  Class.prototype = Object.create(Base.prototype);
-  Class.prototype.constructor = Class;
-  return Class;
-}
-
-function define(name, Element, options) {
-  if (name) {
-    self.customElements.define(name, Element, options);
-  }
-}
-
-function findFreeTagName(name, suffix = null) {
-  name = name || 's';
-  const tag = kebabCase(suffix ? `${name}-${suffix}` : name);
-  return isFreeTagName(tag) ? tag : findFreeTagName(tag, uniqueId());
-}
-
-function isFreeTagName(name) {
-  return hasDash(name) && !self.customElements.get(name);
-}
-
-/**
- * Generates a unique ID. If `prefix` is given, the ID is appended to it.
- *
- * @param {string} prefix The value to prefix the ID with.
- * @return {string} Returns the unique ID.
- * @example
- *
- *    uniqueId('contact_');
- *    // => 'contact_104'
- *
- *    uniqueId();
- *    // => '105'
- */
-let idCounter = 0;
-function uniqueId(prefix = '') {
-  var id = ++idCounter;
-  return `${prefix}${id}`;
-}
-
 const CONNECTED = 'connected';
 const DISCONNECTED = 'disconnected';
 
 function createElement(options, enhancer) {
-  if (typeof enhancer !== 'undefined') {
+  if (!isUndefined(enhancer)) {
     if (!isFunction(enhancer)) {
       throw new Error('Expected the enhancer to be a function.');
     }
-
     return enhancer(createElement)(options);
   }
 
   const { el, component } = options;
 
-  const update = augmentor(() => {
+  const update = augmentor(function() {
     const fragment = component.call(el, el);
-    return el.render.call(el, fragment);
+    return el.render(fragment);
   });
 
   function render(fragment) {
@@ -393,12 +395,8 @@ function createElement(options, enhancer) {
     return fragment;
   }
 
-  function renderer(root, html) {
-    root.innerHTML = html();
-  }
-
   function connectedCallback() {
-    update.call(el);
+    update();
     el.dispatchEvent(new CustomEvent(CONNECTED));
   }
 
@@ -408,7 +406,7 @@ function createElement(options, enhancer) {
 
   function attributeChangedCallback(name, oldValue, newValue) {
     if (el.shouldUpdate(oldValue, newValue)) {
-      update.call(el);
+      update();
     }
   }
 
@@ -448,7 +446,7 @@ function element(name, component, enhancer, options) {
     name = undefined;
   }
 
-  if (!isFunction(enhancer) && typeof options === 'undefined') {
+  if (!isFunction(enhancer) && isUndefined(options)) {
     options = enhancer;
     enhancer = undefined;
   }
@@ -482,7 +480,7 @@ function element(name, component, enhancer, options) {
 function forwardCallbacks(proto, callbacks) {
   callbacks.forEach(cb => {
     proto[cb] = function(...args) {
-      if (cb in this) {
+      if (this.hasOwnProperty(cb)) {
         this[cb](...args);
       }
     };
@@ -539,10 +537,6 @@ function ondisconnected() {
   if (_) _();
 }
 
-function defaultRenderer(root, html) {
-  root.innerHTML = html();
-}
-
 /**
  * Adds a simple way to define your own renderer.
  *
@@ -550,7 +544,7 @@ function defaultRenderer(root, html) {
  *
  * @return {Function}
  */
-function renderer(customRenderer = defaultRenderer) {
+function renderer$1(customRenderer = renderer) {
   return createElement => (...args) => {
     const element = createElement(...args);
     element.renderer = customRenderer;
@@ -588,4 +582,4 @@ function applyMiddleware(...middleware) {
   };
 }
 
-export { callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, useEffect$1 as useEffect, renderer, applyMiddleware, element, isFunction, getNativeConstructor, compose, camelCase, kebabCase, hasDash, createCompleteAssign, completeAssign, CustomEvent, extend, define, findFreeTagName, isFreeTagName };
+export { callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, useEffect$1 as useEffect, renderer$1 as renderer, applyMiddleware, element, isFunction, isUndefined, getNativeConstructor, define, findFreeTagName, isFreeTagName, hasDash, compose, camelCase, CustomEvent, extend, createCompleteAssign, completeAssign };

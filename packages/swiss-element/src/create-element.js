@@ -1,23 +1,23 @@
 import augmentor from './augmentor.js';
-import { CustomEvent, isFunction } from './utils.js';
+import renderer from './default-renderer.js';
+import { CustomEvent, isFunction, isUndefined } from './utils.js';
 
 export const CONNECTED = 'connected';
 export const DISCONNECTED = 'disconnected';
 
 export function createElement(options, enhancer) {
-  if (typeof enhancer !== 'undefined') {
+  if (!isUndefined(enhancer)) {
     if (!isFunction(enhancer)) {
       throw new Error('Expected the enhancer to be a function.');
     }
-
     return enhancer(createElement)(options);
   }
 
   const { el, component } = options;
 
-  const update = augmentor(() => {
+  const update = augmentor(function() {
     const fragment = component.call(el, el);
-    return el.render.call(el, fragment);
+    return el.render(fragment);
   });
 
   function render(fragment) {
@@ -25,12 +25,8 @@ export function createElement(options, enhancer) {
     return fragment;
   }
 
-  function renderer(root, html) {
-    root.innerHTML = html();
-  }
-
   function connectedCallback() {
-    update.call(el);
+    update();
     el.dispatchEvent(new CustomEvent(CONNECTED));
   }
 
@@ -40,7 +36,7 @@ export function createElement(options, enhancer) {
 
   function attributeChangedCallback(name, oldValue, newValue) {
     if (el.shouldUpdate(oldValue, newValue)) {
-      update.call(el);
+      update();
     }
   }
 

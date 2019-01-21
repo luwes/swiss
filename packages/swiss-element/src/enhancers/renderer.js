@@ -1,7 +1,4 @@
-
-function defaultRenderer(root, html) {
-  root.innerHTML = html();
-}
+import defaultRenderer from '../default-renderer.js';
 
 /**
  * Adds a simple way to define your own renderer.

@@ -645,11 +645,6 @@
   resolved "https://registry.yarnpkg.com/@ungap/create-content/-/create-content-0.1.4.tgz#e30b40c527d40dbac598672fc2ad497f912b30c6"
   integrity sha512-YM6YQkF5wUxJlw5yDzEAzJfPK/kXR/GxIARx4NNJCInfx/nirHmy3ujPjfi7CaXjcVCwyfpv3vKQm6h762lbRA==
 
-"@ungap/custom-event@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@ungap/custom-event/-/custom-event-0.2.0.tgz#0d200735806ba13f2cf1e8f8522b2a812e08947e"
-  integrity sha512-jovJx+4IaAL8JAzepJXDBVlS9t9mR3vKbbjcHwHCF+sN0KKCYQ2pNVAlQYiRrPqeNBl5VXU7uUDOKBg9ODB+0Q==
-
 "@ungap/essential-map@^0.1.7":
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/@ungap/essential-map/-/essential-map-0.1.7.tgz#466b181c299f825b1d853901ee88f3ce302b7c71"
@@ -681,11 +676,6 @@
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/@ungap/weakmap/-/weakmap-0.1.4.tgz#7ca55d2cab02639686b2c90e58cf161b8a3c482d"
   integrity sha512-TO4TTwlQXdjHKoWgKxsMqApnOV8JruaNilqOg0I04MTYb5+fj9taIVijS4ILwWg0ytQY5DwTKzPWj+0G+7bsXw==
-
-"@ungap/weakset@^0.1.5":
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/@ungap/weakset/-/weakset-0.1.5.tgz#d72b128aeb0dbd8bafac1a35194081f59250b550"
-  integrity sha512-C8hEf9h8OjdiOkO4onVTRld6ssMGma9rkaXw6k97p2Hi9PRIHJHV9evEqFy2VVS+koLtTw4Bf4qFOwTGobazkA==
 
 "@webcomponents/custom-elements@^1.2.1":
   version "1.2.1"
@@ -967,10 +957,10 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-augmentor@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/augmentor/-/augmentor-0.2.0.tgz#226e265406ae7fa779e8396018f2e5cde5e9f45e"
-  integrity sha512-XPsgw32onFHt1HTxusCex7p8Bfvlhh3Ay9KzOIsFZNeEf08VWntGUWVp24PVTchx2crqQ+tyvMW20GVgafk/Wg==
+augmentor@0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/augmentor/-/augmentor-0.2.3.tgz#3aeaf5ccf20b6329223347767fd06adc14521c9e"
+  integrity sha512-FtJ4VjbMPxMIE8yXJMbFq2vhdoLdUCeo9DXZR7yjwkl+3amJpk3G+mi6SFwPii7/pXaYYd1KbSvESSLNX7Tdjw==
 
 aws-sign2@~0.7.0:
   version "0.7.0"
@@ -1864,11 +1854,6 @@ diff@3.5.0, diff@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
   integrity sha512-A46qtFgd+g7pDZinpnwiRJtxbC1hpgf0uzP3iG89scHk0AUC7A1TGxf5OiiOUv/JMZR8GOt8hL900hV0bOy5xA==
-
-disconnected@^0.1.6:
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/disconnected/-/disconnected-0.1.6.tgz#8c964f5582e5b5b2162b1a37affbdf3554234b9d"
-  integrity sha512-HU7IB9cbQT+ltplB1x5NnEu9g8qHzSRfRw00EPTQKyGpih+MdfCz3bOnczHjtoYWrP6h4cX6e+dJhxJTpTYiMQ==
 
 dmd@^3.0.10:
   version "3.0.13"
@@ -3558,17 +3543,14 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lighterhtml@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/lighterhtml/-/lighterhtml-0.5.0.tgz#9e2ffc6ad61c836a034e3ee0925f3644bec92831"
-  integrity sha512-wB1I0+NdiNiuh7aZckVrRxRuwNwrlLelcTpqBhvOU67wAcwOG1Z5wzQfxiFMhVyJtH94DmhcdF1R9P6iLD3y0w==
+lighterhtml@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/lighterhtml/-/lighterhtml-0.5.2.tgz#7f2db2d8981fad1ce85937eff8198f4c9f0e1ca2"
+  integrity sha512-zc6r3MXMz/WgDd8MrnxSshhG+3r0mHpRmb+Uwj3W+Ggg1IuZbW72+SprdzhAyhR31RyNSPQJ3nbKtA4Pau3zLg==
   dependencies:
     "@ungap/create-content" "^0.1.4"
-    "@ungap/custom-event" "^0.2.0"
     "@ungap/template-tag-arguments" "^0.1.1"
     "@ungap/weakmap" "^0.1.4"
-    "@ungap/weakset" "^0.1.5"
-    disconnected "^0.1.6"
     domdiff "^2.0.3"
     domtagger "^0.2.3"
     hyperhtml-style "^0.1.2"

@@ -6,7 +6,8 @@ import {
   completeAssign,
   extend,
   getNativeConstructor,
-  isFunction
+  isFunction,
+  isUndefined
 } from './utils.js';
 
 /**
@@ -28,7 +29,7 @@ export function element(name, component, enhancer, options) {
     name = undefined;
   }
 
-  if (!isFunction(enhancer) && typeof options === 'undefined') {
+  if (!isFunction(enhancer) && isUndefined(options)) {
     options = enhancer;
     enhancer = undefined;
   }
@@ -62,7 +63,7 @@ export function element(name, component, enhancer, options) {
 function forwardCallbacks(proto, callbacks) {
   callbacks.forEach(cb => {
     proto[cb] = function(...args) {
-      if (cb in this) {
+      if (this.hasOwnProperty(cb)) {
         this[cb](...args);
       }
     };
