@@ -15,7 +15,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint packages/*/src",
-    "format": "prettier --write \"packages/*/{src,test}/**/*.js\" \"**/*.md\"",
+    "format": "prettier --write \"{packages,fixtures}/*/{src,test}/**/*.js\" \"**/*.md\"",
     "test": "karma start",
     "coverage": "codecov",
     "build": "rollup -c scripts/rollup/config.js",

@@ -13,7 +13,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Fixed constructor so elements can be initiated without the `new` keyword.
-e.g. `const counter = element('s-counter', Counter, renderer(render))();`
+  e.g. `const counter = element('s-counter', Counter, renderer(render))();`
 
 ## 0.2.0 - 2019-01-19
 
