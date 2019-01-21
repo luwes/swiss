@@ -1,7 +1,7 @@
 {
-  "name": "swiss-element-todo",
+  "name": "swiss-element-fullname",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "scripts": {
     "start": "node scripts/start"
   },
@@ -11,6 +11,6 @@
   "dependencies": {
     "lighterhtml": "^0.5.2",
     "lit-html": "^1.0.0-rc.2",
-    "swiss-element": "0.2.0"
+    "swiss-element": "0.2.2"
   }
 }

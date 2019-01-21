@@ -17,7 +17,7 @@ export const bundles = [
   {
     externals: [],
     formats: [ESM, UMD],
-    global: 'swissElementTodo',
-    input: 'fixtures/todo/src/todo.js',
+    global: 'swissElementFullname',
+    input: 'fixtures/fullname/src/fullname.js',
   }
 ];
