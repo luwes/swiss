@@ -38,7 +38,8 @@ export function camelCase(name) {
   return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 }
 
-export const CustomEvent = (isFunction(self.CustomEvent) && self.CustomEvent) ||
+export const CustomEvent =
+  (isFunction(self.CustomEvent) && self.CustomEvent) ||
   ((name, params = {}) => {
     var newEvent = document.createEvent('CustomEvent');
     newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);

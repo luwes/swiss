@@ -298,7 +298,8 @@ function camelCase(name) {
   return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 }
 
-const CustomEvent = (isFunction(self.CustomEvent) && self.CustomEvent) ||
+const CustomEvent =
+  (isFunction(self.CustomEvent) && self.CustomEvent) ||
   ((name, params = {}) => {
     var newEvent = document.createEvent('CustomEvent');
     newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
@@ -378,56 +379,61 @@ const completeAssign = createCompleteAssign({
 const CONNECTED = 'connected';
 const DISCONNECTED = 'dis' + CONNECTED;
 
-function createElement(options, enhancer) {
-  if (!isUndefined(enhancer)) {
-    if (!isFunction(enhancer)) {
-      throw new Error('Expected the enhancer to be a function.');
+function createFactory(supr, component) {
+
+  function createElement(options, enhancer) {
+    if (!isUndefined(enhancer)) {
+      if (!isFunction(enhancer)) {
+        throw new Error('Expected the enhancer to be a function.');
+      }
+      return enhancer(createElement)(options);
     }
-    return enhancer(createElement)(options);
-  }
 
-  const { el, component } = options;
+    const el = supr();
 
-  const update = augmentor(function() {
-    const fragment = component.call(el, el);
-    return el.render(fragment);
-  });
+    const update = augmentor(function() {
+      const fragment = component.call(el, el);
+      return el.render(fragment);
+    });
 
-  function render(fragment) {
-    el.renderer(el.renderRoot, () => fragment);
-    return fragment;
-  }
+    function render(fragment) {
+      el.renderer(el.renderRoot, () => fragment);
+      return fragment;
+    }
 
-  function connectedCallback() {
-    update();
-    el.dispatchEvent(new CustomEvent(CONNECTED));
-  }
-
-  function disconnectedCallback() {
-    el.dispatchEvent(new CustomEvent(DISCONNECTED));
-  }
-
-  function attributeChangedCallback(name, oldValue, newValue) {
-    if (el.shouldUpdate(oldValue, newValue)) {
+    function connectedCallback() {
       update();
+      el.dispatchEvent(new CustomEvent(CONNECTED));
     }
+
+    function disconnectedCallback() {
+      el.dispatchEvent(new CustomEvent(DISCONNECTED));
+    }
+
+    function attributeChangedCallback(name, oldValue, newValue) {
+      if (el.shouldUpdate(oldValue, newValue)) {
+        update();
+      }
+    }
+
+    function shouldUpdate(oldValue, newValue) {
+      return oldValue !== newValue;
+    }
+
+    return completeAssign(el, {
+      render,
+      renderer,
+      connectedCallback,
+      disconnectedCallback,
+      attributeChangedCallback,
+      shouldUpdate,
+      get renderRoot() {
+        return el.shadowRoot || el._shadowRoot || el;
+      }
+    });
   }
 
-  function shouldUpdate(oldValue, newValue) {
-    return oldValue !== newValue;
-  }
-
-  return {
-    render,
-    renderer,
-    connectedCallback,
-    disconnectedCallback,
-    attributeChangedCallback,
-    shouldUpdate,
-    get renderRoot() {
-      return el.shadowRoot || el._shadowRoot || el;
-    }
-  };
+  return createElement;
 }
 
 function useEffect$1(fn, inputs = []) {
@@ -496,10 +502,8 @@ function element(name, component, enhancer, options) {
 
   const Native = getNativeConstructor(options && options.extends);
   const SwissElement = extend(Native, function(supr) {
-    const el = supr();
-    const opts = { ...options, component, el };
-    const api = createElement(opts, enhancer);
-    return completeAssign(el, api);
+    const opts = { ...options, component };
+    return createFactory(supr, component)(opts, enhancer);
   });
 
   // Callbacks have to be on the prototype before construction.
@@ -548,6 +552,10 @@ function addPropsToAttrs(proto, attributes) {
 
 /**
  * Adds a simple way to define your own renderer.
+ * Verified libraries working by passing just the `render` function:
+ *
+ * - Lit-html
+ * - Preact
  *
  * @param  {Function} customRenderer A function that takes the custom element root and a function `html` which once executed renders the created dom nodes to the root node of the custom element.
  *
@@ -556,7 +564,44 @@ function addPropsToAttrs(proto, attributes) {
 function renderer$1(customRenderer = renderer) {
   return createElement => (...args) => {
     const element = createElement(...args);
-    element.renderer = customRenderer;
+
+    // Put the `html()` calls first, they're more likely to throw.
+    const renderWays = [
+      (root, html) => customRenderer(html(), root),
+      (root, html) => customRenderer(root, html()),
+      (root, html) => customRenderer(html, root),
+      (root, html) => customRenderer(root, html)
+    ];
+
+    /**
+     * Most library render functions look like 1 of 4 where the root and result
+     * of the render is switched or whether the result is returned by an
+     * additional function execution.
+     *
+     * This function is only called on the first render pass, after it's cached.
+     *
+     * @param  {HTMLElement} root
+     * @param  {Node|Function} html
+     * @param  {Number} i
+     * @return {*}
+     */
+    function findRenderWay(root, html, i = 0) {
+      element.renderer = renderWays[i];
+      i += 1;
+
+      let result;
+      try {
+        result = element.renderer(root, html, 0);
+      } catch (err) {
+        if (i <= 3) {
+          return findRenderWay(root, html, i);
+        }
+      }
+
+      return result || '';
+    }
+
+    element.renderer = findRenderWay;
     return element;
   };
 }

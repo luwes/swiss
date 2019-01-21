@@ -1,9 +1,8 @@
-import { createElement } from './create-element.js';
+import { createFactory } from './create-element.js';
 import {
   camelCase,
   define,
   findFreeTagName,
-  completeAssign,
   extend,
   getNativeConstructor,
   isFunction,
@@ -45,10 +44,8 @@ export function element(name, component, enhancer, options) {
 
   const Native = getNativeConstructor(options && options.extends);
   const SwissElement = extend(Native, function(supr) {
-    const el = supr();
-    const opts = { ...options, component, el };
-    const api = createElement(opts, enhancer);
-    return completeAssign(el, api);
+    const opts = { ...options, component };
+    return createFactory(supr, component)(opts, enhancer);
   });
 
   // Callbacks have to be on the prototype before construction.
