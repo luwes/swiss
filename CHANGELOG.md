@@ -2,6 +2,25 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.2.2 - 2019-01-20
+
+### Changed
+
+- Removed some utility exports, only `compose` is really necessary.
+
+## 0.2.1 - 2019-01-19
+
+### Changed
+
+- Fixed constructor so elements can be initiated without the `new` keyword.
+e.g. `const counter = element('s-counter', Counter, renderer(render))();`
+
+## 0.2.0 - 2019-01-19
+
+### Changed
+
+- Changed element to include customElements.define
+
 ## 0.1.0 - 2019-01-17
 
 ### Fixed
