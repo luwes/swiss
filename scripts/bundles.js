@@ -19,5 +19,11 @@ export const bundles = [
     formats: [ESM, UMD],
     global: 'swissElementFullname',
     input: 'fixtures/fullname/src/fullname.js',
+  },
+  {
+    externals: [],
+    formats: [ESM, UMD],
+    global: 'swissElementCounter',
+    input: 'fixtures/htm-preact/src/counter.js',
   }
 ];
