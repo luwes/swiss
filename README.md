@@ -1,8 +1,8 @@
 # <a href="https://github.com/luwes/swiss-element">![SwissElement](./media/swiss-element.svg 'SwissElement')</a>
 
 [![Build Status](https://img.shields.io/travis/luwes/swiss-element/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/swiss-element)
-[![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=v0.2.2)](https://codecov.io/gh/luwes/swiss-element)
-![Badge size](http://img.badgesize.io/luwes/swiss-element/master/packages/swiss-element/dist/swiss-element.js.svg?style=flat-square&compression=gzip&version=v0.2.2)
+[![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=v0.3.0)](https://codecov.io/gh/luwes/swiss-element)
+![Badge size](http://img.badgesize.io/luwes/swiss-element/master/packages/swiss-element/dist/swiss-element.js.svg?style=flat-square&compression=gzip&version=v0.3.0)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 **npm**: `npm install swiss-element --save`  
@@ -16,10 +16,10 @@ Swiss Element provides a functional way of defining custom elements.
 - Extend the custom element with composition via enhancers
 - Choose your own renderer
 
-### Example
+### Example - Counter
 
 ```js
-import { html, render } from 'lighterhtml';
+import { html, render } from 'lit-html';
 import { element, renderer, useState } from 'swiss-element';
 
 function Counter(element) {
@@ -36,6 +36,18 @@ element('s-counter', Counter, renderer(render));
 ```
 
 A starter app is available at https://codesandbox.io/s/github/luwes/swiss-element-starter-app/tree/master/
+
+### Example - Hello world
+
+```js
+document.body.appendChild(
+  element(
+    's-hello-world', 
+    ({ w }) => `Hello ${w}`, 
+    { observedAttributes: ['w'] }
+  )()
+).setAttribute('w', 'world');
+```
 
 # API
 
