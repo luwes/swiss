@@ -68,8 +68,3 @@ function App() {
 }
 
 element('my-app', App, litRenderer);
-
-element(App, litRenderer);
-
-element('test', App, litRenderer);
-element('test', App, litRenderer);

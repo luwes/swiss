@@ -429,6 +429,37 @@ function createElement(options, enhancer) {
   };
 }
 
+function useEffect$1(fn, inputs = []) {
+  const args = [fn];
+  if (inputs)
+    // if the inputs is an empty array
+    // observe the returned element for connect/disconnect events
+    // and invoke effects/cleanup on these events only
+    args.push(inputs.length ? inputs : lifecycleHandler);
+  return useEffect.apply(null, args);
+}
+
+function lifecycleHandler($, element) {
+  const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
+  element.addEventListener(CONNECTED, handler, false);
+  element.addEventListener(DISCONNECTED, handler, false);
+}
+
+function handleEvent(e) {
+  this['on' + e.type]();
+}
+
+function onconnected() {
+  ondisconnected.call(this);
+  this._ = this.$();
+}
+
+function ondisconnected() {
+  const { _ } = this;
+  this._ = null;
+  if (_) _();
+}
+
 const CALLBACK = 'Callback';
 const CONNECTED_CALLBACK = 'connected' + CALLBACK;
 const DISCONNECTED_CALLBACK = 'dis' + CONNECTED_CALLBACK;
@@ -514,37 +545,6 @@ function addPropsToAttrs(proto, attributes) {
   });
 }
 
-function useEffect$1(fn, inputs = []) {
-  const args = [fn];
-  if (inputs)
-    // if the inputs is an empty array
-    // observe the returned element for connect/disconnect events
-    // and invoke effects/cleanup on these events only
-    args.push(inputs.length ? inputs : lifecycleHandler);
-  return useEffect.apply(null, args);
-}
-
-function lifecycleHandler($, element) {
-  const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
-  element.addEventListener(CONNECTED, handler, false);
-  element.addEventListener(DISCONNECTED, handler, false);
-}
-
-function handleEvent(e) {
-  this['on' + e.type]();
-}
-
-function onconnected() {
-  ondisconnected.call(this);
-  this._ = this.$();
-}
-
-function ondisconnected() {
-  const { _ } = this;
-  this._ = null;
-  if (_) _();
-}
-
 /**
  * Adds a simple way to define your own renderer.
  *
@@ -590,4 +590,4 @@ function applyMiddleware(...middleware) {
   };
 }
 
-export { callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, useEffect$1 as useEffect, renderer$1 as renderer, applyMiddleware, element, isFunction, isUndefined, getNativeConstructor, define, findFreeTagName, isFreeTagName, hasDash, compose, camelCase, CustomEvent, extend, createCompleteAssign, completeAssign };
+export { callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, useEffect$1 as useEffect, renderer$1 as renderer, applyMiddleware, compose, element };
