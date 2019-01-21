@@ -3,7 +3,7 @@ import renderer from './default-renderer.js';
 import { CustomEvent, isFunction, isUndefined } from './utils.js';
 
 export const CONNECTED = 'connected';
-export const DISCONNECTED = 'disconnected';
+export const DISCONNECTED = 'dis' + CONNECTED;
 
 export function createElement(options, enhancer) {
   if (!isUndefined(enhancer)) {

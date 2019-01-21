@@ -10,6 +10,12 @@ import {
   isUndefined
 } from './utils.js';
 
+const CALLBACK = 'Callback';
+const CONNECTED_CALLBACK = 'connected' + CALLBACK;
+const DISCONNECTED_CALLBACK = 'dis' + CONNECTED_CALLBACK;
+const ATTRIBUTE_CHANGED_CALLBACK = 'attributeChanged' + CALLBACK;
+const ADOPTED_CALLBACK = 'adopted' + CALLBACK;
+
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
  *
@@ -38,8 +44,8 @@ export function element(name, component, enhancer, options) {
   name = options.name = findFreeTagName(name || options.name);
 
   const Native = getNativeConstructor(options && options.extends);
-  const SwissElement = extend(Native, function() {
-    const el = this._super();
+  const SwissElement = extend(Native, function(supr) {
+    const el = supr();
     const opts = { ...options, component, el };
     const api = createElement(opts, enhancer);
     return completeAssign(el, api);
@@ -47,10 +53,10 @@ export function element(name, component, enhancer, options) {
 
   // Callbacks have to be on the prototype before construction.
   forwardCallbacks(SwissElement.prototype, [
-    'connectedCallback',
-    'disconnectedCallback',
-    'attributeChangedCallback',
-    'adoptedCallback'
+    CONNECTED_CALLBACK,
+    DISCONNECTED_CALLBACK,
+    ATTRIBUTE_CHANGED_CALLBACK,
+    ADOPTED_CALLBACK
   ]);
 
   SwissElement.observedAttributes = options.observedAttributes || [];

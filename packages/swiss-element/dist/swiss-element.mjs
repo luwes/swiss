@@ -298,15 +298,11 @@ function camelCase(name) {
   return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 }
 
-function CustomEvent(name, params = {}) {
-  if ('CustomEvent' in self && isFunction(self.CustomEvent)) {
-    return new self.CustomEvent(name, params);
-  }
-
+const CustomEvent = self.CustomEvent || ((name, params = {}) => {
   var newEvent = document.createEvent('CustomEvent');
   newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
   return newEvent;
-}
+});
 
 /**
  * Generates a unique ID. If `prefix` is given, the ID is appended to it.
@@ -329,16 +325,22 @@ function uniqueId(prefix = '') {
 
 function extend(Base, init) {
   function Class() {
-    this._super = () => {
+    if (!(this instanceof Class)) {
+      return new Class();
+    }
+
+    const supr = () => {
       return typeof Reflect !== 'undefined'
         ? Reflect.construct(Base, [], this.constructor)
         : Base.call(this);
     };
-    return init.call(this);
+
+    return init.call(this, supr);
   }
 
   Class.prototype = Object.create(Base.prototype);
   Class.prototype.constructor = Class;
+
   return Class;
 }
 
@@ -373,7 +375,7 @@ const completeAssign = createCompleteAssign({
 });
 
 const CONNECTED = 'connected';
-const DISCONNECTED = 'disconnected';
+const DISCONNECTED = 'dis' + CONNECTED;
 
 function createElement(options, enhancer) {
   if (!isUndefined(enhancer)) {
@@ -427,6 +429,12 @@ function createElement(options, enhancer) {
   };
 }
 
+const CALLBACK = 'Callback';
+const CONNECTED_CALLBACK = 'connected' + CALLBACK;
+const DISCONNECTED_CALLBACK = 'dis' + CONNECTED_CALLBACK;
+const ATTRIBUTE_CHANGED_CALLBACK = 'attributeChanged' + CALLBACK;
+const ADOPTED_CALLBACK = 'adopted' + CALLBACK;
+
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
  *
@@ -455,8 +463,8 @@ function element(name, component, enhancer, options) {
   name = options.name = findFreeTagName(name || options.name);
 
   const Native = getNativeConstructor(options && options.extends);
-  const SwissElement = extend(Native, function() {
-    const el = this._super();
+  const SwissElement = extend(Native, function(supr) {
+    const el = supr();
     const opts = { ...options, component, el };
     const api = createElement(opts, enhancer);
     return completeAssign(el, api);
@@ -464,10 +472,10 @@ function element(name, component, enhancer, options) {
 
   // Callbacks have to be on the prototype before construction.
   forwardCallbacks(SwissElement.prototype, [
-    'connectedCallback',
-    'disconnectedCallback',
-    'attributeChangedCallback',
-    'adoptedCallback'
+    CONNECTED_CALLBACK,
+    DISCONNECTED_CALLBACK,
+    ATTRIBUTE_CHANGED_CALLBACK,
+    ADOPTED_CALLBACK
   ]);
 
   SwissElement.observedAttributes = options.observedAttributes || [];

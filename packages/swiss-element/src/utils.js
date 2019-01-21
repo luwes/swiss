@@ -38,15 +38,11 @@ export function camelCase(name) {
   return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 }
 
-export function CustomEvent(name, params = {}) {
-  if ('CustomEvent' in self && isFunction(self.CustomEvent)) {
-    return new self.CustomEvent(name, params);
-  }
-
+export const CustomEvent = self.CustomEvent || ((name, params = {}) => {
   var newEvent = document.createEvent('CustomEvent');
   newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
   return newEvent;
-}
+});
 
 /**
  * Generates a unique ID. If `prefix` is given, the ID is appended to it.
@@ -69,16 +65,22 @@ function uniqueId(prefix = '') {
 
 export function extend(Base, init) {
   function Class() {
-    this._super = () => {
+    if (!(this instanceof Class)) {
+      return new Class();
+    }
+
+    const supr = () => {
       return typeof Reflect !== 'undefined'
         ? Reflect.construct(Base, [], this.constructor)
         : Base.call(this);
     };
-    return init.call(this);
+
+    return init.call(this, supr);
   }
 
   Class.prototype = Object.create(Base.prototype);
   Class.prototype.constructor = Class;
+
   return Class;
 }
 
