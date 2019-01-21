@@ -205,11 +205,13 @@ function camelCase(name) {
   return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 }
 
-const CustomEvent$1 = self.CustomEvent || ((name, params = {}) => {
-  var newEvent = document.createEvent('CustomEvent');
-  newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
-  return newEvent;
-});
+const CustomEvent$1 =
+  (isFunction(self.CustomEvent) && self.CustomEvent) ||
+  ((name, params = {}) => {
+    var newEvent = document.createEvent('CustomEvent');
+    newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
+    return newEvent;
+  });
 
 /**
  * Generates a unique ID. If `prefix` is given, the ID is appended to it.
@@ -284,56 +286,61 @@ const completeAssign = createCompleteAssign({
 const CONNECTED = 'connected';
 const DISCONNECTED = 'dis' + CONNECTED;
 
-function createElement(options, enhancer) {
-  if (!isUndefined(enhancer)) {
-    if (!isFunction(enhancer)) {
-      throw new Error('Expected the enhancer to be a function.');
+function createFactory(supr, component) {
+
+  function createElement(options, enhancer) {
+    if (!isUndefined(enhancer)) {
+      if (!isFunction(enhancer)) {
+        throw new Error('Expected the enhancer to be a function.');
+      }
+      return enhancer(createElement)(options);
     }
-    return enhancer(createElement)(options);
-  }
 
-  const { el, component } = options;
+    const el = supr();
 
-  const update = augmentor(function() {
-    const fragment = component.call(el, el);
-    return el.render(fragment);
-  });
+    const update = augmentor(function() {
+      const fragment = component.call(el, el);
+      return el.render(fragment);
+    });
 
-  function render(fragment) {
-    el.renderer(el.renderRoot, () => fragment);
-    return fragment;
-  }
+    function render(fragment) {
+      el.renderer(el.renderRoot, () => fragment);
+      return fragment;
+    }
 
-  function connectedCallback() {
-    update();
-    el.dispatchEvent(new CustomEvent$1(CONNECTED));
-  }
-
-  function disconnectedCallback() {
-    el.dispatchEvent(new CustomEvent$1(DISCONNECTED));
-  }
-
-  function attributeChangedCallback(name, oldValue, newValue) {
-    if (el.shouldUpdate(oldValue, newValue)) {
+    function connectedCallback() {
       update();
+      el.dispatchEvent(new CustomEvent$1(CONNECTED));
     }
+
+    function disconnectedCallback() {
+      el.dispatchEvent(new CustomEvent$1(DISCONNECTED));
+    }
+
+    function attributeChangedCallback(name, oldValue, newValue) {
+      if (el.shouldUpdate(oldValue, newValue)) {
+        update();
+      }
+    }
+
+    function shouldUpdate(oldValue, newValue) {
+      return oldValue !== newValue;
+    }
+
+    return completeAssign(el, {
+      render,
+      renderer,
+      connectedCallback,
+      disconnectedCallback,
+      attributeChangedCallback,
+      shouldUpdate,
+      get renderRoot() {
+        return el.shadowRoot || el._shadowRoot || el;
+      }
+    });
   }
 
-  function shouldUpdate(oldValue, newValue) {
-    return oldValue !== newValue;
-  }
-
-  return {
-    render,
-    renderer,
-    connectedCallback,
-    disconnectedCallback,
-    attributeChangedCallback,
-    shouldUpdate,
-    get renderRoot() {
-      return el.shadowRoot || el._shadowRoot || el;
-    }
-  };
+  return createElement;
 }
 
 const CALLBACK = 'Callback';
@@ -371,10 +378,8 @@ function element(name, component, enhancer, options) {
 
   const Native = getNativeConstructor(options && options.extends);
   const SwissElement = extend(Native, function(supr) {
-    const el = supr();
-    const opts = { ...options, component, el };
-    const api = createElement(opts, enhancer);
-    return completeAssign(el, api);
+    const opts = { ...options, component };
+    return createFactory(supr, component)(opts, enhancer);
   });
 
   // Callbacks have to be on the prototype before construction.
@@ -423,6 +428,10 @@ function addPropsToAttrs(proto, attributes) {
 
 /**
  * Adds a simple way to define your own renderer.
+ * Verified libraries working by passing just the `render` function:
+ *
+ * - Lit-html
+ * - Preact
  *
  * @param  {Function} customRenderer A function that takes the custom element root and a function `html` which once executed renders the created dom nodes to the root node of the custom element.
  *
@@ -431,7 +440,44 @@ function addPropsToAttrs(proto, attributes) {
 function renderer$1(customRenderer = renderer) {
   return createElement => (...args) => {
     const element = createElement(...args);
-    element.renderer = customRenderer;
+
+    // Put the `html()` calls first, they're more likely to throw.
+    const renderWays = [
+      (root, html) => customRenderer(html(), root),
+      (root, html) => customRenderer(root, html()),
+      (root, html) => customRenderer(html, root),
+      (root, html) => customRenderer(root, html)
+    ];
+
+    /**
+     * Most library render functions look like 1 of 4 where the root and result
+     * of the render is switched or whether the result is returned by an
+     * additional function execution.
+     *
+     * This function is only called on the first render pass, after it's cached.
+     *
+     * @param  {HTMLElement} root
+     * @param  {Node|Function} html
+     * @param  {Number} i
+     * @return {*}
+     */
+    function findRenderWay(root, html, i = 0) {
+      element.renderer = renderWays[i];
+      i += 1;
+
+      let result;
+      try {
+        result = element.renderer(root, html, 0);
+      } catch (err) {
+        if (i <= 3) {
+          return findRenderWay(root, html, i);
+        }
+      }
+
+      return result || '';
+    }
+
+    element.renderer = findRenderWay;
     return element;
   };
 }
@@ -451,6 +497,7 @@ function renderer$1(customRenderer = renderer) {
  */
 const directives = new WeakMap();
 const isDirective = (o) => typeof o === 'function' && directives.has(o);
+//# sourceMappingURL=directive.js.map
 
 /**
  * @license
@@ -485,6 +532,7 @@ const removeNodes = (container, startNode, endNode = null) => {
         node = n;
     }
 };
+//# sourceMappingURL=dom.js.map
 
 /**
  * @license
@@ -508,6 +556,7 @@ const noChange = {};
  * A sentinel value that signals a NodePart to fully clear its content.
  */
 const nothing = {};
+//# sourceMappingURL=part.js.map
 
 /**
  * @license
@@ -697,6 +746,7 @@ const createMarker = () => document.createComment('');
  *    * (') then any non-(')
  */
 const lastAttributeNameRegex = /([ \x09\x0a\x0c\x0d])([^\0-\x1F\x7F-\x9F \x09\x0a\x0c\x0d"'>=/]+)([ \x09\x0a\x0c\x0d]*=[ \x09\x0a\x0c\x0d]*(?:[^ \x09\x0a\x0c\x0d"'`<>=]*|"[^"]*|'[^']*))$/;
+//# sourceMappingURL=template.js.map
 
 /**
  * @license
@@ -794,6 +844,7 @@ class TemplateInstance {
         return fragment;
     }
 }
+//# sourceMappingURL=template-instance.js.map
 
 /**
  * @license
@@ -858,6 +909,7 @@ class TemplateResult {
         return template;
     }
 }
+//# sourceMappingURL=template-result.js.map
 
 /**
  * @license
@@ -1272,6 +1324,7 @@ const getOptions = (o) => o &&
     (eventOptionsSupported ?
         { capture: o.capture, passive: o.passive, once: o.once } :
         o.capture);
+//# sourceMappingURL=parts.js.map
 
 /**
  * @license
@@ -1323,6 +1376,7 @@ class DefaultTemplateProcessor {
     }
 }
 const defaultTemplateProcessor = new DefaultTemplateProcessor();
+//# sourceMappingURL=default-template-processor.js.map
 
 /**
  * @license
@@ -1370,6 +1424,7 @@ function templateFactory(result) {
     return template;
 }
 const templateCaches = new Map();
+//# sourceMappingURL=template-factory.js.map
 
 /**
  * @license
@@ -1410,6 +1465,7 @@ const render = (result, container, options) => {
     part.setValue(result);
     part.commit();
 };
+//# sourceMappingURL=render.js.map
 
 /**
  * @license
@@ -1429,8 +1485,7 @@ const render = (result, container, options) => {
  * render to and update a container.
  */
 const html = (strings, ...values) => new TemplateResult(strings, values, 'html', defaultTemplateProcessor);
-
-const litRenderer = renderer$1((root, html$$1) => render(html$$1(), root));
+//# sourceMappingURL=lit-html.js.map
 
 function dispatch(el, first, last) {
   let event = new CustomEvent('change', {
@@ -1438,6 +1493,21 @@ function dispatch(el, first, last) {
   });
   el.dispatchEvent(event);
 }
+
+function App() {
+  const [name, setName] = state('');
+
+  return html`
+    <h2>User Page</h2>
+
+    <h3>${name}</h3>
+
+    <p>Change name:</p>
+    <full-name @change="${ev => ev.detail && setName(ev.detail)}"> </full-name>
+  `;
+}
+
+element('my-app', App, renderer$1(render));
 
 function FullName(el) {
   const [first, setFirst] = state('Swiss');
@@ -1480,19 +1550,4 @@ function FullName(el) {
   `;
 }
 
-element('full-name', FullName, litRenderer);
-
-function App() {
-  const [name, setName] = state('');
-
-  return html`
-    <h2>User Page</h2>
-
-    <h3>${name}</h3>
-
-    <p>Change name:</p>
-    <full-name @change="${ev => ev.detail && setName(ev.detail)}"> </full-name>
-  `;
-}
-
-element('my-app', App, litRenderer);
+element('full-name', FullName, renderer$1(render));

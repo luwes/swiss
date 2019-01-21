@@ -1,8 +1,5 @@
 import { element, useState, renderer } from 'swiss-element';
-// import { html, render } from "lighterhtml";
-
 import { html, render } from 'lit-html';
-const litRenderer = renderer((root, html) => render(html(), root));
 
 function dispatch(el, first, last) {
   let event = new CustomEvent('change', {
@@ -10,6 +7,21 @@ function dispatch(el, first, last) {
   });
   el.dispatchEvent(event);
 }
+
+function App() {
+  const [name, setName] = useState('');
+
+  return html`
+    <h2>User Page</h2>
+
+    <h3>${name}</h3>
+
+    <p>Change name:</p>
+    <full-name @change="${ev => ev.detail && setName(ev.detail)}"> </full-name>
+  `;
+}
+
+element('my-app', App, renderer(render));
 
 function FullName(el) {
   const [first, setFirst] = useState('Swiss');
@@ -52,19 +64,4 @@ function FullName(el) {
   `;
 }
 
-element('full-name', FullName, litRenderer);
-
-function App() {
-  const [name, setName] = useState('');
-
-  return html`
-    <h2>User Page</h2>
-
-    <h3>${name}</h3>
-
-    <p>Change name:</p>
-    <full-name @change="${ev => ev.detail && setName(ev.detail)}"> </full-name>
-  `;
-}
-
-element('my-app', App, litRenderer);
+element('full-name', FullName, renderer(render));
