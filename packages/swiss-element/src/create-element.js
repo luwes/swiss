@@ -20,19 +20,21 @@ export function createFactory(supr, component) {
     }
 
     const el = supr();
+    let oldHtml;
 
-    const update = augmentor(function() {
-      const fragment = component.call(el, el);
-      return el.render(fragment);
+    const requestUpdate = augmentor(function() {
+      const html = component.call(el, el);
+      return el.render(html);
     });
 
-    function render(fragment) {
-      el.renderer(el.renderRoot, () => fragment);
-      return fragment;
+    function render(html) {
+      el.renderer(el.renderRoot, html, oldHtml);
+      oldHtml = html;
+      return html;
     }
 
     function connectedCallback() {
-      update();
+      requestUpdate();
       el.dispatchEvent(new CustomEvent(CONNECTED));
     }
 
@@ -42,7 +44,7 @@ export function createFactory(supr, component) {
 
     function attributeChangedCallback(name, oldValue, newValue) {
       if (el.shouldUpdate(oldValue, newValue)) {
-        update();
+        requestUpdate();
       }
     }
 
@@ -56,6 +58,7 @@ export function createFactory(supr, component) {
       connectedCallback,
       disconnectedCallback,
       attributeChangedCallback,
+      requestUpdate,
       shouldUpdate,
       get renderRoot() {
         return el.shadowRoot || el._shadowRoot || el;
