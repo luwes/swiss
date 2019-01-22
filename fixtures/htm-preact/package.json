@@ -10,6 +10,6 @@
   },
   "dependencies": {
     "htm": "^2.0.0",
-    "swiss-element": "0.2.2"
+    "swiss-element": "0.3.0"
   }
 }
