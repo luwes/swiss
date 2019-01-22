@@ -15,15 +15,21 @@ export const bundles = [
     input: 'packages/swiss-element/src/index.js',
   },
   {
-    externals: [],
-    formats: [ESM, UMD],
+    externals: ['lit-html'],
+    formats: [UMD],
     global: 'swissElementFullname',
     input: 'fixtures/fullname/src/fullname.js',
   },
   {
-    externals: [],
-    formats: [ESM, UMD],
+    externals: ['htm'],
+    formats: [UMD],
     global: 'swissElementCounter',
     input: 'fixtures/htm-preact/src/counter.js',
+  },
+  {
+    externals: ['superfine'],
+    formats: [UMD],
+    global: 'swissElementCounter',
+    input: 'fixtures/superfine/src/counter.js',
   }
 ];
