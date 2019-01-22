@@ -2,10 +2,12 @@ import defaultRenderer from '../default-renderer.js';
 
 /**
  * Adds a simple way to define your own renderer.
- * Verified libraries working by passing just the `render` function:
+ * Verified libraries working by passing just the `render` or `patch` function:
  *
+ * - Lighterhtml
  * - Lit-html
- * - Preact
+ * - HTM-Preact
+ * - Superfine
  *
  * @param  {Function} customRenderer A function that takes the custom element root and a function `html` which once executed renders the created dom nodes to the root node of the custom element.
  *
@@ -15,18 +17,18 @@ function renderer(customRenderer = defaultRenderer) {
   return createElement => (...args) => {
     const element = createElement(...args);
 
-    // Put the `html()` calls first, they're more likely to throw.
     const renderWays = [
-      (root, html) => customRenderer(html(), root),
-      (root, html) => customRenderer(root, html()),
+      // lit-html, htm-preact
       (root, html) => customRenderer(html, root),
-      (root, html) => customRenderer(root, html)
+      // superfine
+      (root, html, old) => customRenderer(old, html, root),
+      // lighterhtml
+      (root, html) => customRenderer(root, () => html)
     ];
 
     /**
-     * Most library render functions look like 1 of 4 where the root and result
-     * of the render is switched or whether the result is returned by an
-     * additional function execution.
+     * Most library render functions look very similar, do a quick search on the
+     * first render. Probably shouldn't do this but it's so damn convenient :P
      *
      * This function is only called on the first render pass, after it's cached.
      *
@@ -35,16 +37,16 @@ function renderer(customRenderer = defaultRenderer) {
      * @param  {Number} i
      * @return {*}
      */
-    function findRenderWay(root, html, i = 0) {
+    function findRenderWay(root, html, old, i = 0) {
       element.renderer = renderWays[i];
 
       let result;
       try {
-        result = element.renderer(root, html, 0);
+        result = element.renderer(root, html, old);
       } catch (err) {
         i += 1;
-        if (i <= 3) {
-          return findRenderWay(root, html, i);
+        if (i < renderWays.length) {
+          return findRenderWay(root, html, old, i);
         }
       }
 
