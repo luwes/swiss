@@ -37,12 +37,12 @@ function renderer(customRenderer = defaultRenderer) {
      */
     function findRenderWay(root, html, i = 0) {
       element.renderer = renderWays[i];
-      i += 1;
 
       let result;
       try {
         result = element.renderer(root, html, 0);
       } catch (err) {
+        i += 1;
         if (i <= 3) {
           return findRenderWay(root, html, i);
         }

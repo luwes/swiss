@@ -11,7 +11,6 @@ export const CONNECTED = 'connected';
 export const DISCONNECTED = 'dis' + CONNECTED;
 
 export function createFactory(supr, component) {
-
   function createElement(options, enhancer) {
     if (!isUndefined(enhancer)) {
       if (!isFunction(enhancer)) {

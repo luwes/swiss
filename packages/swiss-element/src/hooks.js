@@ -1,3 +1,11 @@
+export {
+  useCallback,
+  useMemo,
+  useReducer,
+  useRef,
+  useState
+} from './augmentor.js';
+
 import { useEffect as effect } from './augmentor.js';
 import { CONNECTED, DISCONNECTED } from './create-element.js';
 

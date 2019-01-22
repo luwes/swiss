@@ -380,7 +380,6 @@ const CONNECTED = 'connected';
 const DISCONNECTED = 'dis' + CONNECTED;
 
 function createFactory(supr, component) {
-
   function createElement(options, enhancer) {
     if (!isUndefined(enhancer)) {
       if (!isFunction(enhancer)) {
@@ -587,12 +586,12 @@ function renderer$1(customRenderer = renderer) {
      */
     function findRenderWay(root, html, i = 0) {
       element.renderer = renderWays[i];
-      i += 1;
 
       let result;
       try {
         result = element.renderer(root, html, 0);
       } catch (err) {
+        i += 1;
         if (i <= 3) {
           return findRenderWay(root, html, i);
         }
@@ -636,4 +635,4 @@ function applyMiddleware(...middleware) {
   };
 }
 
-export { callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, useEffect$1 as useEffect, renderer$1 as renderer, applyMiddleware, compose, element };
+export { renderer$1 as renderer, applyMiddleware, compose, useEffect$1 as useEffect, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, element };
