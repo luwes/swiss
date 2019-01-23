@@ -1,3 +1,5 @@
+export const isArray = Array.isArray;
+
 export function isFunction(value) {
   return typeof value === 'function';
 }

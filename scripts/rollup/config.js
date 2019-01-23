@@ -11,6 +11,8 @@ const formatOptions = {
   [UMD]: { ext: '.js' }
 };
 
+// const dev = process.env.NODE_ENV == 'dev';
+
 // For every type in bundle.types creates a new bundle obj.
 const unbundle = ({ formats, ...rest }) =>
   formats.map(format => ({ ...rest, format }));

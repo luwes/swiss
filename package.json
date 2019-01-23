@@ -19,7 +19,7 @@
     "test": "karma start",
     "coverage": "codecov",
     "build": "rollup -c scripts/rollup/config.js",
-    "watch": "rollup -wc scripts/rollup/config.js",
+    "watch": "NODE_ENV=dev rollup -wc scripts/rollup/config.js",
     "docs": "node scripts/docs.js && npm run format:docs",
     "format:docs": "prettier --write \"**/*.md\""
   },

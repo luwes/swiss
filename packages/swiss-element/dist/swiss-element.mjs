@@ -255,8 +255,10 @@ const id$5 = uid();
 setup.push(stacked(id$5));
 
 function renderer(root, html) {
-  root.innerHTML = html();
+  root.innerHTML = html;
 }
+
+const isArray = Array.isArray;
 
 function isFunction(value) {
   return typeof value === 'function';
@@ -474,6 +476,7 @@ const CONNECTED_CALLBACK = 'connected' + CALLBACK;
 const DISCONNECTED_CALLBACK = 'dis' + CONNECTED_CALLBACK;
 const ATTRIBUTE_CHANGED_CALLBACK = 'attributeChanged' + CALLBACK;
 const ADOPTED_CALLBACK = 'adopted' + CALLBACK;
+const OBSERVED_ATTRIBUTES = 'observedAttributes';
 
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
@@ -499,6 +502,11 @@ function element(name, component, enhancer, options) {
     enhancer = undefined;
   }
 
+  // To shorten syntax if options is an array assume it's the observedAttributes.
+  if (isArray(options)) {
+    options = { [OBSERVED_ATTRIBUTES]: options };
+  }
+
   options = options || {};
   name = options.name = findFreeTagName(name || options.name);
 
@@ -516,8 +524,9 @@ function element(name, component, enhancer, options) {
     ADOPTED_CALLBACK
   ]);
 
-  SwissElement.observedAttributes = options.observedAttributes || [];
-  addPropsToAttrs(SwissElement.prototype, SwissElement.observedAttributes);
+  const oa = (SwissElement[OBSERVED_ATTRIBUTES] =
+    options[OBSERVED_ATTRIBUTES] || []);
+  addPropsToAttrs(SwissElement.prototype, oa);
 
   define(name, SwissElement, options);
   return SwissElement;
