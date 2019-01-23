@@ -40,13 +40,9 @@ A starter app is available at https://codesandbox.io/s/github/luwes/swiss-elemen
 ### Example - Hello world
 
 ```js
-document.body
-  .appendChild(
-    element('s-hello-world', ({ w }) => `Hello ${w}`, {
-      observedAttributes: ['w']
-    })()
-  )
-  .setAttribute('w', 'world');
+document.body.appendChild(
+  element('hello-world', ({ w }) => `Hello ${w}`, ['w'])()
+).w = 'world';
 ```
 
 # API

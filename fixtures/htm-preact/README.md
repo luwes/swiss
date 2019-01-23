@@ -2,11 +2,7 @@
 
 ```js
 import { html, render } from '../node_modules/htm/preact/standalone.mjs';
-import {
-  element,
-  renderer,
-  useState
-} from 'swiss-element';
+import { element, renderer, useState } from 'swiss-element';
 
 function Counter() {
   const [count, setCount] = useState(0);
@@ -19,5 +15,4 @@ function Counter() {
 }
 
 element('s-counter', Counter, renderer(render));
-
 ```

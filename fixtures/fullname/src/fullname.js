@@ -24,13 +24,13 @@ function App() {
 element('my-app', App, renderer(render));
 
 function FullName(el) {
-  const [first, setFirst] = useState('Swiss');
-  const [last, setLast] = useState('Cheese 🧀');
+  const [first, setFirst] = useState('Leonhard');
+  const [last, setLast] = useState('Euler ✍️');
 
   dispatch(el, first, last);
 
   return html`
-    <div class="container">
+    <form>
       <label for="first">First</label>
       <input
         value="${first}"
@@ -46,19 +46,13 @@ function FullName(el) {
         type="text"
         name="last"
       />
-    </div>
+    </form>
 
     <style>
-      .container {
+      form {
         border: none;
         display: grid;
         grid-template-columns: 20% 80%;
-      }
-
-      input {
-        border: 1px solid #e5e5e5;
-        padding: 6px 10px;
-        margin-bottom: 1em;
       }
     </style>
   `;
