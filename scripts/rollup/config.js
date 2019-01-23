@@ -18,8 +18,8 @@ const unbundle = ({ formats, ...rest }) =>
   formats.map(format => ({ ...rest, format }));
 let allBundles = R.chain(unbundle, bundles);
 
-function getConfig({ global, input, format }) {
-  const [base, name] = input.split('/');
+function getConfig({ name, global, input, format }) {
+  const [base, folder] = input.split('/');
   return {
     input,
     watch: {
@@ -27,7 +27,7 @@ function getConfig({ global, input, format }) {
     },
     output: {
       format,
-      file: path.join(base, name, `dist/${name}${formatOptions[format].ext}`),
+      file: path.join(base, folder, `dist/${name}${formatOptions[format].ext}`),
       name: global,
     },
     plugins: [

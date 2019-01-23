@@ -1,7 +1,7 @@
 {
-  "name": "swiss-element-fullname",
+  "name": "swiss-element-lithtml-fullname",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "scripts": {
     "start": "node scripts/start"
   },
@@ -10,6 +10,6 @@
   },
   "dependencies": {
     "lit-html": "^1.0.0-rc.2",
-    "swiss-element": "0.3.0"
+    "swiss-element": "0.4.0"
   }
 }
