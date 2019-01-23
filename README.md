@@ -13,8 +13,8 @@
 Swiss Element provides a functional way of defining custom elements.
 
 - React-like [hooks](https://reactjs.org/docs/hooks-intro.html) (useEffect, useState, useCallback, useMemo, useReducer, useRef)
-- Extend the custom element with composition via enhancers
-- Choose your own renderer
+- Extend the custom element with composition via [enhancers](#enhancers)
+- Choose your own renderer ([Lit-html](fixtures/fullname), [Htm-preact](fixtures/htm-preact), [Superfine](fixtures/superfine), everything that outputs DOM...)
 
 ### Example - Counter
 
