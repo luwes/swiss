@@ -1,0 +1,13 @@
+[build]
+  base    = ""
+  publish = "fixtures/fullname"
+  command = "yarn build"
+
+[context.production]
+  [context.production.environment]
+    YARN_VERSION = "1.12.3"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
