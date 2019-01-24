@@ -18,6 +18,8 @@ function renderer(customRenderer = defaultRenderer) {
     const element = createElement(...args);
 
     const renderWays = [
+      // default
+      (root, html) => customRenderer(root, html),
       // lit-html, htm-preact
       (root, html) => customRenderer(html, root),
       // superfine
