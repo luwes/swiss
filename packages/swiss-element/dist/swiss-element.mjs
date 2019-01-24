@@ -440,12 +440,15 @@ const id$5 = uid();
 
 setup.push(stacked(id$5));
 
+let element;
+
 function hooks(createElement) {
   return options => {
     const el = createElement(options);
     const { component } = options;
 
     const requestUpdate = augmentor(function() {
+      element = el;
       const html = component.call(el, el);
       return el.render(html);
     });
@@ -465,7 +468,7 @@ function useEffect$1(fn, inputs = []) {
   return useEffect.apply(null, args);
 }
 
-function lifecycleHandler($, element) {
+function lifecycleHandler($) {
   const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
   element.addEventListener(CONNECTED, handler, false);
   element.addEventListener(DISCONNECTED, handler, false);
@@ -533,7 +536,7 @@ const OBSERVED_ATTRIBUTES = 'observedAttributes';
  *
  * @return {HTMLElement}
  */
-function element(name, component, enhancer, options) {
+function element$1(name, component, enhancer, options) {
   if (isFunction(name)) {
     options = enhancer;
     enhancer = component;
@@ -611,6 +614,8 @@ function renderer$1(customRenderer = renderer) {
     const element = createElement(...args);
 
     const renderWays = [
+      // default
+      (root, html) => customRenderer(root, html),
       // lit-html, htm-preact
       (root, html) => customRenderer(html, root),
       // superfine
@@ -681,4 +686,4 @@ function applyMiddleware(...middleware) {
   };
 }
 
-export { renderer$1 as renderer, applyMiddleware, compose, element, useEffect$1 as useEffect, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState };
+export { renderer$1 as renderer, applyMiddleware, compose, element$1 as element, useEffect$1 as useEffect, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState };

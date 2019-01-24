@@ -1,5 +1,4 @@
-import { element } from '../src/swiss-element.js';
-import renderer from '../src/enhancers/renderer.js';
+import { element, renderer } from '../src/index.js';
 
 it('element returns a function', function() {
   element().should.be.a('function');
@@ -33,7 +32,7 @@ it('custom element lifecycle callbacks work', function() {
 });
 
 it('element can be enhanced', function() {
-  const customRender = sinon.spy((root, html) => (root.innerHTML = html()));
+  const customRender = sinon.spy((root, html) => (root.innerHTML = html));
 
   element('swiss-element', () => `Say cheese`, renderer(customRender));
 
@@ -49,7 +48,7 @@ it('element can extend a native', function() {
     return `I am button`;
   }
 
-  const customRender = sinon.spy((root, html) => (root.innerHTML = html()));
+  const customRender = sinon.spy((root, html) => (root.innerHTML = html));
 
   const button = element(RenderButton, renderer(customRender))();
   document.body.appendChild(button);

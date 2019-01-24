@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Made hooks and propsToAttrs default enhancers.
+- Fix `useEffect` hook
 
 ## 0.4.0 - 2019-01-22
 
