@@ -1,8 +1,8 @@
 # <a href="https://github.com/luwes/swiss-element">![SwissElement](./media/swiss-element.svg 'SwissElement')</a>
 
 [![Build Status](https://img.shields.io/travis/luwes/swiss-element/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/swiss-element)
-[![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=v0.4.0)](https://codecov.io/gh/luwes/swiss-element)
-![Badge size](http://img.badgesize.io/luwes/swiss-element/master/packages/swiss-element/dist/swiss-element.js.svg?style=flat-square&compression=gzip&version=v0.4.0)
+[![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=v0.5.0)](https://codecov.io/gh/luwes/swiss-element)
+![Badge size](http://img.badgesize.io/luwes/swiss-element/master/packages/swiss-element/dist/swiss-element.js.svg?style=flat-square&compression=gzip&version=v0.5.0)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 **npm**: `npm install swiss-element --save`  
