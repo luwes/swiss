@@ -11,12 +11,15 @@ import augmentor, {
 } from '../../node_modules/augmentor/esm/index.js';
 import { CONNECTED, DISCONNECTED } from '../create-element.js';
 
+let element;
+
 function hooks(createElement) {
   return options => {
     const el = createElement(options);
     const { component } = options;
 
     const requestUpdate = augmentor(function() {
+      element = el;
       const html = component.call(el, el);
       return el.render(html);
     });
@@ -36,7 +39,7 @@ export function useEffect(fn, inputs = []) {
   return effect.apply(null, args);
 }
 
-function lifecycleHandler($, element) {
+function lifecycleHandler($) {
   const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
   element.addEventListener(CONNECTED, handler, false);
   element.addEventListener(DISCONNECTED, handler, false);
