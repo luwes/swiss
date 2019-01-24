@@ -1,4 +1,3 @@
-import augmentor from './augmentor.js';
 import renderer from './default-renderer.js';
 import {
   completeAssign,
@@ -22,10 +21,10 @@ export function createFactory(supr, component) {
     const el = supr();
     let oldHtml;
 
-    const requestUpdate = augmentor(function() {
+    function requestUpdate() {
       const html = component.call(el, el);
       return el.render(html);
-    });
+    }
 
     function render(html) {
       el.renderer(el.renderRoot, html, oldHtml);
@@ -34,7 +33,7 @@ export function createFactory(supr, component) {
     }
 
     function connectedCallback() {
-      requestUpdate();
+      el.requestUpdate();
       el.dispatchEvent(new CustomEvent(CONNECTED));
     }
 
@@ -44,7 +43,7 @@ export function createFactory(supr, component) {
 
     function attributeChangedCallback(name, oldValue, newValue) {
       if (el.shouldUpdate(oldValue, newValue)) {
-        requestUpdate();
+        el.requestUpdate();
       }
     }
 

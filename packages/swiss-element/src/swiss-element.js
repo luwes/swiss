@@ -1,6 +1,9 @@
 import { createFactory } from './create-element.js';
+import hooks from './enhancers/hooks.js';
+import propsToAttrs from './enhancers/props-to-attrs.js';
 import {
-  camelCase,
+  completeAssign,
+  compose,
   define,
   findFreeTagName,
   extend,
@@ -42,7 +45,7 @@ export function element(name, component, enhancer, options) {
     enhancer = undefined;
   }
 
-  // To shorten syntax if options is an array assume it's the observedAttributes.
+  // To shorten syntax if options is an array assume it's `observedAttributes`.
   if (isArray(options)) {
     options = { [OBSERVED_ATTRIBUTES]: options };
   }
@@ -50,9 +53,16 @@ export function element(name, component, enhancer, options) {
   options = options || {};
   name = options.name = findFreeTagName(name || options.name);
 
+  // The `hooks` and `propsToAttrs` enhancers are added by default.
+  enhancer = compose(
+    enhancer,
+    hooks,
+    propsToAttrs
+  );
+
   const Native = getNativeConstructor(options && options.extends);
   const SwissElement = extend(Native, function(supr) {
-    const opts = { ...options, component };
+    const opts = completeAssign({}, options, { component });
     return createFactory(supr, component)(opts, enhancer);
   });
 
@@ -64,9 +74,9 @@ export function element(name, component, enhancer, options) {
     ADOPTED_CALLBACK
   ]);
 
-  const oa = (SwissElement[OBSERVED_ATTRIBUTES] =
+  const oa = (options[OBSERVED_ATTRIBUTES] =
     options[OBSERVED_ATTRIBUTES] || []);
-  addPropsToAttrs(SwissElement.prototype, oa);
+  SwissElement[OBSERVED_ATTRIBUTES] = oa;
 
   define(name, SwissElement, options);
   return SwissElement;
@@ -79,24 +89,5 @@ function forwardCallbacks(proto, callbacks) {
         this[cb](...args);
       }
     };
-  });
-}
-
-function addPropsToAttrs(proto, attributes) {
-  attributes.forEach(name => {
-    // it is possible to redefine the behavior at any time
-    // simply overwriting get prop() and set prop(value)
-    if (!(name in proto)) {
-      Object.defineProperty(proto, camelCase(name), {
-        configurable: true,
-        get() {
-          return this.getAttribute(name);
-        },
-        set(value) {
-          if (value == null) this.removeAttribute(name);
-          else this.setAttribute(name, value);
-        }
-      });
-    }
   });
 }

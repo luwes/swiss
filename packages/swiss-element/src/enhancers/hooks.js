@@ -4,10 +4,27 @@ export {
   useReducer,
   useRef,
   useState
-} from './augmentor.js';
+} from '../../node_modules/augmentor/esm/index.js';
 
-import { useEffect as effect } from './augmentor.js';
-import { CONNECTED, DISCONNECTED } from './create-element.js';
+import augmentor, {
+  useEffect as effect
+} from '../../node_modules/augmentor/esm/index.js';
+import { CONNECTED, DISCONNECTED } from '../create-element.js';
+
+function hooks(createElement) {
+  return options => {
+    const el = createElement(options);
+    const { component } = options;
+
+    const requestUpdate = augmentor(function() {
+      const html = component.call(el, el);
+      return el.render(html);
+    });
+
+    el.requestUpdate = requestUpdate;
+    return el;
+  };
+}
 
 export function useEffect(fn, inputs = []) {
   const args = [fn];
@@ -39,3 +56,5 @@ function ondisconnected() {
   this._ = null;
   if (_) _();
 }
+
+export default hooks;

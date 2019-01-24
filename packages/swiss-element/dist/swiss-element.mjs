@@ -1,3 +1,189 @@
+function renderer(root, html) {
+  root.innerHTML = html;
+}
+
+const isArray = Array.isArray;
+
+function isFunction(value) {
+  return typeof value === 'function';
+}
+
+function isUndefined(value) {
+  return typeof value === 'undefined';
+}
+
+function getNativeConstructor(ext) {
+  return ext ? document.createElement(ext).constructor : HTMLElement;
+}
+
+function define(name, Element, options) {
+  if (name) {
+    self.customElements.define(name, Element, options);
+  }
+}
+
+function findFreeTagName(name, suffix = null) {
+  name = name || 's';
+  const tag = suffix ? `${name}-${suffix}` : name;
+  return isFreeTagName(tag) ? tag : findFreeTagName(tag, uniqueId());
+}
+
+function isFreeTagName(name) {
+  return hasDash(name) && !self.customElements.get(name);
+}
+
+function hasDash(name) {
+  return name && /.-./.test(name);
+}
+
+function compose(...fns) {
+  return x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
+}
+
+function camelCase(name) {
+  return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
+}
+
+const CustomEvent =
+  (isFunction(self.CustomEvent) && self.CustomEvent) ||
+  ((name, params = {}) => {
+    var newEvent = document.createEvent('CustomEvent');
+    newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
+    return newEvent;
+  });
+
+/**
+ * Generates a unique ID. If `prefix` is given, the ID is appended to it.
+ *
+ * @param {string} prefix The value to prefix the ID with.
+ * @return {string} Returns the unique ID.
+ * @example
+ *
+ *    uniqueId('contact_');
+ *    // => 'contact_104'
+ *
+ *    uniqueId();
+ *    // => '105'
+ */
+let idCounter = 0;
+function uniqueId(prefix = '') {
+  var id = ++idCounter;
+  return `${prefix}${id}`;
+}
+
+function extend(Base, init) {
+  function Class() {
+    if (!(this instanceof Class)) {
+      return new Class();
+    }
+
+    const supr = () => {
+      return typeof Reflect !== 'undefined'
+        ? Reflect.construct(Base, [], this.constructor)
+        : Base.call(this);
+    };
+
+    return init.call(this, supr);
+  }
+
+  Class.prototype = Object.create(Base.prototype);
+  Class.prototype.constructor = Class;
+
+  return Class;
+}
+
+/**
+ * Create a complete assign function with custom descriptors.
+ * @param  {Object} options - The custom descriptor options.
+ * @return {Function}
+ */
+function createCompleteAssign(options) {
+  return (target, ...sources) => {
+    sources.forEach(source => {
+      for (const prop in source) {
+        const descriptor = Object.getOwnPropertyDescriptor(source, prop);
+        Object.defineProperty(target, prop, Object.assign(descriptor, options));
+      }
+    });
+    return target;
+  };
+}
+
+/**
+ * Complete assign is used to copy the values of all enumerable own properties from one or more source objects to a target object, including getters and setters. It will return the target object. Properties are still allowed to be overridden.
+ *
+ * @param  {Object} target
+ * @param  {...Object} sources
+ * @return {Object} The target with assigned properties
+ */
+const completeAssign = createCompleteAssign({
+  enumerable: false,
+  configurable: true,
+  writeable: false
+});
+
+const CONNECTED = 'connected';
+const DISCONNECTED = 'dis' + CONNECTED;
+
+function createFactory(supr, component) {
+  function createElement(options, enhancer) {
+    if (!isUndefined(enhancer)) {
+      if (!isFunction(enhancer)) {
+        throw new Error('Expected the enhancer to be a function.');
+      }
+      return enhancer(createElement)(options);
+    }
+
+    const el = supr();
+    let oldHtml;
+
+    function requestUpdate() {
+      const html = component.call(el, el);
+      return el.render(html);
+    }
+
+    function render(html) {
+      el.renderer(el.renderRoot, html, oldHtml);
+      oldHtml = html;
+      return html;
+    }
+
+    function connectedCallback() {
+      el.requestUpdate();
+      el.dispatchEvent(new CustomEvent(CONNECTED));
+    }
+
+    function disconnectedCallback() {
+      el.dispatchEvent(new CustomEvent(DISCONNECTED));
+    }
+
+    function attributeChangedCallback(name, oldValue, newValue) {
+      if (el.shouldUpdate(oldValue, newValue)) {
+        el.requestUpdate();
+      }
+    }
+
+    function shouldUpdate(oldValue, newValue) {
+      return oldValue !== newValue;
+    }
+
+    return completeAssign(el, {
+      render,
+      renderer,
+      connectedCallback,
+      disconnectedCallback,
+      attributeChangedCallback,
+      requestUpdate,
+      shouldUpdate,
+      get renderRoot() {
+        return el.shadowRoot || el._shadowRoot || el;
+      }
+    });
+  }
+
+  return createElement;
+}
+
 let now = null;
 const current = () => now;
 
@@ -254,190 +440,19 @@ const id$5 = uid();
 
 setup.push(stacked(id$5));
 
-function renderer(root, html) {
-  root.innerHTML = html;
-}
-
-const isArray = Array.isArray;
-
-function isFunction(value) {
-  return typeof value === 'function';
-}
-
-function isUndefined(value) {
-  return typeof value === 'undefined';
-}
-
-function getNativeConstructor(ext) {
-  return ext ? document.createElement(ext).constructor : HTMLElement;
-}
-
-function define(name, Element, options) {
-  if (name) {
-    self.customElements.define(name, Element, options);
-  }
-}
-
-function findFreeTagName(name, suffix = null) {
-  name = name || 's';
-  const tag = suffix ? `${name}-${suffix}` : name;
-  return isFreeTagName(tag) ? tag : findFreeTagName(tag, uniqueId());
-}
-
-function isFreeTagName(name) {
-  return hasDash(name) && !self.customElements.get(name);
-}
-
-function hasDash(name) {
-  return name && /.-./.test(name);
-}
-
-function compose(...fns) {
-  return x => fns.reduceRight((y, f) => f(y), x);
-}
-
-function camelCase(name) {
-  return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
-}
-
-const CustomEvent =
-  (isFunction(self.CustomEvent) && self.CustomEvent) ||
-  ((name, params = {}) => {
-    var newEvent = document.createEvent('CustomEvent');
-    newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
-    return newEvent;
-  });
-
-/**
- * Generates a unique ID. If `prefix` is given, the ID is appended to it.
- *
- * @param {string} prefix The value to prefix the ID with.
- * @return {string} Returns the unique ID.
- * @example
- *
- *    uniqueId('contact_');
- *    // => 'contact_104'
- *
- *    uniqueId();
- *    // => '105'
- */
-let idCounter = 0;
-function uniqueId(prefix = '') {
-  var id = ++idCounter;
-  return `${prefix}${id}`;
-}
-
-function extend(Base, init) {
-  function Class() {
-    if (!(this instanceof Class)) {
-      return new Class();
-    }
-
-    const supr = () => {
-      return typeof Reflect !== 'undefined'
-        ? Reflect.construct(Base, [], this.constructor)
-        : Base.call(this);
-    };
-
-    return init.call(this, supr);
-  }
-
-  Class.prototype = Object.create(Base.prototype);
-  Class.prototype.constructor = Class;
-
-  return Class;
-}
-
-/**
- * Create a complete assign function with custom descriptors.
- * @param  {Object} options - The custom descriptor options.
- * @return {Function}
- */
-function createCompleteAssign(options) {
-  return (target, ...sources) => {
-    sources.forEach(source => {
-      for (const prop in source) {
-        const descriptor = Object.getOwnPropertyDescriptor(source, prop);
-        Object.defineProperty(target, prop, Object.assign(descriptor, options));
-      }
-    });
-    return target;
-  };
-}
-
-/**
- * Complete assign is used to copy the values of all enumerable own properties from one or more source objects to a target object, including getters and setters. It will return the target object. Properties are still allowed to be overridden.
- *
- * @param  {Object} target
- * @param  {...Object} sources
- * @return {Object} The target with assigned properties
- */
-const completeAssign = createCompleteAssign({
-  enumerable: false,
-  configurable: true,
-  writeable: false
-});
-
-const CONNECTED = 'connected';
-const DISCONNECTED = 'dis' + CONNECTED;
-
-function createFactory(supr, component) {
-  function createElement(options, enhancer) {
-    if (!isUndefined(enhancer)) {
-      if (!isFunction(enhancer)) {
-        throw new Error('Expected the enhancer to be a function.');
-      }
-      return enhancer(createElement)(options);
-    }
-
-    const el = supr();
-    let oldHtml;
+function hooks(createElement) {
+  return options => {
+    const el = createElement(options);
+    const { component } = options;
 
     const requestUpdate = augmentor(function() {
       const html = component.call(el, el);
       return el.render(html);
     });
 
-    function render(html) {
-      el.renderer(el.renderRoot, html, oldHtml);
-      oldHtml = html;
-      return html;
-    }
-
-    function connectedCallback() {
-      requestUpdate();
-      el.dispatchEvent(new CustomEvent(CONNECTED));
-    }
-
-    function disconnectedCallback() {
-      el.dispatchEvent(new CustomEvent(DISCONNECTED));
-    }
-
-    function attributeChangedCallback(name, oldValue, newValue) {
-      if (el.shouldUpdate(oldValue, newValue)) {
-        requestUpdate();
-      }
-    }
-
-    function shouldUpdate(oldValue, newValue) {
-      return oldValue !== newValue;
-    }
-
-    return completeAssign(el, {
-      render,
-      renderer,
-      connectedCallback,
-      disconnectedCallback,
-      attributeChangedCallback,
-      requestUpdate,
-      shouldUpdate,
-      get renderRoot() {
-        return el.shadowRoot || el._shadowRoot || el;
-      }
-    });
-  }
-
-  return createElement;
+    el.requestUpdate = requestUpdate;
+    return el;
+  };
 }
 
 function useEffect$1(fn, inputs = []) {
@@ -469,6 +484,34 @@ function ondisconnected() {
   const { _ } = this;
   this._ = null;
   if (_) _();
+}
+
+function propsToAttrs(createElement) {
+  return options => {
+    const el = createElement(options);
+    const { observedAttributes } = options;
+    addPropsToAttrs(Object.getPrototypeOf(el), observedAttributes);
+    return el;
+  };
+}
+
+function addPropsToAttrs(proto, attributes) {
+  attributes.forEach(name => {
+    // it is possible to redefine the behavior at any time
+    // simply overwriting get prop() and set prop(value)
+    if (!(name in proto)) {
+      Object.defineProperty(proto, camelCase(name), {
+        configurable: true,
+        get() {
+          return this.getAttribute(name);
+        },
+        set(value) {
+          if (value == null) this.removeAttribute(name);
+          else this.setAttribute(name, value);
+        }
+      });
+    }
+  });
 }
 
 const CALLBACK = 'Callback';
@@ -503,7 +546,7 @@ function element(name, component, enhancer, options) {
     enhancer = undefined;
   }
 
-  // To shorten syntax if options is an array assume it's the observedAttributes.
+  // To shorten syntax if options is an array assume it's `observedAttributes`.
   if (isArray(options)) {
     options = { [OBSERVED_ATTRIBUTES]: options };
   }
@@ -511,9 +554,16 @@ function element(name, component, enhancer, options) {
   options = options || {};
   name = options.name = findFreeTagName(name || options.name);
 
+  // The `hooks` and `propsToAttrs` enhancers are added by default.
+  enhancer = compose(
+    enhancer,
+    hooks,
+    propsToAttrs
+  );
+
   const Native = getNativeConstructor(options && options.extends);
   const SwissElement = extend(Native, function(supr) {
-    const opts = { ...options, component };
+    const opts = completeAssign({}, options, { component });
     return createFactory(supr, component)(opts, enhancer);
   });
 
@@ -525,9 +575,9 @@ function element(name, component, enhancer, options) {
     ADOPTED_CALLBACK
   ]);
 
-  const oa = (SwissElement[OBSERVED_ATTRIBUTES] =
+  const oa = (options[OBSERVED_ATTRIBUTES] =
     options[OBSERVED_ATTRIBUTES] || []);
-  addPropsToAttrs(SwissElement.prototype, oa);
+  SwissElement[OBSERVED_ATTRIBUTES] = oa;
 
   define(name, SwissElement, options);
   return SwissElement;
@@ -540,25 +590,6 @@ function forwardCallbacks(proto, callbacks) {
         this[cb](...args);
       }
     };
-  });
-}
-
-function addPropsToAttrs(proto, attributes) {
-  attributes.forEach(name => {
-    // it is possible to redefine the behavior at any time
-    // simply overwriting get prop() and set prop(value)
-    if (!(name in proto)) {
-      Object.defineProperty(proto, camelCase(name), {
-        configurable: true,
-        get() {
-          return this.getAttribute(name);
-        },
-        set(value) {
-          if (value == null) this.removeAttribute(name);
-          else this.setAttribute(name, value);
-        }
-      });
-    }
   });
 }
 
@@ -650,4 +681,4 @@ function applyMiddleware(...middleware) {
   };
 }
 
-export { renderer$1 as renderer, applyMiddleware, compose, useEffect$1 as useEffect, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, element };
+export { renderer$1 as renderer, applyMiddleware, compose, element, useEffect$1 as useEffect, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState };

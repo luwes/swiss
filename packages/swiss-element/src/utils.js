@@ -33,7 +33,7 @@ export function hasDash(name) {
 }
 
 export function compose(...fns) {
-  return x => fns.reduceRight((y, f) => f(y), x);
+  return x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
 }
 
 export function camelCase(name) {
