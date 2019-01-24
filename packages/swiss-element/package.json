@@ -1,6 +1,6 @@
 {
   "name": "swiss-element",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Core swiss element library",
   "module": "dist/swiss-element.mjs",
   "main": "dist/swiss-element.js",
