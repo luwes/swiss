@@ -1,8 +1,8 @@
 # <a href="https://github.com/luwes/swiss-element">![SwissElement](./media/swiss-element.svg 'SwissElement')</a>
 
 [![Build Status](https://img.shields.io/travis/luwes/swiss-element/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/swiss-element)
-[![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=v0.3.0)](https://codecov.io/gh/luwes/swiss-element)
-![Badge size](http://img.badgesize.io/luwes/swiss-element/master/packages/swiss-element/dist/swiss-element.js.svg?style=flat-square&compression=gzip&version=v0.3.0)
+[![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=v0.4.0)](https://codecov.io/gh/luwes/swiss-element)
+![Badge size](http://img.badgesize.io/luwes/swiss-element/master/packages/swiss-element/dist/swiss-element.js.svg?style=flat-square&compression=gzip&version=v0.4.0)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 **npm**: `npm install swiss-element --save`  
@@ -55,12 +55,12 @@ Defines a custom element in the `CustomElementRegistry` which renders the compon
 
 **Kind**: global function
 
-| Param      | Type                  | Description                                                                                                                                                                                                                                                  |
-| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| name       | <code>string</code>   | The tag name for the custom element.                                                                                                                                                                                                                         |
-| component  | <code>function</code> | The component that is rendered in the element.                                                                                                                                                                                                               |
-| [enhancer] | <code>function</code> | The element enhancer. You may optionally specify it to enhance the element with third-party capabilities such as middleware, custom renderer, public API, etc. The only element enhancers that ship with Swiss Element are `applyMiddleware` and `renderer`. |
-| [options]  | <code>Object</code>   | An options object with 2 optional properties `observedAttributes` and `extends` (e.g. `extends: 'button'`). The options object is also passed to all the enhancers.                                                                                          |
+| Param      | Type                                      | Description                                                                                                                                                                                                                                                          |
+| ---------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name       | <code>string</code>                       | The tag name for the custom element.                                                                                                                                                                                                                                 |
+| component  | <code>function</code>                     | The component that is rendered in the element.                                                                                                                                                                                                                       |
+| [enhancer] | <code>function</code>                     | The element enhancer. You may optionally specify it to enhance the element with third-party capabilities such as middleware, custom renderer, public API, etc. The only element enhancers that ship with Swiss Element are `applyMiddleware` and `renderer`.         |
+| [options]  | <code>Object</code> \| <code>Array</code> | An options object with 2 optional properties `observedAttributes` and `extends` (e.g. `extends: 'button'`). You can also just pass an array which will be the `observedAttributes` array for shorter syntax. The options object is also passed to all the enhancers. |
 
 ---
 
@@ -90,6 +90,12 @@ Middleware is the suggested way to extend Swiss Element with custom functionalit
 ### renderer(customRenderer) ⇒ <code>function</code>
 
 Adds a simple way to define your own renderer.
+Verified libraries working by passing just the `render` or `patch` function:
+
+- Lighterhtml
+- Lit-html
+- HTM-Preact
+- Superfine
 
 **Kind**: global function
 
