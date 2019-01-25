@@ -15,6 +15,7 @@ Swiss Element provides a functional way of defining custom elements.
 - React-like [hooks](https://reactjs.org/docs/hooks-intro.html) (useEffect, useState, useCallback, useMemo, useReducer, useRef)
 - Extend the custom element with composition via [enhancers](#enhancers)
 - Choose your own renderer ([Lit-html](fixtures/fullname), [Htm-preact](fixtures/htm-preact), [Superfine](fixtures/superfine), everything that outputs DOM...)
+- Observed attributes are also accessible via element properties
 
 ### Example - Counter
 
@@ -26,7 +27,7 @@ function Counter(element) {
   const [count, setCount] = useState(0);
 
   return html`
-    <a href="#" onclick="${() => setCount(count + 1)}">
+    <a href="#" @click="${() => setCount(count + 1)}">
       Clicked ${count} times
     </a>
   `;
