@@ -1,10 +1,5 @@
 import renderer from './default-renderer.js';
-import {
-  completeAssign,
-  CustomEvent,
-  isFunction,
-  isUndefined
-} from './utils.js';
+import { completeAssign, CustomEvent, isUndefined } from './utils.js';
 
 export const CONNECTED = 'connected';
 export const DISCONNECTED = 'dis' + CONNECTED;
@@ -12,9 +7,6 @@ export const DISCONNECTED = 'dis' + CONNECTED;
 export function createFactory(supr, component) {
   function createElement(options, enhancer) {
     if (!isUndefined(enhancer)) {
-      if (!isFunction(enhancer)) {
-        throw new Error('Expected the enhancer to be a function.');
-      }
       return enhancer(createElement)(options);
     }
 

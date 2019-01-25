@@ -53,6 +53,10 @@ export function element(name, component, enhancer, options) {
   options = options || {};
   name = options.name = findFreeTagName(name || options.name);
 
+  if (!isUndefined(enhancer) && !isFunction(enhancer)) {
+    throw new Error('Expected the enhancer to be a function.');
+  }
+
   // The `hooks` and `propsToAttrs` enhancers are added by default.
   enhancer = compose(
     enhancer,

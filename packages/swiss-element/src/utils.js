@@ -41,12 +41,13 @@ export function camelCase(name) {
 }
 
 export const CustomEvent =
-  (isFunction(self.CustomEvent) && self.CustomEvent) ||
-  ((name, params = {}) => {
-    var newEvent = document.createEvent('CustomEvent');
-    newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
-    return newEvent;
-  });
+  (isFunction(self.CustomEvent) && self.CustomEvent) || CustomEventPonyfill;
+
+export function CustomEventPonyfill(name, params = {}) {
+  var newEvent = document.createEvent('CustomEvent');
+  newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
+  return newEvent;
+}
 
 /**
  * Generates a unique ID. If `prefix` is given, the ID is appended to it.

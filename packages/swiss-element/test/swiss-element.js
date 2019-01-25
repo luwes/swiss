@@ -12,9 +12,9 @@ it('element creator returns a function', function() {
 it('custom element lifecycle callbacks work', function() {
   const customLifecycle = createElement => options => {
     const el = createElement(options);
-    el.connectedCallback = sinon.spy();
-    el.disconnectedCallback = sinon.spy();
-    el.attributeChangedCallback = sinon.spy();
+    el.connectedCallback = sinon.spy(el.connectedCallback);
+    el.disconnectedCallback = sinon.spy(el.disconnectedCallback);
+    el.attributeChangedCallback = sinon.spy(el.attributeChangedCallback);
     return el;
   };
 
@@ -55,4 +55,16 @@ it('element can extend a native', function() {
 
   expect(button.innerHTML).to.equal('I am button');
   expect(button instanceof HTMLElement).to.be.true;
+});
+
+it('non function enhancer throws', function() {
+  function RenderButton() {
+    return `I am button`;
+  }
+
+  assert.throws(
+    () => element(RenderButton, [], {}),
+    Error,
+    'Expected the enhancer to be a function.'
+  );
 });

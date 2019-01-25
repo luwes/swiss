@@ -45,12 +45,13 @@ function camelCase(name) {
 }
 
 const CustomEvent =
-  (isFunction(self.CustomEvent) && self.CustomEvent) ||
-  ((name, params = {}) => {
-    var newEvent = document.createEvent('CustomEvent');
-    newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
-    return newEvent;
-  });
+  (isFunction(self.CustomEvent) && self.CustomEvent) || CustomEventPonyfill;
+
+function CustomEventPonyfill(name, params = {}) {
+  var newEvent = document.createEvent('CustomEvent');
+  newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
+  return newEvent;
+}
 
 /**
  * Generates a unique ID. If `prefix` is given, the ID is appended to it.
@@ -128,9 +129,6 @@ const DISCONNECTED = 'dis' + CONNECTED;
 function createFactory(supr, component) {
   function createElement(options, enhancer) {
     if (!isUndefined(enhancer)) {
-      if (!isFunction(enhancer)) {
-        throw new Error('Expected the enhancer to be a function.');
-      }
       return enhancer(createElement)(options);
     }
 
@@ -556,6 +554,10 @@ function element$1(name, component, enhancer, options) {
 
   options = options || {};
   name = options.name = findFreeTagName(name || options.name);
+
+  if (!isUndefined(enhancer) && !isFunction(enhancer)) {
+    throw new Error('Expected the enhancer to be a function.');
+  }
 
   // The `hooks` and `propsToAttrs` enhancers are added by default.
   enhancer = compose(
