@@ -61,28 +61,33 @@ const set = (info, clean) => {
 setup.push(runner => {
   const stack = [];
   const state = {i: 0, stack};
+  const drop = (current, clean, raf, t) => {
+    if (raf && t)
+      cancel(t);
+    else if (clean)
+      clean();
+    set(current, null);
+  };
   runner[id] = state;
-  const reset = () => {
+  runner.before.push(() => {
+    state.i = 0;
+  });
+  runner.reset.push(() => {
     state.i = 0;
     for (let {length} = stack, i = 0; i < length; i++) {
-      const {check, clean, raf, t} = stack[i];
-      if (check) {
-        if (raf && t)
-          cancel(t);
-        else if (clean)
-          clean();
-        set(stack[i], null);
-      }
+      const current = stack[i];
+      const {check, clean, raf, t} = current;
+      if (check)
+        drop(current, clean, raf, t);
     }
-  };
-  runner.reset.push(reset);
-  runner.before.push(reset);
+  });
   runner.after.push(() => {
     for (let {length} = stack, i = 0; i < length; i++) {
       const current = stack[i];
-      const {fn, raf, update} = current;
-      if (update) {
+      const {check, clean, fn, raf, t, update} = current;
+      if (check && update) {
         current.update = false;
+        drop(current, clean, raf, t);
         if (raf)
           current.t = request(fn);
         else

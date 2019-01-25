@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="../index.js"></script>
+</head>
+<body>
+<script>
+const {useEffect, useLayoutEffect, useState} = augmentor;
+
+const button1 = document.createElement("button");
+document.body.appendChild(button1);
+
+const button2 = document.createElement("button");
+document.body.appendChild(button2);
+
+const p = text => {
+  const par = document.createElement("p");
+  par.textContent = text;
+  document.body.appendChild(par);
+  return par;
+};
+
+const fn = augmentor(() => {
+  const [danger, setDanger] = useState(0);
+  const [announcer, setAnnouncer] = useState(0);
+
+  useEffect(
+    () => {
+      p(`Critical level at ${danger}%`);
+      return () =>
+        p(`I am fired? At critical level ${danger}? Okay, adios amigos!`);
+    },
+    [announcer]
+  );
+
+  p(`Wait a second.`);
+
+  button1.textContent = `wait a second ${danger}`;
+  button2.textContent = `side effect ${announcer}`;
+
+  button1.onclick = () => setDanger(danger + 1);
+  button2.onclick = () => setAnnouncer(announcer + 1);
+});
+
+fn();
+</script>
+</body>
+</html>
