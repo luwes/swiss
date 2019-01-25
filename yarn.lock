@@ -3536,10 +3536,10 @@ karma-sinon@^1.0.5:
   resolved "https://registry.yarnpkg.com/karma-sinon/-/karma-sinon-1.0.5.tgz#4e3443f2830fdecff624d3747163f1217daa2a9a"
   integrity sha1-TjRD8oMP3s/2JNN0cWPxIX2qKpo=
 
-karma@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/karma/-/karma-3.1.4.tgz#3890ca9722b10d1d14b726e1335931455788499e"
-  integrity sha512-31Vo8Qr5glN+dZEVIpnPCxEGleqE0EY6CtC2X9TagRV3rRQ3SNrvfhddICkJgUK3AgqpeKSZau03QumTGhGoSw==
+karma@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/karma/-/karma-4.0.0.tgz#f28e38a2b66243fde3f98e12a8dcaa2c6ff8ca9c"
+  integrity sha512-EFoFs3F6G0BcUGPNOn/YloGOb3h09hzTguyXlg6loHlKY76qbJikkcyPk43m2kfRF65TUGda/mig29QQtyhm1g==
   dependencies:
     bluebird "^3.3.0"
     body-parser "^1.16.1"
@@ -3618,10 +3618,10 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lighterhtml@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/lighterhtml/-/lighterhtml-0.6.0.tgz#43dd5023302d51f7d9a5191fec47e240bd7a6ca4"
-  integrity sha512-E7u6TC5iNY5+RF+B+0ibnssHXKaPlSSuUmJ0o63nMOXQE7pVxbmB+OMUm0EhMjmVyy4WY+C3n6+St9t1Nckb3A==
+lighterhtml@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/lighterhtml/-/lighterhtml-0.7.0.tgz#1db51c0ac6915fcf036b511ae9f80af3d03c25df"
+  integrity sha512-TPnsPMNKJIEVUSQOX41LOVkphFKG4CyGXSSimKO8sKqt/SNl6+Pl19TuWfgGEUnUwjmV4B8QJCs+h29yqFaYSg==
   dependencies:
     "@ungap/create-content" "^0.1.4"
     "@ungap/template-tag-arguments" "^0.1.1"

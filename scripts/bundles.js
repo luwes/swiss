@@ -21,6 +21,7 @@ export const bundles = [
     global: 'swissElementFullname',
     name: 'fullname',
     input: 'fixtures/lighterhtml/src/fullname.js',
+    sourcemap: true,
   },
   {
     externals: ['lit-html'],
@@ -28,6 +29,7 @@ export const bundles = [
     global: 'swissElementFullname',
     name: 'fullname',
     input: 'fixtures/lit-html/src/fullname.js',
+    sourcemap: true,
   },
   {
     externals: ['htm'],
@@ -35,6 +37,7 @@ export const bundles = [
     global: 'swissElementCounter',
     name: 'counter',
     input: 'fixtures/htm-preact/src/counter.js',
+    sourcemap: true,
   },
   {
     externals: ['superfine'],
@@ -42,5 +45,6 @@ export const bundles = [
     global: 'swissElementCounter',
     name: 'counter',
     input: 'fixtures/superfine/src/counter.js',
+    sourcemap: true,
   }
 ];

@@ -18,7 +18,7 @@ const unbundle = ({ formats, ...rest }) =>
   formats.map(format => ({ ...rest, format }));
 let allBundles = R.chain(unbundle, bundles);
 
-function getConfig({ name, global, input, format }) {
+function getConfig({ name, global, input, format, sourcemap }) {
   const [base, folder] = input.split('/');
   return {
     input,
@@ -27,6 +27,7 @@ function getConfig({ name, global, input, format }) {
     },
     output: {
       format,
+      sourcemap,
       file: path.join(base, folder, `dist/${name}${formatOptions[format].ext}`),
       name: global,
     },

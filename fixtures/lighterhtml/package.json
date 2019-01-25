@@ -9,7 +9,7 @@
     "browser-sync": "^2.24.6"
   },
   "dependencies": {
-    "lighterhtml": "^0.6.0",
-    "swiss-element": "0.4.0"
+    "lighterhtml": "^0.7.0",
+    "swiss-element": "0.5.0"
   }
 }
