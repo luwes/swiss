@@ -3,7 +3,7 @@ import {
   element,
   renderer,
   useState
-} from '../node_modules/swiss-element/dist/swiss-element.mjs';
+} from 'swiss-element';
 
 function Counter() {
   const [count, setCount] = useState(0);
