@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.5.1 - 2019-01-27
+
+### Changed
+
+- Pass old html to renderer functions
+- Upgrade augmentor dependency
+
 ## 0.5.0 - 2019-01-23
 
 ### Changed
