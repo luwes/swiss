@@ -1,0 +1,10 @@
+{
+  "name": "swiss-element-nanomorph",
+  "private": true,
+  "version": "0.0.1",
+  "dependencies": {
+    "nanohtml": "^1.4.0",
+    "nanomorph": "^5.2.0",
+    "swiss-element": "0.5.0"
+  }
+}

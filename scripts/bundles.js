@@ -45,5 +45,13 @@ export const bundles = [
     name: 'counter',
     input: 'fixtures/renderers/superfine/src/counter.js',
     sourcemap: true
+  },
+  {
+    externals: ['nanomorph', 'nanohtml'],
+    formats: [UMD],
+    global: 'swissElementCounter',
+    name: 'counter',
+    input: 'fixtures/renderers/nanomorph/src/counter.js',
+    sourcemap: true
   }
 ];
