@@ -19,13 +19,13 @@ function renderer(customRenderer = defaultRenderer) {
 
     const renderWays = [
       // default
-      (root, html) => customRenderer(root, html),
+      (root, html, old) => customRenderer(root, html, old),
       // lit-html, htm-preact
-      (root, html) => customRenderer(html, root),
+      (root, html, old) => customRenderer(html, root, old),
       // superfine
       (root, html, old) => customRenderer(old, html, root),
       // lighterhtml
-      (root, html) => customRenderer(root, () => html)
+      (root, html, old) => customRenderer(root, () => html, old)
     ];
 
     /**
