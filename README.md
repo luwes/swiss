@@ -14,7 +14,7 @@ Swiss Element provides a functional way of defining custom elements.
 
 - React-like [hooks](https://reactjs.org/docs/hooks-intro.html) (useEffect, useState, useCallback, useMemo, useReducer, useRef)
 - Extend the custom element with composition via [enhancers](#enhancers)
-- Choose your own renderer ([Lighterhtml](fixtures/renderers/lighterhtml), [Lit-html](fixtures/renderers/lit-html), [Htm-preact](fixtures/renderers/htm-preact), [Superfine](fixtures/renderers/superfine), everything that outputs DOM...)
+- Choose your own renderer ([Lighterhtml](site/content/fixtures/renderers/lighterhtml), [Lit-html](site/content/fixtures/renderers/lit-html), [Htm-preact](site/content/fixtures/renderers/htm-preact), [Superfine](site/content/fixtures/renderers/superfine), everything that outputs DOM...)
 - Observed attributes are also accessible via element properties
 
 ### Example - Counter
