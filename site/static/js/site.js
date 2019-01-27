@@ -29,14 +29,13 @@ $(document).ready(function() {
   function smoothScroll(e) {
     e.preventDefault();
     $(document).off('scroll');
-    var target = this.hash,
-      menu = target;
+    var target = this.hash;
     var $target = $(target);
     $('html, body')
       .stop()
       .animate(
         {
-          scrollTop: $target.offset().top - 40
+          scrollTop: $target.offset() && $target.offset().top - 40
         },
         0,
         'swing',
