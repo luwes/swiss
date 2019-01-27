@@ -5,3 +5,5 @@ yarn-error.log
 .nyc_output/
 coverage
 *.lcov
+
+/site/public/
