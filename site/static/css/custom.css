@@ -72,14 +72,15 @@
   letter-spacing: normal;
 }
 
-.code-example {
-  margin-top: 1.5rem;
-  margin-bottom: 0;
+pre.code-example {
+  padding: 1.5em;
+  margin-bottom: 3rem;
 }
 
-.code-example-body {
-  white-space: pre;
-  word-wrap: break-word
+code.code-example-body {
+  background: none;
+  padding: 0;
+  border: none;
 }
 
 .example {
