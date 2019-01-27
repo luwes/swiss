@@ -1,0 +1,27 @@
+{{ define "main" }}
+<section class="single">
+  <h1 class="title">{{ .Title }}</h1>
+  <article>
+    {{ if .Params.page }}
+      {{ partial .Params.page . }}
+    {{ else }}
+      <!-- Render content normally -->
+    {{ end }}
+
+    {{ .Content }}
+
+    {{ if .Params.source }}
+      <div class="source-code">
+        <h2>Source code</h2>
+        <!-- CODE EXAMPLE ———————————————————————————————————————— -->
+        <pre class="code-example">
+          <code class="code-example-body prettyprint">
+            {{- readFile .Params.source | safeHTML -}}
+          </code>
+        </pre>
+      </div>
+    {{ end }}
+
+  </article>
+</section>
+{{ end }}

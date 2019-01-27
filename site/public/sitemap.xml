@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>https://swiss-element.netlify.com/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://swiss-element.netlify.com/fixtures/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://swiss-element.netlify.com/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://swiss-element.netlify.com/fixtures/renderers/lighterhtml/</loc>
+  </url>
+  
+  <url>
+    <loc>https://swiss-element.netlify.com/fixtures/renderers/lit-html/</loc>
+  </url>
+  
+  <url>
+    <loc>https://swiss-element.netlify.com/fixtures/renderers/htm-preact/</loc>
+  </url>
+  
+  <url>
+    <loc>https://swiss-element.netlify.com/fixtures/renderers/superfine/</loc>
+  </url>
+  
+  <url>
+    <loc>https://swiss-element.netlify.com/</loc>
+  </url>
+  
+</urlset>

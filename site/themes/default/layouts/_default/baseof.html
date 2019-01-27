@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  {{- partial "head.html" . -}}
+  <body class="code-snippets-visible">
+    <!-- Primary Page Layout
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <div class="container">
+      {{- partial "header.html" . -}}
+      {{- block "main" . }}{{- end }}
+      {{- partial "footer.html" . -}}
+    </div>
+  </body>
+</html>

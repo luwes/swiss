@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html><head>
+  
+  <meta charset="utf-8">
+  <title>🇨🇭Element &#43; Lit-html</title>
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="/css/skeleton.css">
+  <link rel="stylesheet" href="/css/custom.css">
+
+  
+  <link href="/favicon.ico" rel="icon" type="image/x-icon" />
+
+  
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  <link rel="stylesheet" href="/css/github-prettify-theme.css">
+  <script src="/js/site.js"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
+  
+  <script src="//unpkg.com/@webcomponents/custom-elements"></script>
+
+  
+  <script src="//unpkg.com/custom-event-polyfill"></script>
+</head>
+<body class="code-snippets-visible">
+    
+    <div class="container"><div class="navbar-spacer"></div>
+<nav class="navbar">
+  <div class="container">
+    <ul class="navbar-list">
+      <li class="navbar-item"><a class="navbar-link" href="/">Intro</a></li>
+      <li class="navbar-item">
+        <a class="navbar-link" href="#" data-popover="#codeNavPopover">Renderers</a>
+        <div id="codeNavPopover" class="popover">
+          <ul class="popover-list">
+            
+              <li class="popover-item">
+                <a class="popover-link" href="/fixtures/renderers/lighterhtml/" title="Lighterhtml">Lighterhtml</a>
+              </li>
+            
+              <li class="popover-item">
+                <a class="popover-link" href="/fixtures/renderers/lit-html/" title="Lit-html">Lit-html</a>
+              </li>
+            
+              <li class="popover-item">
+                <a class="popover-link" href="/fixtures/renderers/htm-preact/" title="HTM &#43; Preact">HTM &#43; Preact</a>
+              </li>
+            
+              <li class="popover-item">
+                <a class="popover-link" href="/fixtures/renderers/superfine/" title="Superfine">Superfine</a>
+              </li>
+            
+          </ul>
+        </div>
+      </li>
+      <li class="navbar-item">
+        <a class="navbar-link" href="#" data-popover="#moreNavPopover">More</a>
+        <div id="moreNavPopover" class="popover">
+          <ul class="popover-list">
+            <li class="popover-item">
+              <a class="popover-link" href="https://github.com/luwes/swiss-element/">On Github</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<section class="single">
+  <h1 class="title">🇨🇭Element &#43; Lit-html</h1>
+  <article>
+    
+      
+    
+
+    
+<my-app></my-app>
+<script src="dist/fullname.js"></script>
+
+
+    
+      <div class="source-code">
+        <h2>Source code</h2>
+        
+        <pre class="code-example">
+          <code class="code-example-body prettyprint">import { element, useState, renderer } from 'swiss-element';
+import { html, render } from 'lit-html';
+
+function dispatch(el, first, last) {
+  let event = new CustomEvent('change', {
+    detail: first + ' ' + last
+  });
+  el.dispatchEvent(event);
+}
+
+function App() {
+  const [name, setName] = useState('');
+
+  return html`
+    <h2>User Page</h2>
+
+    <h3>${name}</h3>
+
+    <p>Change name:</p>
+    <full-name @change="${ev => ev.detail && setName(ev.detail)}"> </full-name>
+  `;
+}
+
+element('my-app', App, renderer(render));
+
+function FullName(el) {
+  const [first, setFirst] = useState('Leonhard');
+  const [last, setLast] = useState('Euler ✍️');
+
+  dispatch(el, first, last);
+
+  return html`
+    <form>
+      <label for="first">First</label>
+      <input
+        value="${first}"
+        @keyup="${ev => setFirst(ev.target.value)}"
+        type="text"
+        name="first"
+      />
+
+      <label for="last">Last</label>
+      <input
+        value="${last}"
+        @keyup="${ev => setLast(ev.target.value)}"
+        type="text"
+        name="last"
+      />
+    </form>
+
+    <style>
+      form {
+        border: none;
+        display: grid;
+        grid-template-columns: 20% 80%;
+      }
+    </style>
+  `;
+}
+
+element('full-name', FullName, renderer(render));
+</code>
+        </pre>
+      </div>
+    
+
+  </article>
+</section>
+</div>
+  </body>
+</html>

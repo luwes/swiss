@@ -1,0 +1,32 @@
+<div class="navbar-spacer"></div>
+<nav class="navbar">
+  <div class="container">
+    <ul class="navbar-list">
+      <li class="navbar-item"><a class="navbar-link" href="/">Intro</a></li>
+      <li class="navbar-item">
+        <a class="navbar-link" href="#" data-popover="#codeNavPopover">Renderers</a>
+        <div id="codeNavPopover" class="popover">
+          <ul class="popover-list">
+            {{ range .Site.Menus.renderers }}
+              <li class="popover-item">
+                <a class="popover-link" href="{{ .URL }}" title="{{ .Title }}">
+                  {{- .Title -}}
+                </a>
+              </li>
+            {{ end }}
+          </ul>
+        </div>
+      </li>
+      <li class="navbar-item">
+        <a class="navbar-link" href="#" data-popover="#moreNavPopover">More</a>
+        <div id="moreNavPopover" class="popover">
+          <ul class="popover-list">
+            <li class="popover-item">
+              <a class="popover-link" href="{{.Site.Params.Github}}">On Github</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>

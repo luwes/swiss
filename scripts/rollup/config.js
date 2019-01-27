@@ -3,7 +3,7 @@ import * as R from 'ramda';
 import { ESM, UMD, bundles } from '../bundles';
 import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
-import { terser } from "rollup-plugin-terser";
+import { terser } from 'rollup-plugin-terser';
 import bundleSize from 'rollup-plugin-bundle-size';
 
 const formatOptions = {
@@ -19,28 +19,30 @@ const unbundle = ({ formats, ...rest }) =>
 let allBundles = R.chain(unbundle, bundles);
 
 function getConfig({ name, global, input, format, sourcemap }) {
-  const [base, folder] = input.split('/');
   return {
     input,
     watch: {
-      clearScreen: false,
+      clearScreen: false
     },
     output: {
       format,
       sourcemap,
-      file: path.join(base, folder, `dist/${name}${formatOptions[format].ext}`),
-      name: global,
+      file: path.join(
+        path.dirname(input),
+        '..',
+        `dist/${name}${formatOptions[format].ext}`
+      ),
+      name: global
     },
     plugins: [
       nodeResolve({ module: true }),
       format === UMD && babel(),
       format === UMD && terser(),
-      bundleSize(),
+      bundleSize()
     ].filter(Boolean),
-    onwarn: function (warning) {
+    onwarn: function(warning) {
       // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-      if (warning.code === 'THIS_IS_UNDEFINED')
-        return;
+      if (warning.code === 'THIS_IS_UNDEFINED') return;
 
       console.error(warning.message);
     }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>🇨🇭Swiss Element - Fixtures on 🇨🇭Swiss Element - Custom elements made easy.</title>
+    <link>https://swiss-element.netlify.com/</link>
+    <description>Recent content in 🇨🇭Swiss Element - Fixtures on 🇨🇭Swiss Element - Custom elements made easy.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="https://swiss-element.netlify.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>🇨🇭Element &#43; Lighterhtml</title>
+      <link>https://swiss-element.netlify.com/fixtures/renderers/lighterhtml/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://swiss-element.netlify.com/fixtures/renderers/lighterhtml/</guid>
+      <description>   </description>
+    </item>
+    
+    <item>
+      <title>🇨🇭Element &#43; Lit-html</title>
+      <link>https://swiss-element.netlify.com/fixtures/renderers/lit-html/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://swiss-element.netlify.com/fixtures/renderers/lit-html/</guid>
+      <description>   </description>
+    </item>
+    
+    <item>
+      <title>🇨🇭Swiss Element &#43; HTM &#43; Preact</title>
+      <link>https://swiss-element.netlify.com/fixtures/renderers/htm-preact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://swiss-element.netlify.com/fixtures/renderers/htm-preact/</guid>
+      <description>   </description>
+    </item>
+    
+    <item>
+      <title>🇨🇭Swiss Element &#43; Superfine</title>
+      <link>https://swiss-element.netlify.com/fixtures/renderers/superfine/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://swiss-element.netlify.com/fixtures/renderers/superfine/</guid>
+      <description>   </description>
+    </item>
+    
+  </channel>
+</rss>

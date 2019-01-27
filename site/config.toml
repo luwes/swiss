@@ -1,0 +1,8 @@
+baseURL = "https://swiss-element.netlify.com/"
+languageCode = "en-us"
+title = "🇨🇭Swiss Element - Custom elements made easy."
+theme = "default"
+ignoreFiles = [ "node_modules" ]
+
+[params]
+github = "https://github.com/luwes/swiss-element/"
