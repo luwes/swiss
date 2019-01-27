@@ -332,28 +332,33 @@ const set = (info, clean) => {
 setup.push(runner => {
   const stack = [];
   const state = {i: 0, stack};
+  const drop = (current$$1, clean, raf, t) => {
+    if (raf && t)
+      cancel(t);
+    else if (clean)
+      clean();
+    set(current$$1, null);
+  };
   runner[id$1] = state;
-  const reset = () => {
+  runner.before.push(() => {
+    state.i = 0;
+  });
+  runner.reset.push(() => {
     state.i = 0;
     for (let {length} = stack, i = 0; i < length; i++) {
-      const {check, clean, raf, t} = stack[i];
-      if (check) {
-        if (raf && t)
-          cancel(t);
-        else if (clean)
-          clean();
-        set(stack[i], null);
-      }
+      const current$$1 = stack[i];
+      const {check, clean, raf, t} = current$$1;
+      if (check)
+        drop(current$$1, clean, raf, t);
     }
-  };
-  runner.reset.push(reset);
-  runner.before.push(reset);
+  });
   runner.after.push(() => {
     for (let {length} = stack, i = 0; i < length; i++) {
       const current$$1 = stack[i];
-      const {fn, raf, update} = current$$1;
-      if (update) {
+      const {check, clean, fn, raf, t, update} = current$$1;
+      if (check && update) {
         current$$1.update = false;
+        drop(current$$1, clean, raf, t);
         if (raf)
           current$$1.t = request(fn);
         else
@@ -617,13 +622,13 @@ function renderer$1(customRenderer = renderer) {
 
     const renderWays = [
       // default
-      (root, html) => customRenderer(root, html),
+      (root, html, old) => customRenderer(root, html, old),
       // lit-html, htm-preact
-      (root, html) => customRenderer(html, root),
+      (root, html, old) => customRenderer(html, root, old),
       // superfine
       (root, html, old) => customRenderer(old, html, root),
       // lighterhtml
-      (root, html) => customRenderer(root, () => html)
+      (root, html, old) => customRenderer(root, () => html, old)
     ];
 
     /**

@@ -9,6 +9,6 @@
     "src"
   ],
   "dependencies": {
-    "augmentor": "0.2.3"
+    "augmentor": "0.2.4"
   }
 }
