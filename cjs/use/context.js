@@ -6,9 +6,9 @@ const id = uid();
 
 setup.push(stacked(id));
 
-const createContext = () => {
+const createContext = value => {
   const context = {
-    value: void 0,
+    value,
     provide
   };
   all.set(context, []);

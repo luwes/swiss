@@ -323,9 +323,9 @@ var augmentor = (function () {
   var all = new WeakMap();
   var id$6 = uid();
   setup.push(stacked(id$6));
-  var createContext = function createContext() {
+  var createContext = function createContext(value) {
     var context = {
-      value: void 0,
+      value: value,
       provide: provide
     };
     all.set(context, []);
