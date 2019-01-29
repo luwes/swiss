@@ -439,11 +439,44 @@ var state = value => useReducer(
   value
 );
 
+const all = new WeakMap;
 const id$5 = uid();
 
 setup.push(stacked(id$5));
 
-let element;
+const createContext = value => {
+  const context = {
+    value,
+    provide
+  };
+  all.set(context, []);
+  return context;
+};
+
+const useContext = context => {
+  const {i, stack, unknown, update} = unstacked(id$5);
+  if (unknown) {
+    all.get(context).push(update);
+    stack.push(context);
+  }
+  return stack[i].value;
+};
+
+function provide(value) {
+  if (this.value !== value) {
+    this.value = value;
+    for (let arr = all.get(this), {length} = arr, i = 0; i < length; i++)
+      arr[i]();
+  }
+}
+
+/**
+ * Holds the current element that is being rendered.
+ * @type {Object}
+ */
+const CurrentElement = {
+  current: null
+};
 
 function hooks(createElement) {
   return options => {
@@ -451,7 +484,7 @@ function hooks(createElement) {
     const { component } = options;
 
     const requestUpdate = augmentor(function() {
-      element = el;
+      CurrentElement.current = el;
       const html = component.call(el, el);
       return el.render(html);
     });
@@ -459,37 +492,6 @@ function hooks(createElement) {
     el.requestUpdate = requestUpdate;
     return el;
   };
-}
-
-function useEffect$1(fn, inputs = []) {
-  const args = [fn];
-  if (inputs)
-    // if the inputs is an empty array
-    // observe the returned element for connect/disconnect events
-    // and invoke effects/cleanup on these events only
-    args.push(inputs.length ? inputs : lifecycleHandler);
-  return useEffect.apply(null, args);
-}
-
-function lifecycleHandler($) {
-  const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
-  element.addEventListener(CONNECTED, handler, false);
-  element.addEventListener(DISCONNECTED, handler, false);
-}
-
-function handleEvent(e) {
-  this['on' + e.type]();
-}
-
-function onconnected() {
-  ondisconnected.call(this);
-  this._ = this.$();
-}
-
-function ondisconnected() {
-  const { _ } = this;
-  this._ = null;
-  if (_) _();
 }
 
 function propsToAttrs(createElement) {
@@ -539,7 +541,7 @@ const OBSERVED_ATTRIBUTES = 'observedAttributes';
  *
  * @return {HTMLElement}
  */
-function element$1(name, component, enhancer, options) {
+function element(name, component, enhancer, options) {
   if (isFunction(name)) {
     options = enhancer;
     enhancer = component;
@@ -601,6 +603,41 @@ function forwardCallbacks(proto, callbacks) {
       }
     };
   });
+}
+
+function useEffect$1(fn, inputs = []) {
+  const args = [fn];
+  if (inputs)
+    // if the inputs is an empty array
+    // observe the returned element for connect/disconnect events
+    // and invoke effects/cleanup on these events only
+    args.push(inputs.length ? inputs : lifecycleHandler);
+  return useEffect.apply(null, args);
+}
+
+function lifecycleHandler($) {
+  const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
+  CurrentElement.current.addEventListener(CONNECTED, handler, false);
+  CurrentElement.current.addEventListener(DISCONNECTED, handler, false);
+}
+
+function handleEvent(e) {
+  this['on' + e.type]();
+}
+
+function onconnected() {
+  ondisconnected.call(this);
+  this._ = this.$();
+}
+
+function ondisconnected() {
+  const { _ } = this;
+  this._ = null;
+  if (_) _();
+}
+
+function useElement() {
+  return CurrentElement.current;
 }
 
 /**
@@ -693,4 +730,4 @@ function applyMiddleware(...middleware) {
   };
 }
 
-export { renderer$1 as renderer, applyMiddleware, compose, element$1 as element, useEffect$1 as useEffect, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState };
+export { renderer$1 as renderer, applyMiddleware, compose, element, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, createContext, useContext, useEffect$1 as useEffect, useElement };

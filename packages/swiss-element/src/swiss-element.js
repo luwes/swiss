@@ -1,5 +1,5 @@
 import { createFactory } from './create-element.js';
-import hooks from './enhancers/hooks.js';
+import hooks from './enhancers/hooks/enhancer.js';
 import propsToAttrs from './enhancers/props-to-attrs.js';
 import {
   completeAssign,
