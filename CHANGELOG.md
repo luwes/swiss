@@ -2,19 +2,25 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.6.0 - 2019-01-29
+
+### Added
+
+- Added `useContext` and `useElement` hooks.
+
 ## 0.5.1 - 2019-01-27
 
 ### Changed
 
-- Pass old html to renderer functions
-- Upgrade augmentor dependency
+- Pass old html to renderer functions.
+- Upgraded augmentor dependency.
 
 ## 0.5.0 - 2019-01-23
 
 ### Changed
 
 - Made hooks and propsToAttrs default enhancers.
-- Fix `useEffect` hook
+- Fixed `useEffect` hook
 
 ## 0.4.0 - 2019-01-22
 
