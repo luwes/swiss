@@ -1,35 +1,14 @@
 {{ define "main" }}
-<section class="header">
-  <h2 class="title">{{.Title}}</h2>
-  {{ with .Params.subtitle }}
-    <span class="subtitle">{{.}}</span>
-  {{ end }}
-  <a class="button button-primary" href="{{.Site.Params.Github}}">Github</a>
-  <div class="value-props row">
-    <!--         <div class="four columns value-prop">
-      <img class="value-img" src="images/feather.svg">
-      Light as a feather at ~400 lines &amp; built with mobile in mind.
+<section class="hero is-fullheight-with-navbar">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        {{.Title}}
+      </h1>
+      <div>
+        {{.Content}}
+      </div>
     </div>
-    <div class="four columns value-prop">
-      <img class="value-img" src="images/pens.svg">
-      Styles designed to be a starting point, not a UI framework.
-    </div>
-    <div class="four columns value-prop">
-      <img class="value-img" src="images/watch.svg">
-      Quick to start with zero compiling or installing necessary.
-    </div> -->
   </div>
 </section>
-<main aria-role="main">
-  <div class="homepage-content">
-    <!-- Note that the content for index.html, as a sort of list page, will pull from content/_index.md -->
-    {{.Content}}
-  </div>
-  <div>
-    <!-- Note that .Pages is the same as .Site.RegularPages on the homepage template. -->
-    {{ range first 10 .Pages }}
-      {{ .Render "summary"}}
-    {{ end }}
-  </div>
-</main>
 {{ end }}

@@ -1,0 +1,10 @@
+{
+  "name": "swiss-element-redux-fixture",
+  "private": true,
+  "version": "0.0.1",
+  "dependencies": {
+    "htm": "^2.0.0",
+    "redux": "^4.0.1",
+    "swiss-element": "0.5.1"
+  }
+}
