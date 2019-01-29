@@ -4,6 +4,6 @@
   "version": "0.2.0",
   "dependencies": {
     "lighterhtml": "^0.7.0",
-    "swiss-element": "0.5.1"
+    "swiss-element": "0.6.0"
   }
 }

@@ -9,6 +9,6 @@
     "src"
   ],
   "peerDependencies": {
-    "swiss-element": "^0.5.1"
+    "swiss-element": "0.6.0"
   }
 }
