@@ -20,6 +20,9 @@ const ATTRIBUTE_CHANGED_CALLBACK = 'attributeChanged' + CALLBACK;
 const ADOPTED_CALLBACK = 'adopted' + CALLBACK;
 const OBSERVED_ATTRIBUTES = 'observedAttributes';
 
+// The `hooks` and `propsToAttrs` enhancers are added by default.
+export const defaultEnhancers = [hooks, propsToAttrs];
+
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
  *
@@ -57,12 +60,7 @@ export function element(name, component, enhancer, options) {
     throw new Error('Expected the enhancer to be a function.');
   }
 
-  // The `hooks` and `propsToAttrs` enhancers are added by default.
-  enhancer = compose(
-    enhancer,
-    hooks,
-    propsToAttrs
-  );
+  enhancer = compose(enhancer, ...defaultEnhancers);
 
   const Native = getNativeConstructor(options && options.extends);
   const SwissElement = extend(Native, function(supr) {
