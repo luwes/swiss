@@ -8,14 +8,26 @@ export const bundleFormats = {
 
 export const bundles = [
   {
-    externals: ['augmentor'],
     formats: [ESM, UMD],
     global: 'swissElement',
     name: 'swiss-element',
     input: 'packages/swiss-element/src/index.js'
   },
   {
-    externals: ['lighterhtml'],
+    external: ['swiss-element'],
+    formats: [ESM, UMD],
+    global: 'swissRedux',
+    name: 'swiss-redux',
+    input: 'packages/swiss-redux/src/index.js'
+  },
+  {
+    formats: [UMD],
+    global: 'swissElementCounter',
+    name: 'counter',
+    input: 'fixtures/redux/src/counter.js',
+    sourcemap: true
+  },
+  {
     formats: [UMD],
     global: 'swissElementFullname',
     name: 'fullname',
@@ -23,7 +35,6 @@ export const bundles = [
     sourcemap: true
   },
   {
-    externals: ['lit-html'],
     formats: [UMD],
     global: 'swissElementFullname',
     name: 'fullname',
@@ -31,7 +42,6 @@ export const bundles = [
     sourcemap: true
   },
   {
-    externals: ['htm'],
     formats: [UMD],
     global: 'swissElementCounter',
     name: 'counter',
@@ -39,7 +49,6 @@ export const bundles = [
     sourcemap: true
   },
   {
-    externals: ['superfine'],
     formats: [UMD],
     global: 'swissElementCounter',
     name: 'counter',
@@ -47,7 +56,6 @@ export const bundles = [
     sourcemap: true
   },
   {
-    externals: ['nanomorph', 'nanohtml'],
     formats: [UMD],
     global: 'swissElementCounter',
     name: 'counter',

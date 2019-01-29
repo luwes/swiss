@@ -6,22 +6,24 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import bundleSize from 'rollup-plugin-bundle-size';
+import replace from 'rollup-plugin-replace';
 
 const formatOptions = {
   [ESM]: { ext: '.mjs' },
   [UMD]: { ext: '.js' }
 };
 
-// const dev = process.env.NODE_ENV == 'dev';
+const env = process.env.NODE_ENV;
 
 // For every type in bundle.types creates a new bundle obj.
 const unbundle = ({ formats, ...rest }) =>
   formats.map(format => ({ ...rest, format }));
 let allBundles = R.chain(unbundle, bundles);
 
-function getConfig({ name, global, input, format, sourcemap }) {
+function getConfig({ name, global, input, format, external, sourcemap }) {
   return {
     input,
+    external,
     watch: {
       clearScreen: false
     },
@@ -36,6 +38,13 @@ function getConfig({ name, global, input, format, sourcemap }) {
       name: global
     },
     plugins: [
+      replace({
+        values: {
+          __DEBUG__: env !== 'production',
+          __DEV__: env === 'dev',
+          'process.env.NODE_ENV': JSON.stringify('production')
+        }
+      }),
       nodeResolve({ module: true }),
       commonjs(),
       format === UMD && babel(),
