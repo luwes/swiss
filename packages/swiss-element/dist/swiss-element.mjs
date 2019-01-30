@@ -29,11 +29,7 @@ function findFreeTagName(name, suffix = null) {
 }
 
 function isFreeTagName(name) {
-  return hasDash(name) && !self.customElements.get(name);
-}
-
-function hasDash(name) {
-  return name && /.-./.test(name);
+  return /.-./.test(name) && !self.customElements.get(name);
 }
 
 function compose(...fns) {
@@ -118,9 +114,7 @@ function createCompleteAssign(options) {
  * @return {Object} The target with assigned properties
  */
 const completeAssign = createCompleteAssign({
-  enumerable: false,
-  configurable: true,
-  writeable: false
+  configurable: true
 });
 
 const CONNECTED = 'connected';
@@ -606,6 +600,13 @@ function forwardCallbacks(proto, callbacks) {
   });
 }
 
+function useElement() {
+  return CurrentElement.current;
+}
+
+const CONNECTED$1 = 'connected';
+const DISCONNECTED$1 = 'dis' + CONNECTED$1;
+
 function useEffect$1(fn, inputs = []) {
   const args = [fn];
   if (inputs)
@@ -618,8 +619,9 @@ function useEffect$1(fn, inputs = []) {
 
 function lifecycleHandler($) {
   const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
-  CurrentElement.current.addEventListener(CONNECTED, handler, false);
-  CurrentElement.current.addEventListener(DISCONNECTED, handler, false);
+  const element = useElement();
+  element.addEventListener(CONNECTED$1, handler);
+  element.addEventListener(DISCONNECTED$1, handler);
 }
 
 function handleEvent(e) {
@@ -635,10 +637,6 @@ function ondisconnected() {
   const { _ } = this;
   this._ = null;
   if (_) _();
-}
-
-function useElement() {
-  return CurrentElement.current;
 }
 
 /**

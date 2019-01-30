@@ -1,6 +1,8 @@
 import { useEffect as effect } from '../../../node_modules/augmentor/esm/index.js';
-import { CONNECTED, DISCONNECTED } from '../../create-element.js';
-import CurrentElement from './current-element.js';
+import { useElement } from './use-element.js';
+
+const CONNECTED = 'connected';
+const DISCONNECTED = 'dis' + CONNECTED;
 
 export function useEffect(fn, inputs = []) {
   const args = [fn];
@@ -14,8 +16,9 @@ export function useEffect(fn, inputs = []) {
 
 function lifecycleHandler($) {
   const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
-  CurrentElement.current.addEventListener(CONNECTED, handler, false);
-  CurrentElement.current.addEventListener(DISCONNECTED, handler, false);
+  const element = useElement();
+  element.addEventListener(CONNECTED, handler);
+  element.addEventListener(DISCONNECTED, handler);
 }
 
 function handleEvent(e) {

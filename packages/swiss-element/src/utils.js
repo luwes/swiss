@@ -25,11 +25,7 @@ export function findFreeTagName(name, suffix = null) {
 }
 
 export function isFreeTagName(name) {
-  return hasDash(name) && !self.customElements.get(name);
-}
-
-export function hasDash(name) {
-  return name && /.-./.test(name);
+  return /.-./.test(name) && !self.customElements.get(name);
 }
 
 export function compose(...fns) {
@@ -114,7 +110,5 @@ export function createCompleteAssign(options) {
  * @return {Object} The target with assigned properties
  */
 export const completeAssign = createCompleteAssign({
-  enumerable: false,
-  configurable: true,
-  writeable: false
+  configurable: true
 });

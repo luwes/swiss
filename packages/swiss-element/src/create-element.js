@@ -1,8 +1,8 @@
 import renderer from './default-renderer.js';
 import { completeAssign, CustomEvent, isUndefined } from './utils.js';
 
-export const CONNECTED = 'connected';
-export const DISCONNECTED = 'dis' + CONNECTED;
+const CONNECTED = 'connected';
+const DISCONNECTED = 'dis' + CONNECTED;
 
 export function createFactory(supr, component) {
   function createElement(options, enhancer) {
