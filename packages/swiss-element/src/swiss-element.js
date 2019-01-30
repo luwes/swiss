@@ -60,7 +60,10 @@ export function element(name, component, enhancer, options) {
     throw new Error('Expected the enhancer to be a function.');
   }
 
-  enhancer = compose(enhancer, ...defaultEnhancers);
+  enhancer = compose(
+    enhancer,
+    ...defaultEnhancers
+  );
 
   const Native = getNativeConstructor(options && options.extends);
   const SwissElement = extend(Native, function(supr) {

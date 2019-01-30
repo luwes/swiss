@@ -1,4 +1,4 @@
-# <a href="https://github.com/luwes/swiss-element">![SwissElement](./media/swiss-element.svg 'SwissElement')</a>
+# <a href="https://github.com/luwes/swiss-element"><img src="./media/swiss-element.svg" height="50" alt="Swiss Element" /></a>
 
 [![Build Status](https://img.shields.io/travis/luwes/swiss-element/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/swiss-element)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=v0.5.0)](https://codecov.io/gh/luwes/swiss-element)

@@ -1,44 +1,45 @@
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="/">
-      <b>🇨🇭Swiss Element</b>
-    </a>
-    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-start">
-      <a class="navbar-item" href="/">Home</a>
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">Renderers</a>
-        <div class="navbar-dropdown">
-          {{ range .Site.Menus.renderers }}
-            <a class="navbar-item" href="{{ .URL }}" title="{{ .Title }}">
-                {{- .Title -}}
-            </a>
-          {{ end }}
-        </div>
-      </div>
-      {{ range .Site.Menus.main }}
-        <a class="navbar-item" href="{{ .URL }}" title="{{ .Title }}">
-            {{- .Title -}}
-        </a>
-      {{ end }}
+<nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <img class="logo" src="/images/swiss-element.svg" alt="Swiss Element">
+      </a>
+      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <span class="navbar-item">
-            <a class="button is-dark" href="{{.Site.Params.Github}}">
-              <span class="icon">
-                <i class="fab fa-github"></i>
-              </span>
-              <span>Github</span>
-            </a>
-          </span>
+    <div id="navbarBasicExample" class="navbar-menu">
+      <div class="navbar-start">
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">Renderers</a>
+          <div class="navbar-dropdown">
+            {{ range .Site.Menus.renderers }}
+              <a class="navbar-item" href="{{ .URL }}" title="{{ .Title }}">
+                  {{- .Title -}}
+              </a>
+            {{ end }}
+          </div>
+        </div>
+        {{ range .Site.Menus.main }}
+          <a class="navbar-item" href="{{ .URL }}" title="{{ .Title }}">
+              {{- .Title -}}
+          </a>
+        {{ end }}
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <span class="navbar-item">
+              <a class="button is-dark" href="{{.Site.Params.Github}}">
+                <span class="icon">
+                  <i class="fab fa-github"></i>
+                </span>
+                <span>Github</span>
+              </a>
+            </span>
+          </div>
         </div>
       </div>
     </div>

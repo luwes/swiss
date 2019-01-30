@@ -1,19 +1,21 @@
 import morph from 'nanomorph';
 import html from 'nanohtml/lib/browser';
-import {
-  element,
-  renderer,
-  useState
-} from 'swiss-element';
+import { element, renderer, useState } from 'swiss-element';
 
 function Counter() {
   const [count, setCount] = useState(0);
 
   return html`
-    <div>
-      <h1>${count}</h1>
-      <button onclick="${() => setCount(count - 1)}">-</button>
-      <button onclick="${() => setCount(count + 1)}">+</button>
+    <div class="box level">
+      <div class="level-item">
+        <button class="button" onclick="${() => setCount(count - 1)}">-</button>
+      </div>
+      <div class="level-item">
+        <h1 class="title">${count}</h1>
+      </div>
+      <div class="level-item">
+        <button class="button" onclick="${() => setCount(count + 1)}">+</button>
+      </div>
     </div>
   `;
 }
