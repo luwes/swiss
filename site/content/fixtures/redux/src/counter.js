@@ -1,5 +1,5 @@
 import { html, render } from 'htm/preact/standalone';
-import { context, useSelector, useActionCreator } from 'swiss-redux';
+import { context, useSelector, useActions } from 'swiss-redux';
 import { compose, element, renderer } from 'swiss-element';
 import { createStore } from 'redux';
 
@@ -25,8 +25,7 @@ const actions = {
 
 function Counter() {
   const count = useSelector(state => state);
-  const increment = useActionCreator(actions.increment);
-  const decrement = useActionCreator(actions.decrement);
+  const { decrement, increment } = useActions(actions);
 
   return html`
     <div class="box level">

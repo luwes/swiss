@@ -70,10 +70,17 @@ function useSelector(selector) {
   return result;
 }
 
-function useActionCreator(actionCreator) {
+function useAction(actionCreator) {
   const element = useElement();
   const { dispatch } = useContext(contexts.get(element) || globalContext);
   return (...args) => dispatch(actionCreator(...args));
 }
 
-export { context, useSelector, useActionCreator };
+function useActions(actionCreators) {
+  return Object.keys(actionCreators).reduce((acc, curr) => {
+    const ac = actionCreators[curr];
+    return { ...acc, [curr]: useAction(ac) };
+  }, {});
+}
+
+export { context, useSelector, useAction, useActions };

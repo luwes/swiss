@@ -43,8 +43,15 @@ export function useSelector(selector) {
   return result;
 }
 
-export function useActionCreator(actionCreator) {
+export function useAction(actionCreator) {
   const element = useElement();
   const { dispatch } = useContext(contexts.get(element) || globalContext);
   return (...args) => dispatch(actionCreator(...args));
+}
+
+export function useActions(actionCreators) {
+  return Object.keys(actionCreators).reduce((acc, curr) => {
+    const ac = actionCreators[curr];
+    return { ...acc, [curr]: useAction(ac) };
+  }, {});
 }
