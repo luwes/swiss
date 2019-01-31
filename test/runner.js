@@ -37,7 +37,7 @@ const test = el => {
     counter.current++;
     if (firstTime)
       setFirstTime(false);
-    setActivated(!activated);
+    setActivated(() => !activated);
   }, []);
 
   const onmouseover = useCallback((event) => {

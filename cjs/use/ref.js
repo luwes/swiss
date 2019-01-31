@@ -1,5 +1,5 @@
 'use strict';
-const {$, setup, stacked, unstacked, uid} = require('../core.js');
+const {$, empty, setup, stacked, unstacked, uid} = require('../core.js');
 
 const id = uid();
 
@@ -10,7 +10,7 @@ Object.defineProperty(exports, '__esModule', {value: true}).default = value => {
   if (unknown) {
     const info = {current: null};
     stack.push(info);
-    info.current = $(value);
+    info.current = $(value, empty);
   }
   return stack[i];
 };

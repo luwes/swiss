@@ -4,7 +4,8 @@ export const current = () => now;
 export const empty = [];
 export const setup = [];
 
-export const $ = value => typeof value === typeof $ ? value() : value;
+export const $ = (value, args) =>
+  typeof value === typeof $ ? value.apply(null, args) : value;
 
 export const diff = (a, b) => (a.length !== b.length || a.some(diverse, b));
 

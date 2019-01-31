@@ -1,4 +1,4 @@
-import {$, setup, stacked, unstacked, uid} from '../core.js';
+import {$, empty, setup, stacked, unstacked, uid} from '../core.js';
 
 const id = uid();
 
@@ -13,7 +13,7 @@ export default (reducer, value) => {
       update();
     }];
     stack.push(info);
-    info[0] = $(value);
+    info[0] = $(value, empty);
   }
   return stack[i];
 };

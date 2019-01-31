@@ -1,4 +1,4 @@
-import {$, setup, stacked, unstacked, uid} from '../core.js';
+import {$, empty, setup, stacked, unstacked, uid} from '../core.js';
 
 const id = uid();
 
@@ -9,7 +9,7 @@ export default value => {
   if (unknown) {
     const info = {current: null};
     stack.push(info);
-    info.current = $(value);
+    info.current = $(value, empty);
   }
   return stack[i];
 };

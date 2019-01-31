@@ -9,8 +9,8 @@ var augmentor = (function () {
   };
   var empty = [];
   var setup = [];
-  var $ = function $(value) {
-    return typeof(value) === typeof($) ? value() : value;
+  var $ = function $(value, args) {
+    return typeof(value) === typeof($) ? value.apply(null, args) : value;
   };
   var diff = function diff(a, b) {
     return a.length !== b.length || a.some(diverse, b);
@@ -250,7 +250,7 @@ var augmentor = (function () {
         current: null
       };
       stack.push(info);
-      info.current = $(value);
+      info.current = $(value, empty);
     }
 
     return stack[i];
@@ -308,7 +308,7 @@ var augmentor = (function () {
         update();
       }];
       stack.push(info);
-      info[0] = $(value);
+      info[0] = $(value, empty);
     }
 
     return stack[i];
@@ -316,7 +316,7 @@ var augmentor = (function () {
 
   var state = (function (value) {
     return useReducer(function (_, value) {
-      return value;
+      return $(value, [_]);
     }, value);
   });
 

@@ -8,7 +8,8 @@ exports.empty = empty;
 const setup = [];
 exports.setup = setup;
 
-const $ = value => typeof value === typeof $ ? value() : value;
+const $ = (value, args) =>
+  typeof value === typeof $ ? value.apply(null, args) : value;
 exports.$ = $;
 
 const diff = (a, b) => (a.length !== b.length || a.some(diverse, b));
