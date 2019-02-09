@@ -24,9 +24,12 @@
         </div>
         {{ range .Site.Menus.main }}
           <a class="navbar-item" href="{{ .URL }}" title="{{ .Title }}">
-              {{- .Title -}}
+            {{- .Title -}}
           </a>
         {{ end }}
+        <a class="navbar-item" href="https://swiss-element.appspot.com/" title="PWA Starter Kit">
+          PWA Starter Kit
+        </a>
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
