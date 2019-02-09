@@ -1398,10 +1398,10 @@
   resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-1.3.0.tgz#57983165d8651e742bdd14c2718f8cc6c228496e"
   integrity sha512-x7x4rfXfX+xlg0Cdy752IVC8SjjOuMfjSNi1Vy7GKfWCm/MKSc42wGubngPl6/nO7w+nHM/MvfhTD/aEngA7/w==
 
-"@webcomponents/webcomponentsjs@^2.0.0":
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.2.4.tgz#b520d586e46517914d9708c2220b263116d5f86a"
-  integrity sha512-YkLxK9Mbw6QK5bNZ67Rarb/yj0gN+Ziy5+2sLjM0lDb3XafM36gXKZXaIBz4zvLA/cYYTdg+l1LlqXeHEcmeiA==
+"@webcomponents/webcomponentsjs@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@webcomponents/webcomponentsjs/-/webcomponentsjs-2.2.5.tgz#f6b6a6fe74bc85c6c5ef270e2fc23db44d11b9f3"
+  integrity sha512-aLSQa2+NjGv+6hwjQ/mHhrav7qhRf1ZMsUNWNqP3ca9BK9YoDmjsrcFFr8TaZ+ucwm+JiNVEtoQinNpbn863pw==
 
 abbrev@1:
   version "1.1.1"
@@ -1926,10 +1926,10 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-augmentor@^0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/augmentor/-/augmentor-0.2.5.tgz#ee988a6aa2012f1ada74568c142893a80ffa77dc"
-  integrity sha512-eAhKYhsG8BRkn/+ecos+OPa8zz2/TAB2EoBAJVa922Q/orvwqmV+nuj1/aw2sZCOZDbEcpftH++FAtomACg/Ig==
+augmentor@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/augmentor/-/augmentor-0.2.6.tgz#76c1b026b98f3a1e0b74a7fbb62730507a5ebd1a"
+  integrity sha512-j3XvUAbwNTtfRBTkD0O+G4p1XOf6EqWZriqPafP/kv9kMRDqnAbcWkt0FEG9dNKfvGPVXxnR/5lOKZrwmblesA==
 
 aws-sign2@~0.7.0:
   version "0.7.0"
@@ -8326,10 +8326,10 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
-prettier@^1.16.2:
-  version "1.16.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.16.2.tgz#f60bc5929a7f9a05260cc88d5430391100092414"
-  integrity sha512-vBMdCn1LjrFi2CpBsiWVKOq+WP9poXDTIGPe2sG3eE33LQ3b6IUgmaMjLZKKY+frD/8FqPeEK1qAx9mOV8iruA==
+prettier@^1.16.3:
+  version "1.16.3"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.16.3.tgz#8c62168453badef702f34b45b6ee899574a6a65d"
+  integrity sha512-kn/GU6SMRYPxUakNXhpP0EedT/KmaPzr0H5lIsDogrykbaxOpOfAFfk5XA7DZrJyMAv1wlMV3CPcZruGXVVUZw==
 
 pretty-bytes@^3.0.0:
   version "3.0.1"

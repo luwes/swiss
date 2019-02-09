@@ -129,6 +129,10 @@ function createFactory(supr, component) {
     const el = supr();
     let oldHtml;
 
+    if (options.shadow) {
+      el.attachShadow({ mode: options.shadow });
+    }
+
     function requestUpdate() {
       const html = component.call(el, el);
       return el.render(html);
@@ -150,12 +154,12 @@ function createFactory(supr, component) {
     }
 
     function attributeChangedCallback(name, oldValue, newValue) {
-      if (el.shouldUpdate(oldValue, newValue)) {
+      if (el.shouldUpdate(name, oldValue, newValue)) {
         el.requestUpdate();
       }
     }
 
-    function shouldUpdate(oldValue, newValue) {
+    function shouldUpdate(name, oldValue, newValue) {
       return oldValue !== newValue;
     }
 
@@ -182,7 +186,8 @@ const current = () => now;
 const empty = [];
 const setup = [];
 
-const $ = value => typeof value === typeof $ ? value() : value;
+const $ = (value, args) =>
+  typeof value === typeof $ ? value.apply(null, args) : value;
 
 const diff = (a, b) => (a.length !== b.length || a.some(diverse, b));
 
@@ -373,7 +378,7 @@ var ref = value => {
   if (unknown) {
     const info = {current: null};
     stack.push(info);
-    info.current = $(value);
+    info.current = $(value, empty);
   }
   return stack[i];
 };
@@ -423,13 +428,13 @@ var useReducer = (reducer, value) => {
       update();
     }];
     stack.push(info);
-    info[0] = $(value);
+    info[0] = $(value, empty);
   }
   return stack[i];
 };
 
 var state = value => useReducer(
-  (_, value) => value,
+  (_, value) => $(value, [_]),
   value
 );
 
@@ -491,8 +496,7 @@ function hooks(createElement) {
 function propsToAttrs(createElement) {
   return options => {
     const el = createElement(options);
-    const { observedAttributes } = options;
-    addPropsToAttrs(Object.getPrototypeOf(el), observedAttributes);
+    addPropsToAttrs(Object.getPrototypeOf(el), options.observedAttributes);
     return el;
   };
 }
@@ -609,19 +613,24 @@ const DISCONNECTED$1 = 'dis' + CONNECTED$1;
 
 function useEffect$1(fn, inputs = []) {
   const args = [fn];
-  if (inputs)
+  if (inputs) {
     // if the inputs is an empty array
     // observe the returned element for connect/disconnect events
     // and invoke effects/cleanup on these events only
-    args.push(inputs.length ? inputs : lifecycleHandler);
+    const element = useElement();
+    // Capture the current element immediately here because the lifecycle handler
+    // is async, requestAnimationFrame / setTimeout.
+    args.push(inputs.length ? inputs : createLifecycleHandler(element));
+  }
   return useEffect.apply(null, args);
 }
 
-function lifecycleHandler($) {
-  const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
-  const element = useElement();
-  element.addEventListener(CONNECTED$1, handler);
-  element.addEventListener(DISCONNECTED$1, handler);
+function createLifecycleHandler(element) {
+  return $ => {
+    const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
+    element.addEventListener(CONNECTED$1, handler);
+    element.addEventListener(DISCONNECTED$1, handler);
+  };
 }
 
 function handleEvent(e) {

@@ -3,8 +3,7 @@ import { camelCase } from '../utils.js';
 function propsToAttrs(createElement) {
   return options => {
     const el = createElement(options);
-    const { observedAttributes } = options;
-    addPropsToAttrs(Object.getPrototypeOf(el), observedAttributes);
+    addPropsToAttrs(Object.getPrototypeOf(el), options.observedAttributes);
     return el;
   };
 }
