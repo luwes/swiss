@@ -1,6 +1,6 @@
 {
   "name": "swiss-redux",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Provides Redux hooks for Swiss Element.",
   "module": "dist/swiss-redux.mjs",
   "main": "dist/swiss-redux.js",
