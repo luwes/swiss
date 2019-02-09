@@ -15,8 +15,8 @@
       "**/htm/**",
       "**/@webcomponents/webcomponentsjs",
       "**/@webcomponents/webcomponentsjs/**",
-      "**/lit-element",
-      "**/lit-element/**",
+      "**/lit-*",
+      "**/lit-*/**",
       "**/pwa-helpers",
       "**/pwa-helpers/**",
       "**/redux",
@@ -29,6 +29,7 @@
   },
   "main": "index.js",
   "scripts": {
+    "postinstall": "rm -rf packages/swiss-redux/node_modules/swiss-element",
     "lint": "eslint packages/*/src",
     "format": "prettier --write '{packages,fixtures}/*/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md'",
     "test": "karma start",
