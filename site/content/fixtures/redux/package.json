@@ -5,6 +5,6 @@
   "dependencies": {
     "htm": "^2.0.0",
     "redux": "^4.0.1",
-    "swiss-element": "0.7.0"
+    "swiss-element": "0.8.0"
   }
 }

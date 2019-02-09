@@ -4,6 +4,6 @@
   "version": "0.2.0",
   "dependencies": {
     "lit-html": "^1.0.0",
-    "swiss-element": "0.7.0"
+    "swiss-element": "0.8.0"
   }
 }

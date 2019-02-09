@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.8.0 - 2019-02-09
+
+### Changed
+
+- Change `requestUpdate` to just `update`
+- Add `useLayoutEffect` hook
+
 ## 0.7.0 - 2019-02-08
 
 ### Added
