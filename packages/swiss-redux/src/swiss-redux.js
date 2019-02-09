@@ -51,7 +51,10 @@ export function useAction(actionCreator) {
 
 export function useActions(actionCreators) {
   return Object.keys(actionCreators).reduce((acc, curr) => {
-    const ac = actionCreators[curr];
-    return { ...acc, [curr]: useAction(ac) };
+    const actionCreator = actionCreators[curr];
+    if (typeof actionCreator === 'function') {
+      return { ...acc, [curr]: useAction(actionCreator) };
+    }
+    return acc;
   }, {});
 }

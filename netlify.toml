@@ -3,10 +3,9 @@
   publish = "site/public"
   command = "yarn build && (cd site && hugo --gc --minify)"
 
-[context.production]
-  [context.production.environment]
-    YARN_VERSION = "1.12.3"
-    HUGO_VERSION = "0.53"
+[build.environment]
+  YARN_VERSION = "1.12.3"
+  HUGO_VERSION = "0.53"
 
 [[redirects]]
   from = "/*"

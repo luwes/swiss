@@ -13,6 +13,10 @@ export function createFactory(supr, component) {
     const el = supr();
     let oldHtml;
 
+    if (options.shadow) {
+      el.attachShadow({ mode: options.shadow });
+    }
+
     function requestUpdate() {
       const html = component.call(el, el);
       return el.render(html);
@@ -34,12 +38,12 @@ export function createFactory(supr, component) {
     }
 
     function attributeChangedCallback(name, oldValue, newValue) {
-      if (el.shouldUpdate(oldValue, newValue)) {
+      if (el.shouldUpdate(name, oldValue, newValue)) {
         el.requestUpdate();
       }
     }
 
-    function shouldUpdate(oldValue, newValue) {
+    function shouldUpdate(name, oldValue, newValue) {
       return oldValue !== newValue;
     }
 

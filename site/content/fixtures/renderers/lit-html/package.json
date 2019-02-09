@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.2.0",
   "dependencies": {
-    "lit-html": "^1.0.0-rc.2",
-    "swiss-element": "0.6.0"
+    "lit-html": "^1.0.0",
+    "swiss-element": "0.7.0"
   }
 }
