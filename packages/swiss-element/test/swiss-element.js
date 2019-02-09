@@ -1,4 +1,4 @@
-import { element, renderer, defaultEnhancers } from '../src/index.js';
+import { element, renderer } from '../src/index.js';
 
 it('element returns a function', function() {
   element().should.be.a('function');
@@ -70,8 +70,6 @@ it('non function enhancer throws', function() {
 });
 
 it('requestUpdate triggers a render', function() {
-  defaultEnhancers.length = 0; // clear the defaultEnhancers array
-
   let count = 0;
   const el = element(() => count++)();
   document.body.appendChild(el);
