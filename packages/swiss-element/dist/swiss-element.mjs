@@ -1,7 +1,3 @@
-function renderer(root, html) {
-  root.innerHTML = html;
-}
-
 const isArray = Array.isArray;
 
 function isFunction(value) {
@@ -117,16 +113,24 @@ const completeAssign = createCompleteAssign({
   configurable: true
 });
 
-const CONNECTED = 'connected';
-const DISCONNECTED = 'dis' + CONNECTED;
-
-function createFactory(supr, component) {
+function createFactory(supr) {
   function createElement(options, enhancer) {
     if (!isUndefined(enhancer)) {
       return enhancer(createElement)(options);
     }
+    return supr();
+  }
+  return createElement;
+}
 
-    const el = supr();
+const CONNECTED = 'connected';
+const DISCONNECTED = 'dis' + CONNECTED;
+
+function componentEnhancer(createElement) {
+  return options => {
+    const el = createElement(options);
+    const { component } = options;
+
     let oldHtml;
 
     if (options.shadow) {
@@ -142,6 +146,10 @@ function createFactory(supr, component) {
       el.renderer(el.renderRoot, html, oldHtml);
       oldHtml = html;
       return html;
+    }
+
+    function renderer(root, html) {
+      root.innerHTML = html;
     }
 
     function connectedCallback() {
@@ -175,9 +183,7 @@ function createFactory(supr, component) {
         return el.shadowRoot || el._shadowRoot || el;
       }
     });
-  }
-
-  return createElement;
+  };
 }
 
 let now = null;
@@ -527,8 +533,8 @@ const ATTRIBUTE_CHANGED_CALLBACK = 'attributeChanged' + CALLBACK;
 const ADOPTED_CALLBACK = 'adopted' + CALLBACK;
 const OBSERVED_ATTRIBUTES = 'observedAttributes';
 
-// The `hooks` and `propsToAttrs` enhancers are added by default.
-const defaultEnhancers = [hooks, propsToAttrs];
+// The `hooks`, `propsToAttrs` and `component` enhancers are added by default.
+const defaultEnhancers = [hooks, propsToAttrs, componentEnhancer];
 
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
@@ -575,7 +581,7 @@ function element(name, component, enhancer, options) {
   const Native = getNativeConstructor(options && options.extends);
   const SwissElement = extend(Native, function(supr) {
     const opts = completeAssign({}, options, { component });
-    return createFactory(supr, component)(opts, enhancer);
+    return createFactory(supr)(opts, enhancer);
   });
 
   // Callbacks have to be on the prototype before construction.
@@ -661,7 +667,7 @@ function ondisconnected() {
  *
  * @return {Function}
  */
-function renderer$1(customRenderer = renderer) {
+function renderer(customRenderer) {
   return createElement => (...args) => {
     const element = createElement(...args);
 
@@ -738,4 +744,4 @@ function applyMiddleware(...middleware) {
   };
 }
 
-export { renderer$1 as renderer, applyMiddleware, compose, defaultEnhancers, element, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, createContext, useContext, useEffect$1 as useEffect, useElement };
+export { renderer, applyMiddleware, compose, defaultEnhancers, element, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, createContext, useContext, useEffect$1 as useEffect, useElement };

@@ -1,5 +1,3 @@
-import defaultRenderer from '../default-renderer.js';
-
 /**
  * Adds a simple way to define your own renderer.
  * Verified libraries working by passing just the `render` or `patch` function:
@@ -13,7 +11,7 @@ import defaultRenderer from '../default-renderer.js';
  *
  * @return {Function}
  */
-function renderer(customRenderer = defaultRenderer) {
+function renderer(customRenderer) {
   return createElement => (...args) => {
     const element = createElement(...args);
 

@@ -1,4 +1,5 @@
 import { createFactory } from './create-element.js';
+import component from './enhancers/component.js';
 import hooks from './enhancers/hooks/enhancer.js';
 import propsToAttrs from './enhancers/props-to-attrs.js';
 import {
@@ -20,8 +21,8 @@ const ATTRIBUTE_CHANGED_CALLBACK = 'attributeChanged' + CALLBACK;
 const ADOPTED_CALLBACK = 'adopted' + CALLBACK;
 const OBSERVED_ATTRIBUTES = 'observedAttributes';
 
-// The `hooks` and `propsToAttrs` enhancers are added by default.
-export const defaultEnhancers = [hooks, propsToAttrs];
+// The `hooks`, `propsToAttrs` and `component` enhancers are added by default.
+export const defaultEnhancers = [hooks, propsToAttrs, component];
 
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
@@ -68,7 +69,7 @@ export function element(name, component, enhancer, options) {
   const Native = getNativeConstructor(options && options.extends);
   const SwissElement = extend(Native, function(supr) {
     const opts = completeAssign({}, options, { component });
-    return createFactory(supr, component)(opts, enhancer);
+    return createFactory(supr)(opts, enhancer);
   });
 
   // Callbacks have to be on the prototype before construction.
