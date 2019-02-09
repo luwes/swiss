@@ -374,6 +374,7 @@ setup.push(runner => {
 });
 
 const useEffect = effect(true);
+const useLayoutEffect = effect(false);
 
 const id$2 = uid();
 
@@ -617,7 +618,7 @@ function useElement() {
 const CONNECTED$1 = 'connected';
 const DISCONNECTED$1 = 'dis' + CONNECTED$1;
 
-function useEffect$1(fn, inputs = []) {
+const use = fx => (fn, inputs = []) => {
   const args = [fn];
   if (inputs) {
     // if the inputs is an empty array
@@ -628,8 +629,8 @@ function useEffect$1(fn, inputs = []) {
     // is async, requestAnimationFrame / setTimeout.
     args.push(inputs.length ? inputs : createLifecycleHandler(element));
   }
-  return useEffect.apply(null, args);
-}
+  return fx.apply(null, args);
+};
 
 function createLifecycleHandler(element) {
   return $ => {
@@ -653,6 +654,9 @@ function ondisconnected() {
   this._ = null;
   if (_) _();
 }
+
+const useEffect$1 = use(useEffect);
+const useLayoutEffect$1 = use(useLayoutEffect);
 
 /**
  * Adds a simple way to define your own renderer.
@@ -744,4 +748,4 @@ function applyMiddleware(...middleware) {
   };
 }
 
-export { renderer, applyMiddleware, compose, defaultEnhancers, element, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, createContext, useContext, useEffect$1 as useEffect, useElement };
+export { renderer, applyMiddleware, compose, defaultEnhancers, element, callback as useCallback, useMemo, useReducer, ref as useRef, state as useState, createContext, useContext, useEffect$1 as useEffect, useLayoutEffect$1 as useLayoutEffect, useElement };
