@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.7.0 - 2019-02-08
+
+### Added
+
+- Added `shadow` option
+
+### Fixed
+
+- Fixed `useEffect` hook
+
 ## 0.6.0 - 2019-01-29
 
 ### Added
