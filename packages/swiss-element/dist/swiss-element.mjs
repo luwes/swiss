@@ -126,19 +126,17 @@ function createFactory(supr) {
 const CONNECTED = 'connected';
 const DISCONNECTED = 'dis' + CONNECTED;
 
-function componentEnhancer(createElement) {
+function component(createElement) {
   return options => {
     const el = createElement(options);
-    const { component } = options;
-
     let oldHtml;
 
     if (options.shadow) {
       el.attachShadow({ mode: options.shadow });
     }
 
-    function requestUpdate() {
-      const html = component.call(el, el);
+    function update() {
+      const html = options.component.call(el, el);
       return el.render(html);
     }
 
@@ -153,7 +151,7 @@ function componentEnhancer(createElement) {
     }
 
     function connectedCallback() {
-      el.requestUpdate();
+      el.update();
       el.dispatchEvent(new CustomEvent(CONNECTED));
     }
 
@@ -163,7 +161,7 @@ function componentEnhancer(createElement) {
 
     function attributeChangedCallback(name, oldValue, newValue) {
       if (el.shouldUpdate(name, oldValue, newValue)) {
-        el.requestUpdate();
+        el.update();
       }
     }
 
@@ -177,7 +175,7 @@ function componentEnhancer(createElement) {
       connectedCallback,
       disconnectedCallback,
       attributeChangedCallback,
-      requestUpdate,
+      update,
       shouldUpdate,
       get renderRoot() {
         return el.shadowRoot || el._shadowRoot || el;
@@ -487,15 +485,13 @@ const CurrentElement = {
 function hooks(createElement) {
   return options => {
     const el = createElement(options);
-    const { component } = options;
 
-    const requestUpdate = augmentor(function() {
+    const update = el.update;
+    el.update = augmentor(function() {
       CurrentElement.current = el;
-      const html = component.call(el, el);
-      return el.render(html);
+      return update();
     });
 
-    el.requestUpdate = requestUpdate;
     return el;
   };
 }
@@ -535,7 +531,7 @@ const ADOPTED_CALLBACK = 'adopted' + CALLBACK;
 const OBSERVED_ATTRIBUTES = 'observedAttributes';
 
 // The `hooks`, `propsToAttrs` and `component` enhancers are added by default.
-const defaultEnhancers = [hooks, propsToAttrs, componentEnhancer];
+const defaultEnhancers = [hooks, propsToAttrs, component];
 
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
@@ -549,11 +545,11 @@ const defaultEnhancers = [hooks, propsToAttrs, componentEnhancer];
  *
  * @return {HTMLElement}
  */
-function element(name, component, enhancer, options) {
+function element(name, component$$1, enhancer, options) {
   if (isFunction(name)) {
     options = enhancer;
-    enhancer = component;
-    component = name;
+    enhancer = component$$1;
+    component$$1 = name;
     name = undefined;
   }
 
@@ -581,7 +577,7 @@ function element(name, component, enhancer, options) {
 
   const Native = getNativeConstructor(options && options.extends);
   const SwissElement = extend(Native, function(supr) {
-    const opts = completeAssign({}, options, { component });
+    const opts = completeAssign({}, options, { component: component$$1 });
     return createFactory(supr)(opts, enhancer);
   });
 

@@ -3,19 +3,17 @@ import { completeAssign, CustomEvent } from '../utils.js';
 const CONNECTED = 'connected';
 const DISCONNECTED = 'dis' + CONNECTED;
 
-function componentEnhancer(createElement) {
+function component(createElement) {
   return options => {
     const el = createElement(options);
-    const { component } = options;
-
     let oldHtml;
 
     if (options.shadow) {
       el.attachShadow({ mode: options.shadow });
     }
 
-    function requestUpdate() {
-      const html = component.call(el, el);
+    function update() {
+      const html = options.component.call(el, el);
       return el.render(html);
     }
 
@@ -30,7 +28,7 @@ function componentEnhancer(createElement) {
     }
 
     function connectedCallback() {
-      el.requestUpdate();
+      el.update();
       el.dispatchEvent(new CustomEvent(CONNECTED));
     }
 
@@ -40,7 +38,7 @@ function componentEnhancer(createElement) {
 
     function attributeChangedCallback(name, oldValue, newValue) {
       if (el.shouldUpdate(name, oldValue, newValue)) {
-        el.requestUpdate();
+        el.update();
       }
     }
 
@@ -54,7 +52,7 @@ function componentEnhancer(createElement) {
       connectedCallback,
       disconnectedCallback,
       attributeChangedCallback,
-      requestUpdate,
+      update,
       shouldUpdate,
       get renderRoot() {
         return el.shadowRoot || el._shadowRoot || el;
@@ -63,4 +61,4 @@ function componentEnhancer(createElement) {
   };
 }
 
-export default componentEnhancer;
+export default component;

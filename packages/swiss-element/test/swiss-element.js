@@ -69,19 +69,19 @@ it('non function enhancer throws', function() {
   );
 });
 
-it('requestUpdate triggers a render', function() {
+it('update triggers a render', function() {
   let count = 0;
   const el = element(() => count++)();
   document.body.appendChild(el);
 
-  el.requestUpdate = sinon.spy(el.requestUpdate);
+  el.update = sinon.spy(el.update);
   el.render = sinon.spy(el.render);
   el.renderer = sinon.spy(el.renderer);
 
-  el.requestUpdate();
+  el.update();
   assert(count, 1);
 
-  expect(el.requestUpdate).to.have.been.calledOnce;
+  expect(el.update).to.have.been.calledOnce;
   expect(el.render).to.have.been.calledOnce;
   expect(el.renderer).to.have.been.calledOnce;
 });
