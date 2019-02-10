@@ -82,7 +82,7 @@ Defines a custom element in the `CustomElementRegistry` which renders the compon
 
 ### applyMiddleware(...middleware) ⇒ <code>function</code>
 
-Middleware is the suggested way to extend Swiss Element with custom functionality. Middleware lets you wrap the element's render method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
+Middleware lets you wrap the element's render method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
 
 **Kind**: global function
 
