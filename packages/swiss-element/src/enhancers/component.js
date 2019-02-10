@@ -14,13 +14,12 @@ function component(createElement) {
 
     function update() {
       const html = options.component.call(el, el);
-      return el.render(html);
+      el.render(html);
     }
 
     function render(html) {
       el.renderer(el.renderRoot, html, oldHtml);
       oldHtml = html;
-      return html;
     }
 
     function renderer(root, html) {

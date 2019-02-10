@@ -137,13 +137,12 @@ function component(createElement) {
 
     function update() {
       const html = options.component.call(el, el);
-      return el.render(html);
+      el.render(html);
     }
 
     function render(html) {
       el.renderer(el.renderRoot, html, oldHtml);
       oldHtml = html;
-      return html;
     }
 
     function renderer(root, html) {
@@ -715,7 +714,7 @@ function renderer(customRenderer) {
 }
 
 /**
- * Middleware is the suggested way to extend Swiss Element with custom functionality. Middleware lets you wrap the element's render method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
+ * Middleware lets you wrap the element's render method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
  *
  * @param  {...Function} middleware Functions that conform to the Swiss Element _middleware_ API. Each middleware receives `SwissElement`'s `render` function as a named argument, and returns a function. That function will be given the `next` middleware's render method, and is expected to return a function of `fragment` calling `next(fragment)` with a potentially different argument, or at a different time, or maybe not calling it at all. The last middleware in the chain will receive the real element's `render` method as the `next` parameter, thus ending the chain. So, the middleware signature is `({ render }) => next => fragment`.
  *

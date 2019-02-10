@@ -2,7 +2,7 @@
 
 ```js
 import { html, render } from '../node_modules/htm/preact/standalone.mjs';
-import { context, useSelector, useActionCreator } from 'swiss-redux';
+import { context, useSelector, useAction } from 'swiss-redux';
 import { compose, element, renderer } from 'swiss-element';
 import { createStore } from 'redux';
 
@@ -28,8 +28,8 @@ const actions = {
 
 function Counter() {
   const count = useSelector(state => state);
-  const increment = useActionCreator(actions.increment);
-  const decrement = useActionCreator(actions.decrement);
+  const increment = useAction(actions.increment);
+  const decrement = useAction(actions.decrement);
 
   return html`
     <div class="box level">
