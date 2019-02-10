@@ -8,6 +8,10 @@
     "dist",
     "src"
   ],
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../.. && yarn test && yarn build)"
+  },
   "dependencies": {
     "augmentor": "^0.2.6"
   }
