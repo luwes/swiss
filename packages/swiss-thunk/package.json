@@ -1,0 +1,14 @@
+{
+  "name": "swiss-thunk",
+  "version": "0.0.1",
+  "description": "Thunk middleware for Swiss Element.",
+  "module": "dist/swiss-thunk.mjs",
+  "main": "dist/swiss-thunk.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "peerDependencies": {
+    "swiss-element": ">= 0.6.0"
+  }
+}

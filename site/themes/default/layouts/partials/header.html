@@ -22,6 +22,16 @@
             {{ end }}
           </div>
         </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">Middleware</a>
+          <div class="navbar-dropdown">
+            {{ range .Site.Menus.middleware }}
+              <a class="navbar-item" href="{{ .URL }}" title="{{ .Title }}">
+                  {{- .Title -}}
+              </a>
+            {{ end }}
+          </div>
+        </div>
         {{ range .Site.Menus.main }}
           <a class="navbar-item" href="{{ .URL }}" title="{{ .Title }}">
             {{- .Title -}}

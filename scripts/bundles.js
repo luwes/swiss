@@ -18,8 +18,18 @@ export const bundles = [
     formats: [ESM, UMD],
     global: 'swissRedux',
     name: 'swiss-redux',
-    input: 'packages/swiss-redux/src/index.js'
+    input: 'packages/swiss-redux/src/swiss-redux.js'
   },
+  {
+    external: ['swiss-element'],
+    formats: [ESM, UMD],
+    global: 'swissThunk',
+    name: 'swiss-thunk',
+    input: 'packages/swiss-thunk/src/swiss-thunk.js'
+  },
+];
+
+export const fixtures = [
   {
     formats: [UMD],
     global: 'swissElementCounter',
@@ -60,6 +70,13 @@ export const bundles = [
     global: 'swissElementCounter',
     name: 'counter',
     input: 'fixtures/renderers/nanomorph/src/counter.js',
+    sourcemap: true
+  },
+  {
+    formats: [UMD],
+    global: 'swissElementThunk',
+    name: 'thunk',
+    input: 'fixtures/middleware/thunk/src/thunk.js',
     sourcemap: true
   }
 ];

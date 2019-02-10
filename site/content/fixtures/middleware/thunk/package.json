@@ -1,0 +1,9 @@
+{
+  "name": "swiss-element-thunk-fixture",
+  "private": true,
+  "version": "0.0.1",
+  "dependencies": {
+    "swiss-element": "0.8.0",
+    "swiss-thunk": "0.0.1"
+  }
+}
