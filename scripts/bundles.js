@@ -26,7 +26,7 @@ export const bundles = [
     global: 'swissThunk',
     name: 'swiss-thunk',
     input: 'packages/swiss-thunk/src/swiss-thunk.js'
-  },
+  }
 ];
 
 export const fixtures = [

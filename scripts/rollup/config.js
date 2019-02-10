@@ -54,17 +54,19 @@ function getConfig({ name, global, input, format, external, sourcemap }) {
       nodeResolve({ module: true }),
       commonjs(),
       format === UMD && babel(),
-      format === UMD && terser({
-        warnings: true,
-        mangle: {
-          module: true,
-        },
-      }),
+      format === UMD &&
+        terser({
+          warnings: true,
+          mangle: {
+            module: true
+          }
+        }),
       bundleSize()
     ].filter(Boolean),
     onwarn: function(warning) {
       // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-      if (['THIS_IS_UNDEFINED', 'UNKNOWN_OPTION'].includes(warning.code)) return;
+      if (['THIS_IS_UNDEFINED', 'UNKNOWN_OPTION'].includes(warning.code))
+        return;
 
       console.error(warning.message);
     }
