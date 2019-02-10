@@ -12,12 +12,6 @@ export function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
 }
 
-export function define(name, Element, options) {
-  if (name) {
-    self.customElements.define(name, Element, options);
-  }
-}
-
 export function findFreeTagName(name, suffix = null) {
   name = name || 's';
   const tag = suffix ? `${name}-${suffix}` : name;

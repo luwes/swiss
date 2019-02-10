@@ -2,7 +2,6 @@ import { createFactory } from './create-element.js';
 import {
   completeAssign,
   compose,
-  define,
   findFreeTagName,
   extend,
   getNativeConstructor,
@@ -10,13 +9,6 @@ import {
   isFunction,
   isUndefined
 } from './utils.js';
-
-const CALLBACK = 'Callback';
-const CONNECTED_CALLBACK = 'connected' + CALLBACK;
-const DISCONNECTED_CALLBACK = 'dis' + CONNECTED_CALLBACK;
-const ATTRIBUTE_CHANGED_CALLBACK = 'attributeChanged' + CALLBACK;
-const ADOPTED_CALLBACK = 'adopted' + CALLBACK;
-const OBSERVED_ATTRIBUTES = 'observedAttributes';
 
 export const defaultEnhancers = [];
 
@@ -45,18 +37,16 @@ export function element(name, component, enhancer, options) {
     enhancer = undefined;
   }
 
-  // To shorten syntax if options is an array assume it's `observedAttributes`.
-  if (isArray(options)) {
-    options = { [OBSERVED_ATTRIBUTES]: options };
-  }
-
-  options = options || {};
-  name = options.name = findFreeTagName(name || options.name);
-
   if (!isUndefined(enhancer) && !isFunction(enhancer)) {
     throw new Error('Expected the enhancer to be a function.');
   }
 
+  // To shorten syntax if options is an array assume it's `observedAttributes`.
+  if (isArray(options)) {
+    options = { observedAttributes: options };
+  }
+
+  options = options || {};
   enhancer = compose(
     enhancer,
     ...defaultEnhancers
@@ -70,17 +60,20 @@ export function element(name, component, enhancer, options) {
 
   // Callbacks have to be on the prototype before construction.
   forwardCallbacks(SwissElement.prototype, [
-    CONNECTED_CALLBACK,
-    DISCONNECTED_CALLBACK,
-    ATTRIBUTE_CHANGED_CALLBACK,
-    ADOPTED_CALLBACK
+    'connectedCallback',
+    'disconnectedCallback',
+    'attributeChangedCallback',
+    'adoptedCallback'
   ]);
 
-  const oa = (options[OBSERVED_ATTRIBUTES] =
-    options[OBSERVED_ATTRIBUTES] || []);
-  SwissElement[OBSERVED_ATTRIBUTES] = oa;
+  // `observedAttributes` have to be on the Class before construction.
+  const oa = options.observedAttributes || [];
+  options.observedAttributes = oa;
+  SwissElement.observedAttributes = oa;
 
-  define(name, SwissElement, options);
+  name = options.name = findFreeTagName(name || options.name);
+  self.customElements.define(name, SwissElement, options);
+
   return SwissElement;
 }
 
