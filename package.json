@@ -70,6 +70,7 @@
     "@babel/runtime": "^7.3.1",
     "@webcomponents/custom-elements": "^1.2.1",
     "ansi-colors": "^3.2.3",
+    "babel-eslint": "^10.0.1",
     "chai": "^4.2.0",
     "codecov": "^3.1.0",
     "cross-env": "^5.2.0",
