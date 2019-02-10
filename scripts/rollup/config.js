@@ -7,6 +7,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
 import bundleSize from 'rollup-plugin-bundle-size';
 import replace from 'rollup-plugin-replace';
+import gzip from 'rollup-plugin-gzip';
 import minimist from 'minimist';
 
 const formatOptions = {
@@ -61,6 +62,7 @@ function getConfig({ name, global, input, format, external, sourcemap }) {
             module: true
           }
         }),
+      sourcemap && gzip(),
       bundleSize()
     ].filter(Boolean),
     onwarn: function(warning) {

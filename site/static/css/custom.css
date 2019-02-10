@@ -54,3 +54,8 @@ code.code-example-body {
   background: inherit;
   margin: inherit;
 }
+
+.title .tags {
+  vertical-align: 0.21em;
+  margin-left: 5px;
+}
