@@ -1,8 +1,5 @@
 import { completeAssign, CustomEvent } from '../utils.js';
 
-const CONNECTED = 'connected';
-const DISCONNECTED = 'dis' + CONNECTED;
-
 function component(createElement) {
   return options => {
     const el = createElement(options);
@@ -28,11 +25,11 @@ function component(createElement) {
 
     function connectedCallback() {
       el.update();
-      el.dispatchEvent(new CustomEvent(CONNECTED));
+      el.dispatchEvent(new CustomEvent('connected'));
     }
 
     function disconnectedCallback() {
-      el.dispatchEvent(new CustomEvent(DISCONNECTED));
+      el.dispatchEvent(new CustomEvent('disconnected'));
     }
 
     function attributeChangedCallback(name, oldValue, newValue) {

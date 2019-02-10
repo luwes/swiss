@@ -4,9 +4,6 @@ import {
 } from '../../../node_modules/augmentor/esm/index.js';
 import { useElement } from './use-element.js';
 
-const CONNECTED = 'connected';
-const DISCONNECTED = 'dis' + CONNECTED;
-
 const use = fx => (fn, inputs = []) => {
   const args = [fn];
   if (inputs) {
@@ -24,8 +21,8 @@ const use = fx => (fn, inputs = []) => {
 function createLifecycleHandler(element) {
   return $ => {
     const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
-    element.addEventListener(CONNECTED, handler);
-    element.addEventListener(DISCONNECTED, handler);
+    element.addEventListener('connected', handler);
+    element.addEventListener('disconnected', handler);
   };
 }
 
