@@ -20,7 +20,7 @@ it('warns when rendering during middleware setup', () => {
     return next => action => next(action);
   }
 
-  const createElement = element(() => 99);
+  const createElement = element('problems-99', () => 99);
   expect(() =>
     applyMiddleware(dispatchingMiddleware)(createElement)()
   ).to.throw(

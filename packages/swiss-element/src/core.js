@@ -2,7 +2,6 @@ import { createFactory } from './create-element.js';
 import {
   completeAssign,
   compose,
-  findFreeTagName,
   extend,
   getNativeConstructor,
   isArray,
@@ -10,7 +9,11 @@ import {
   isUndefined
 } from './utils.js';
 
-export const defaultEnhancers = [];
+/**
+ * Quick and dirty way to add default enhancers and options.
+ * @type {Object}
+ */
+export const defaults = {};
 
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
@@ -25,13 +28,6 @@ export const defaultEnhancers = [];
  * @return {HTMLElement}
  */
 export function element(name, component, enhancer, options) {
-  if (isFunction(name)) {
-    options = enhancer;
-    enhancer = component;
-    component = name;
-    name = undefined;
-  }
-
   if (!isFunction(enhancer) && isUndefined(options)) {
     options = enhancer;
     enhancer = undefined;
@@ -46,13 +42,10 @@ export function element(name, component, enhancer, options) {
     options = { observedAttributes: options };
   }
 
-  options = options || {};
-  enhancer = compose(
-    enhancer,
-    ...defaultEnhancers
-  );
+  options = completeAssign({}, options, defaults.options);
+  enhancer = compose(enhancer, ...defaults.enhancers);
 
-  const Native = getNativeConstructor(options && options.extends);
+  const Native = getNativeConstructor(options.extends);
   const SwissElement = extend(Native, function(supr) {
     const opts = completeAssign({}, options, { component });
     return createFactory(supr)(opts, enhancer);
@@ -71,7 +64,6 @@ export function element(name, component, enhancer, options) {
   options.observedAttributes = oa;
   SwissElement.observedAttributes = oa;
 
-  name = options.name = findFreeTagName(name || options.name);
   self.customElements.define(name, SwissElement, options);
 
   return SwissElement;

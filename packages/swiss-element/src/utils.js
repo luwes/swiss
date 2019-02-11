@@ -12,16 +12,6 @@ export function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
 }
 
-export function findFreeTagName(name, suffix = null) {
-  name = name || 's';
-  const tag = suffix ? `${name}-${suffix}` : name;
-  return isFreeTagName(tag) ? tag : findFreeTagName(tag, uniqueId());
-}
-
-export function isFreeTagName(name) {
-  return /.-./.test(name) && !self.customElements.get(name);
-}
-
 export function compose(...fns) {
   return x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
 }
@@ -37,25 +27,6 @@ export function CustomEventPonyfill(name, params = {}) {
   var newEvent = document.createEvent('CustomEvent');
   newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
   return newEvent;
-}
-
-/**
- * Generates a unique ID. If `prefix` is given, the ID is appended to it.
- *
- * @param {string} prefix The value to prefix the ID with.
- * @return {string} Returns the unique ID.
- * @example
- *
- *    uniqueId('contact_');
- *    // => 'contact_104'
- *
- *    uniqueId();
- *    // => '105'
- */
-let idCounter = 0;
-function uniqueId(prefix = '') {
-  var id = ++idCounter;
-  return `${prefix}${id}`;
 }
 
 export function extend(Base, init) {

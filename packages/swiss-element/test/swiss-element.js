@@ -1,11 +1,11 @@
 import { element, renderer } from '../src/index.js';
 
 it('element returns a function', function() {
-  element().should.be.a('function');
+  element('s-0').should.be.a('function');
 });
 
 it('element creator returns a function', function() {
-  const SwissElement = element(() => `Say cheese`);
+  const SwissElement = element('s-1', () => `Say cheese`);
   SwissElement.should.be.a('function');
 });
 
@@ -50,7 +50,7 @@ it('element can extend a native', function() {
 
   const customRender = sinon.spy((root, html) => (root.innerHTML = html));
 
-  const button = element(RenderButton, renderer(customRender))();
+  const button = element('s-2', RenderButton, renderer(customRender))();
   document.body.appendChild(button);
 
   expect(button.innerHTML).to.equal('I am button');
@@ -63,7 +63,7 @@ it('non function enhancer throws', function() {
   }
 
   assert.throws(
-    () => element(RenderButton, [], {}),
+    () => element('s-3', RenderButton, [], {}),
     Error,
     'Expected the enhancer to be a function.'
   );
@@ -71,7 +71,7 @@ it('non function enhancer throws', function() {
 
 it('update triggers a render', function() {
   let count = 0;
-  const el = element(() => count++)();
+  const el = element('s-4', () => count++)();
   document.body.appendChild(el);
 
   el.update = sinon.spy(el.update);

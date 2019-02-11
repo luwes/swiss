@@ -8,9 +8,9 @@ it('renderer enhancer supports multiple signature types', function() {
     sinon.spy((old, html, root) => (root.innerHTML = html))
   ];
 
-  renderWays.forEach(r => {
+  renderWays.forEach((r, i) => {
     const s = document.body.appendChild(
-      element(() => `Say cheese`, renderer(r))()
+      element('s-fromage-' + i, () => `Say cheese`, renderer(r))()
     );
     expect(s.innerHTML).to.equal('Say cheese');
     expect(r).to.have.been.called;

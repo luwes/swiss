@@ -19,7 +19,7 @@ it('useEffect should be called on connectedCallback', function() {
 
 it('useElement should be the current element', function() {
   document.body.appendChild(
-    element('swiss-el', element => {
+    element('swiss-el2', element => {
       assert(element, useElement());
 
       const el = document.createElement('div');
