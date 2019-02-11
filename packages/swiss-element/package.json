@@ -1,6 +1,6 @@
 {
   "name": "swiss-element",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Core swiss element library",
   "module": "dist/swiss-element.mjs",
   "main": "dist/swiss-element.js",
@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "lint": "eslint src",
-    "prepublishOnly": "yarn lint && (cd ../.. && yarn test && yarn build)"
+    "prepublishOnly": "yarn lint && (cd ../.. && yarn test --single-run && yarn build)"
   },
   "dependencies": {
     "augmentor": "^0.2.6"
