@@ -18,16 +18,11 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: 'packages/*/test/**/*.js', type: 'module' },
-      { pattern: 'packages/*/src/**/*.js', type: 'module' },
-      { pattern: 'packages/*/node_modules/*/esm/**/*.js', type: 'module' },
+      { pattern: 'packages/*/test/**/*.js', type: 'module', watched: false }
     ],
 
     // list of files / patterns to exclude
-    exclude: [
-      'packages/pwa-starter-kit/**',
-      'packages/swiss-redux/**'
-    ],
+    exclude: ['packages/pwa-starter-kit/**', 'packages/swiss-redux/**'],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -36,22 +31,21 @@ module.exports = function(config) {
     },
 
     rollupPreprocessor: {
-        output: {
-            format: 'iife', // Helps prevent naming collisions.
-            name: 'swissElement', // Required for 'iife' format.
-            sourcemap: 'inline' // Sensible for testing.
-        },
-        preserveSymlinks: true,
-        plugins: [
-            nodeResolve({
-              module: true,
-              jsnext: true
-            }),
-            commonjs(),
-            istanbul({
-                include: 'packages/*/src/**/*.js'
-            })
-        ]
+      output: {
+        format: 'iife', // Helps prevent naming collisions.
+        name: 'swissElement', // Required for 'iife' format.
+        sourcemap: 'inline' // Sensible for testing.
+      },
+      preserveSymlinks: true,
+      plugins: [
+        nodeResolve({
+          module: true
+        }),
+        commonjs(),
+        istanbul({
+          include: 'packages/*/src/**/*.js'
+        })
+      ]
     },
 
     // test results reporter to use
@@ -60,10 +54,7 @@ module.exports = function(config) {
     reporters: ['progress', 'coverage'],
 
     coverageReporter: {
-      reporters: [
-        { type: 'text' },
-        {type: 'lcov'}
-      ]
+      reporters: [{ type: 'text' }, { type: 'lcov' }]
     },
 
     // web server port

@@ -1,5 +1,5 @@
 {
-  "name": "swiss-element",
+  "name": "swiss",
   "private": true,
   "version": "0.0.0",
   "description": "Functional custom element library",
@@ -7,29 +7,13 @@
     "packages": [
       "packages/*",
       "site/content/fixtures/**/*"
-    ],
-    "nohoist": [
-      "**/swiss-*",
-      "**/swiss-*/**",
-      "**/htm",
-      "**/htm/**",
-      "**/@webcomponents/webcomponentsjs",
-      "**/@webcomponents/webcomponentsjs/**",
-      "**/lit-*",
-      "**/lit-*/**",
-      "**/pwa-helpers",
-      "**/pwa-helpers/**",
-      "**/redux",
-      "**/redux/**",
-      "**/redux-thunk",
-      "**/redux-thunk/**",
-      "**/reselect",
-      "**/reselect/**"
     ]
   },
   "main": "index.js",
   "scripts": {
-    "postinstall": "rm -rf packages/swiss-redux/node_modules/swiss-element",
+    "preinstall": "rm -rf packages/pwa-starter-kit/node_modules",
+    "postinstall": "yarn preinstall && ln -s $(pwd)/node_modules $(pwd)/packages/pwa-starter-kit",
+    "clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && yarn cache clean",
     "lint": "eslint packages/*/src",
     "format": "prettier --write '{packages,fixtures}/*/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md'",
     "test": "karma start",

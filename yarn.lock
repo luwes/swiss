@@ -6570,10 +6570,10 @@ liftoff@^2.5.0:
     rechoir "^0.6.2"
     resolve "^1.1.7"
 
-lighterhtml@^0.8.10:
-  version "0.8.10"
-  resolved "https://registry.yarnpkg.com/lighterhtml/-/lighterhtml-0.8.10.tgz#986d3ad12d2d752467143fa0a1ae7273c6a81967"
-  integrity sha512-neHA5LLLe/iOYGpNqt9ssRBKbTTVrqGnkUMX2HelX/l7MOkp0cWARw6ZxKvDOvzaQbci4Jm+zjpUTK20PsOxeQ==
+lighterhtml@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/lighterhtml/-/lighterhtml-0.9.0.tgz#af244c02849fd235e7a8575af7a8629d8eab57c4"
+  integrity sha512-FtpwzeijbnfWv3pvKc2KT7eomA9kd62+rb5gbJcFVO5IC7FUlEFRGcBjHHUhVvAtkCNVg/e7SsUfgDAox30b1Q==
   dependencies:
     "@ungap/create-content" "^0.1.4"
     "@ungap/template-tag-arguments" "^0.1.1"

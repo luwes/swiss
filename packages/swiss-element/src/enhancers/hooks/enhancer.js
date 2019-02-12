@@ -1,4 +1,4 @@
-import augmentor from '../../../node_modules/augmentor/esm/index.js';
+import augmentor from 'augmentor';
 import CurrentElement from './current-element.js';
 
 function hooks(createElement) {

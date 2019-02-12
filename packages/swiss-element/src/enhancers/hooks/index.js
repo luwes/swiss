@@ -6,7 +6,7 @@ export {
   useState,
   createContext,
   useContext
-} from '../../../node_modules/augmentor/esm/index.js';
+} from 'augmentor';
 
 export * from './use-effect.js';
 export * from './use-element.js';

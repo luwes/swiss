@@ -1,7 +1,7 @@
 import {
   useEffect as effect,
   useLayoutEffect as layoutEffect
-} from '../../../node_modules/augmentor/esm/index.js';
+} from 'augmentor';
 import { useElement } from './use-element.js';
 
 const use = fx => (fn, inputs = []) => {
