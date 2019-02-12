@@ -20,25 +20,23 @@ const use = fx => (fn, inputs = []) => {
 
 function createLifecycleHandler(element) {
   return $ => {
-    const handler = { handleEvent, onconnected, ondisconnected, $, _: null };
-    element.addEventListener('connected', handler);
-    element.addEventListener('disconnected', handler);
+    const shared = {};
+    element.addEventListener('connected', createConnected(shared, $));
+    element.addEventListener('disconnected', createConnected(shared));
   };
 }
 
-function handleEvent(e) {
-  this['on' + e.type]();
-}
-
-function onconnected() {
-  ondisconnected.call(this);
-  this._ = this.$();
-}
-
-function ondisconnected() {
-  const { _ } = this;
-  this._ = null;
-  if (_) _();
+function createConnected(shared, $) {
+  return () => {
+    // disconnect
+    const { _ } = shared;
+    shared._ = null;
+    if (_) _();
+    // connect
+    if ($) {
+      shared._ = $();
+    }
+  };
 }
 
 export const useEffect = use(effect);

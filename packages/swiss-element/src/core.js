@@ -43,7 +43,10 @@ export function element(name, component, enhancer, options) {
   }
 
   options = completeAssign({}, options, defaults.options);
-  enhancer = compose(enhancer, ...defaults.enhancers);
+  enhancer = compose(
+    enhancer,
+    ...defaults.enhancers
+  );
 
   const Native = getNativeConstructor(options.extends);
   const SwissElement = extend(Native, function(supr) {

@@ -12,10 +12,7 @@ function applyMiddleware(...middleware) {
     const element = createElement(...args);
 
     let render = () => {
-      throw new Error(
-        `Rendering while constructing your middleware is not allowed. ` +
-          `Other middleware would not be applied to this render.`
-      );
+      throw new Error();
     };
 
     const middlewareAPI = {

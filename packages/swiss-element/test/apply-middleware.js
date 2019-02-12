@@ -23,8 +23,5 @@ it('warns when rendering during middleware setup', () => {
   const createElement = element('problems-99', () => 99);
   expect(() =>
     applyMiddleware(dispatchingMiddleware)(createElement)()
-  ).to.throw(
-    `Rendering while constructing your middleware is not allowed. ` +
-      `Other middleware would not be applied to this render.`
-  );
+  ).to.throw();
 });
