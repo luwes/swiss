@@ -11,8 +11,6 @@
   },
   "main": "index.js",
   "scripts": {
-    "preinstall": "rm -rf packages/pwa-starter-kit/node_modules",
-    "postinstall": "yarn preinstall && ln -s $(pwd)/node_modules $(pwd)/packages/pwa-starter-kit",
     "clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && yarn cache clean",
     "lint": "eslint packages/*/src",
     "format": "prettier --write '{packages,fixtures}/*/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md'",
@@ -56,7 +54,7 @@
     "ansi-colors": "^3.2.3",
     "babel-eslint": "^10.0.1",
     "chai": "^4.2.0",
-    "codecov": "^3.1.0",
+    "codecov": "^3.2.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.13.0",
     "eslint-plugin-fp": "^2.3.0",
