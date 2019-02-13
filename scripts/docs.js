@@ -6,7 +6,7 @@ const c = require('ansi-colors');
 const sources = [
   {
     cwd: '',
-    files: 'packages/*/src/swiss-element.js',
+    files: 'packages/*/src/core.js',
     config: 'jsdoc.config.js',
     output: 'README.md'
   },

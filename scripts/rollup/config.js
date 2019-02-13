@@ -67,7 +67,11 @@ function getConfig({ name, global, input, format, external, sourcemap }) {
     ].filter(Boolean),
     onwarn: function(warning) {
       // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
-      if (['THIS_IS_UNDEFINED', 'UNKNOWN_OPTION'].includes(warning.code))
+      if (
+        ['THIS_IS_UNDEFINED', 'UNKNOWN_OPTION', 'MISSING_GLOBAL_NAME'].includes(
+          warning.code
+        )
+      )
         return;
 
       console.error(warning.message);
