@@ -3,7 +3,7 @@
  * @type {Object}
  */
 const CurrentElement = {
-  current: null
+  // current: undefined
 };
 
 export default CurrentElement;

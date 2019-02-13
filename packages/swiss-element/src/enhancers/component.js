@@ -1,4 +1,4 @@
-import { completeAssign, CustomEvent } from '../utils.js';
+import { CustomEvent } from '../utils.js';
 
 function component(createElement) {
   return options => {
@@ -15,12 +15,16 @@ function component(createElement) {
     }
 
     function render(html) {
-      el.renderer(el.renderRoot, html, oldHtml);
+      el.renderer(el.renderRoot(), html, oldHtml);
       oldHtml = html;
     }
 
     function renderer(root, html) {
       root.innerHTML = html;
+    }
+
+    function renderRoot() {
+      return el.shadowRoot || el._shadowRoot || el;
     }
 
     function connectedCallback() {
@@ -42,17 +46,15 @@ function component(createElement) {
       return oldValue !== newValue;
     }
 
-    return completeAssign(el, {
+    return Object.assign(el, {
       render,
       renderer,
+      renderRoot,
       connectedCallback,
       disconnectedCallback,
       attributeChangedCallback,
       update,
-      shouldUpdate,
-      get renderRoot() {
-        return el.shadowRoot || el._shadowRoot || el;
-      }
+      shouldUpdate
     });
   };
 }

@@ -13,7 +13,7 @@ const use = fx => (fn, inputs = []) => {
     const element = useElement();
     // Capture the current element immediately here because the lifecycle handler
     // is async, requestAnimationFrame / setTimeout.
-    args.push(inputs.length ? inputs : createLifecycleHandler(element));
+    args[1] = inputs.length ? inputs : createLifecycleHandler(element);
   }
   return fx.apply(null, args);
 };

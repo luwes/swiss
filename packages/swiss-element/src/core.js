@@ -1,6 +1,5 @@
 import { createFactory } from './create-element.js';
 import {
-  completeAssign,
   compose,
   extend,
   getNativeConstructor,
@@ -42,7 +41,7 @@ export function element(name, component, enhancer, options) {
     options = { observedAttributes: options };
   }
 
-  options = completeAssign({}, options, defaults.options);
+  options = Object.assign({}, options, defaults.options);
   enhancer = compose(
     enhancer,
     ...defaults.enhancers
@@ -50,7 +49,7 @@ export function element(name, component, enhancer, options) {
 
   const Native = getNativeConstructor(options.extends);
   const SwissElement = extend(Native, function(supr) {
-    const opts = completeAssign({}, options, { component });
+    const opts = Object.assign({}, options, { component });
     return createFactory(supr)(opts, enhancer);
   });
 
@@ -67,7 +66,7 @@ export function element(name, component, enhancer, options) {
   options.observedAttributes = oa;
   SwissElement.observedAttributes = oa;
 
-  self.customElements.define(name, SwissElement, options);
+  customElements.define(name, SwissElement, options);
 
   return SwissElement;
 }
@@ -75,8 +74,10 @@ export function element(name, component, enhancer, options) {
 function forwardCallbacks(proto, callbacks) {
   callbacks.forEach(cb => {
     proto[cb] = function(...args) {
-      if (this.hasOwnProperty(cb)) {
-        this[cb](...args);
+      // eslint-disable-next-line fp/no-this
+      const el = this;
+      if (el.hasOwnProperty(cb)) {
+        el[cb](...args);
       }
     };
   });
