@@ -1,6 +1,7 @@
 import { createFactory } from './create-element.js';
 import {
   compose,
+  CustomEvent,
   extend,
   getNativeConstructor,
   isArray,
@@ -59,10 +60,10 @@ export function element(name, component, enhancer, options) {
 
   // Callbacks have to be on the prototype before construction.
   forwardCallbacks(SwissElement.prototype, [
-    'connectedCallback',
-    'disconnectedCallback',
-    'attributeChangedCallback',
-    'adoptedCallback'
+    'connected',
+    'disconnected',
+    'attributeChanged',
+    'adopted'
   ]);
 
   // `observedAttributes` have to be on the Class before construction.
@@ -76,13 +77,16 @@ export function element(name, component, enhancer, options) {
 }
 
 function forwardCallbacks(proto, callbacks) {
-  callbacks.forEach(cb => {
+  callbacks.forEach(name => {
+    const cb = name + 'Callback';
     proto[cb] = function(...args) {
       // eslint-disable-next-line fp/no-this
       const el = this;
-      if (el.hasOwnProperty(cb)) {
+      if (!el[cb]._) {
         el[cb](...args);
+        el.dispatchEvent(new CustomEvent(name.toLowerCase()));
       }
     };
+    proto[cb]._ = 1;
   });
 }

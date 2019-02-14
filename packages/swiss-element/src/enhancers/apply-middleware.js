@@ -20,7 +20,7 @@ function applyMiddleware(...middleware) {
     };
 
     const chain = middleware.map(mw => mw(middlewareAPI));
-    render = compose(...chain)(element.render.bind(element));
+    render = compose(...chain)(element.render && element.render.bind(element));
 
     element.render = render;
     return element;

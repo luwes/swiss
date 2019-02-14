@@ -1,5 +1,3 @@
-import { CustomEvent } from '../utils.js';
-
 function component(createElement) {
   return options => {
     const el = createElement(options);
@@ -29,11 +27,6 @@ function component(createElement) {
 
     function connectedCallback() {
       el.update();
-      el.dispatchEvent(new CustomEvent('connected'));
-    }
-
-    function disconnectedCallback() {
-      el.dispatchEvent(new CustomEvent('disconnected'));
     }
 
     function attributeChangedCallback(name, oldValue, newValue) {
@@ -51,7 +44,6 @@ function component(createElement) {
       renderer,
       renderRoot,
       connectedCallback,
-      disconnectedCallback,
       attributeChangedCallback,
       update,
       shouldUpdate
