@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/luwes/swiss-element#readme",
   "devDependencies": {
-    "@babel/core": "^7.2.2",
+    "@babel/core": "^7.3.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.3.2",
     "@babel/plugin-syntax-export-default-from": "^7.2.0",
     "@babel/plugin-transform-object-assign": "^7.2.0",
@@ -56,7 +56,7 @@
     "chai": "^4.2.0",
     "codecov": "^3.2.0",
     "cross-env": "^5.2.0",
-    "eslint": "^5.13.0",
+    "eslint": "^5.14.0",
     "eslint-plugin-fp": "^2.3.0",
     "eslint-plugin-import": "^2.16.0",
     "fs-extra": "^7.0.1",
