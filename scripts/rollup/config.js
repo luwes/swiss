@@ -5,7 +5,7 @@ import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import { terser } from 'rollup-plugin-terser';
-import bundleSize from 'rollup-plugin-bundle-size';
+import bundleSize from 'rollup-plugin-size';
 import replace from 'rollup-plugin-replace';
 import gzip from 'rollup-plugin-gzip';
 import minimist from 'minimist';
@@ -26,7 +26,7 @@ const unbundle = ({ formats, ...rest }) =>
   formats.map(format => ({ ...rest, format }));
 let allBundles = R.chain(unbundle, bs);
 
-function getConfig({ name, global, input, format, external, sourcemap }) {
+function getConfig({ name, global, input, dist, format, external, sourcemap }) {
   return {
     input,
     external,
@@ -36,15 +36,18 @@ function getConfig({ name, global, input, format, external, sourcemap }) {
     output: {
       format,
       sourcemap,
-      file: path.join(
-        path.dirname(input),
-        '..',
-        `dist/${name}${formatOptions[format].ext}`
-      ),
+      file: dist
+        ? `${dist}/${name}${formatOptions[format].ext}`
+        : path.join(
+            path.dirname(input),
+            '..',
+            `dist/${name}${formatOptions[format].ext}`
+          ),
       name: global,
       exports: 'named'
     },
     plugins: [
+      bundleSize(),
       replace({
         values: {
           __DEBUG__: env !== 'production',
@@ -62,8 +65,7 @@ function getConfig({ name, global, input, format, external, sourcemap }) {
             module: true
           }
         }),
-      sourcemap && gzip(),
-      bundleSize()
+      sourcemap && gzip()
     ].filter(Boolean),
     onwarn: function(warning) {
       // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
