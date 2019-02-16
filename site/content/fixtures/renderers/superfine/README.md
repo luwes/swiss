@@ -2,15 +2,20 @@
 
 ```js
 import { h, patch } from 'superfine';
-import { element, renderer, useState } from 'swiss-element';
+import { element, renderer } from 'swiss-element';
+import { useState } from 'swiss-hooks';
 
 function Counter() {
   const [count, setCount] = useState(0);
 
-  return h('div', {}, [
-    h('h1', {}, count),
-    h('button', { onclick: () => setCount(count - 1) }, '-'),
-    h('button', { onclick: () => setCount(count + 1) }, '+')
+  return h('div', { class: 'box level' }, [
+    h('div', { class: 'level-item' }, [
+      h('button', { class: 'button', onclick: () => setCount(count - 1) }, '-')
+    ]),
+    h('div', { class: 'level-item' }, [h('h1', { class: 'title' }, count)]),
+    h('div', { class: 'level-item' }, [
+      h('button', { class: 'button', onclick: () => setCount(count + 1) }, '+')
+    ])
   ]);
 }
 

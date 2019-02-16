@@ -1,4 +1,5 @@
-import { element, useEffect, useElement } from '../src/index.js';
+import { element } from 'swiss-element';
+import { useEffect, useElement } from '../src/index.js';
 
 it('useEffect should be called on connectedCallback', function() {
   const spy = sinon.spy();

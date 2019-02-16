@@ -22,7 +22,11 @@ module.exports = function(config) {
     ],
 
     // list of files / patterns to exclude
-    exclude: ['packages/pwa-starter-kit/**', 'packages/swiss-redux/**'],
+    exclude: [
+      'packages/pwa-starter-kit/**',
+      'packages/swiss-redux/**',
+      'packages/swiss-thunk/**',
+    ],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -33,7 +37,7 @@ module.exports = function(config) {
     rollupPreprocessor: {
       output: {
         format: 'iife', // Helps prevent naming collisions.
-        name: 'swissElement', // Required for 'iife' format.
+        name: 'swissElementTest', // Required for 'iife' format.
         sourcemap: 'inline' // Sensible for testing.
       },
       preserveSymlinks: true,

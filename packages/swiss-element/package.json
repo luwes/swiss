@@ -11,8 +11,5 @@
   "scripts": {
     "lint": "eslint src",
     "prepublishOnly": "yarn lint && (cd ../.. && yarn test --single-run && yarn build)"
-  },
-  "dependencies": {
-    "augmentor": "^0.2.6"
   }
 }

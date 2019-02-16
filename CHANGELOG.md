@@ -2,6 +2,18 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.9.1 - 2019-02-12
+
+### Changed
+
+- Simplify effect hook logic
+
+## 0.9.0 - 2019-02-10
+
+### Removed
+
+- Removed automatic assigning free tag name saving some bytes.
+
 ## 0.8.0 - 2019-02-09
 
 ### Changed

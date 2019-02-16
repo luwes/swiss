@@ -5,7 +5,7 @@ import {
   useState,
   useElement,
   useRef
-} from 'swiss-element';
+} from 'swiss-hooks';
 
 import shallowEqual from './shallow-equal.js';
 

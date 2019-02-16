@@ -16,15 +16,42 @@ const formatOptions = {
 };
 
 const env = process.env.NODE_ENV;
-
 const argv = minimist(process.argv.slice(2));
+
+const requestedBundleTypes = (argv.type || '')
+  .split(',')
+  .map(type => type.toUpperCase());
+const requestedBundleNames = (argv.name || '').split(',');
+
 let bs = argv.fixtures ? fixtures : bundles;
 bs = argv.all ? bundles.concat(fixtures) : bs;
 
 // For every type in bundle.types creates a new bundle obj.
 const unbundle = ({ formats, ...rest }) =>
   formats.map(format => ({ ...rest, format }));
-let allBundles = R.chain(unbundle, bs);
+const allBundles = R.chain(unbundle, bs).filter(
+  ({ name, format }) => !shouldSkipBundle(name, format)
+);
+
+function shouldSkipBundle(bundleName, bundleType) {
+  if (requestedBundleTypes.length > 0) {
+    const isAskingForDifferentType = requestedBundleTypes.every(
+      requestedType => bundleType.indexOf(requestedType) === -1
+    );
+    if (isAskingForDifferentType) {
+      return true;
+    }
+  }
+  if (requestedBundleNames.length > 0) {
+    const isAskingForDifferentNames = requestedBundleNames.every(
+      requestedName => bundleName.indexOf(requestedName) === -1
+    );
+    if (isAskingForDifferentNames) {
+      return true;
+    }
+  }
+  return false;
+}
 
 function getConfig({ name, global, input, dist, format, external, sourcemap }) {
   return {

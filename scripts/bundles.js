@@ -16,6 +16,13 @@ export const bundles = [
   {
     external: ['swiss-element'],
     formats: [ESM, UMD],
+    global: 'swissHooks',
+    name: 'swiss-hooks',
+    input: 'packages/swiss-hooks/src/index.js'
+  },
+  {
+    external: ['swiss-hooks'],
+    formats: [ESM, UMD],
     global: 'swissRedux',
     name: 'swiss-redux',
     input: 'packages/swiss-redux/src/swiss-redux.js'

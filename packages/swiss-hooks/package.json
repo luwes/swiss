@@ -1,0 +1,21 @@
+{
+  "name": "swiss-hooks",
+  "version": "0.0.1",
+  "description": "Hooks enhancer for Swiss Element.",
+  "module": "dist/swiss-hooks.mjs",
+  "main": "dist/swiss-hooks.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../.. && yarn build)"
+  },
+  "peerDependencies": {
+    "swiss-element": ">= 0.10.0"
+  },
+  "dependencies": {
+    "augmentor": "^0.2.6"
+  }
+}

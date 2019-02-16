@@ -1,7 +1,6 @@
 export * from './swiss-element.js';
 
 // These enhancers are added by default but can be mixed and matched with the core.
-export * from './enhancers/hooks/index.js';
 export { default as component } from './enhancers/component.js';
 export { default as propsToAttrs } from './enhancers/props-to-attrs.js';
 

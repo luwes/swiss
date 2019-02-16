@@ -8,3 +8,5 @@ coverage
 
 /site/public/
 dist
+
+packages/swiss-element/hooks.*

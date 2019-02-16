@@ -1,16 +1,25 @@
 # 🇨🇭element + [htm-preact](https://github.com/developit/htm/)
 
 ```js
-import { html, render } from '../node_modules/htm/preact/standalone.mjs';
-import { element, renderer, useState } from 'swiss-element';
+import { html, render } from 'htm/preact/standalone';
+import { element, renderer } from 'swiss-element';
+import { useState } from 'swiss-hooks';
 
 function Counter() {
   const [count, setCount] = useState(0);
 
   return html`
-    <a href="#" onclick="${() => setCount(count + 1)}">
-      Clicked ${count} times
-    </a>
+    <div class="box level">
+      <div class="level-item">
+        <button class="button" onclick="${() => setCount(count - 1)}">-</button>
+      </div>
+      <div class="level-item">
+        <h1 class="title">${count}</h1>
+      </div>
+      <div class="level-item">
+        <button class="button" onclick="${() => setCount(count + 1)}">+</button>
+      </div>
+    </div>
   `;
 }
 

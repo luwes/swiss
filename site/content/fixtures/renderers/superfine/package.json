@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "dependencies": {
     "superfine": "6.0.1",
-    "swiss-element": "0.9.1"
+    "swiss-element": "0.9.1",
+    "swiss-hooks": "0.0.1"
   }
 }
