@@ -10171,11 +10171,6 @@ sw-toolbox@^3.4.0:
     path-to-regexp "^1.0.1"
     serviceworker-cache-polyfill "^4.0.0"
 
-swiss-redux@0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/swiss-redux/-/swiss-redux-0.3.0.tgz#d694819b67c154127f4b63c0a680795e4ab5c294"
-  integrity sha512-84FBjMz0Sb18VvLV7pbeL6vRpZ/g4tZKnzCcTreXE/UEgmTa+OPHMePvIGSaEyIo/dgmUcMmbAGgUAq+3N5uFw==
-
 symbol-observable@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"

@@ -2,11 +2,17 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.10.1 - 2019-02-16
+
+### Changed
+
+- Bumped version because yarnpkg.com wasn't showing the new version :(
+
 ## 0.10.0 - 2019-02-16
 
 ### Changed (BREAKING CHANGES)
 
-- Separate hook logic into `swiss-hooks`. The hooks can no longer be imported from `swiss-element`, this to keep the library lean and less opiniated. The primary goal for swiss element is to provide functional custom elements (no classes, no this keyword)
+- Separated hook logic into `swiss-hooks`. The hooks can no longer be imported from `swiss-element`, this to keep the library lean and less opiniated. The primary goal for swiss element is to provide functional custom elements (no classes, no this keyword)
 
 ## 0.9.1 - 2019-02-12
 
