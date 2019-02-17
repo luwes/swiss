@@ -23,20 +23,13 @@
     "docs": "node scripts/docs.js && npm run format:docs",
     "format:docs": "prettier --write '**/*.md'"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/luwes/swiss-element.git"
-  },
+  "repository": "luwes/swiss-element",
   "keywords": [
     "functional",
     "custom",
     "element"
   ],
-  "author": {
-    "name": "Wesley Luyten",
-    "email": "me@wesleyluyten.com",
-    "url": "wesleyluyten.com"
-  },
+  "author": "Wesley Luyten <me@wesleyluyten.com> (https://wesleyluyten.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/luwes/swiss-element/issues"
