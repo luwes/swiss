@@ -20,3 +20,5 @@ script:
   - yarn test --single-run
 after_success:
   - yarn run coverage
+git:
+  submodules: false
