@@ -1,7 +1,7 @@
 import { camelCase } from '../utils.js';
 
-function propsToAttrs(createElement) {
-  return options => {
+function propsToAttrs() {
+  return createElement => options => {
     const el = createElement(options);
     const proto = Object.getPrototypeOf(el);
 

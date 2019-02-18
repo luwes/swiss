@@ -5,6 +5,6 @@ import { defaults, element } from './core.js';
 // The `propsToAttrs` and `component` enhancers are added by default.
 // If you prefer not to use any of these simply import `src/core.js` and add
 // enhancers of your choice.
-defaults.enhancers = [propsToAttrs, component];
+defaults.enhancers = [propsToAttrs(), component()];
 
-export { defaults, element };
+export { component, defaults, element, propsToAttrs };

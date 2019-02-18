@@ -1,5 +1,9 @@
 export const isArray = Array.isArray;
 
+export function isString(value) {
+  return typeof value === 'string';
+}
+
 export function isFunction(value) {
   return typeof value === 'function';
 }
@@ -27,6 +31,14 @@ export function compose(...fns) {
 
 export function camelCase(name) {
   return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
+}
+
+export function append(parent, nodes) {
+  return [].concat(nodes).map(node =>
+    parent.appendChild(
+      node instanceof Node ? node : document.createTextNode(String(node))
+    )
+  );
 }
 
 export function extend(Base, init) {

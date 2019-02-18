@@ -1,6 +1,9 @@
-function component(createElement) {
-  return options => {
+import { append, isString } from '../utils.js';
+
+function component(defaultComponent) {
+  return createElement => options => {
     const el = createElement(options);
+    const comp = defaultComponent || options.component;
     let oldHtml;
 
     if (options.shadow) {
@@ -8,7 +11,7 @@ function component(createElement) {
     }
 
     function update() {
-      const html = options.component.call(el, el);
+      const html = comp.call(el, el);
       el.render(html);
     }
 
@@ -17,8 +20,15 @@ function component(createElement) {
       oldHtml = html;
     }
 
-    function renderer(root, html) {
-      root.innerHTML = html;
+    function renderer(root, html, old) {
+      if (html !== old) {
+        if (isString(html)) {
+          root.innerHTML = html;
+        } else {
+          root.innerHTML = '';
+          append(root, html);
+        }
+      }
     }
 
     function renderRoot() {
