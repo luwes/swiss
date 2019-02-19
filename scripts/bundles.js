@@ -85,5 +85,12 @@ export const fixtures = [
     name: 'thunk',
     input: 'fixtures/middleware/thunk/src/thunk.js',
     sourcemap: true
-  }
+  },
+  {
+    formats: [UMD],
+    global: 'swissElementCounter',
+    name: 'counter',
+    input: 'fixtures/renderers/stage0/src/counter.js',
+    sourcemap: true
+  },
 ];

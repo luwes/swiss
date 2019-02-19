@@ -2,7 +2,7 @@
 
 [![Build Status](https://img.shields.io/travis/luwes/swiss-element/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/swiss-element)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=v0.10.1)](https://codecov.io/gh/luwes/swiss-element)
-![Badge size](https://img.shields.io/bundlephobia/minzip/swiss-element@0.10.1.svg?colorB=%2345CC10&label=gzip&style=flat-square)
+![Badge size](http://img.badgesize.io/https://unpkg.com/swiss-element@latest/dist/swiss-element.js?compression=gzip&label=gzip&style=flat-square)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 **npm**: `npm install swiss-element --save`  
