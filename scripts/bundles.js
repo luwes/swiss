@@ -33,6 +33,13 @@ export const bundles = [
     global: 'swissThunk',
     name: 'swiss-thunk',
     input: 'packages/swiss-thunk/src/swiss-thunk.js'
+  },
+  {
+    external: ['swiss-element'],
+    formats: [ESM, UMD],
+    global: 'swissLogger',
+    name: 'swiss-logger',
+    input: 'packages/swiss-logger/src/swiss-logger.js'
   }
 ];
 
@@ -88,9 +95,16 @@ export const fixtures = [
   },
   {
     formats: [UMD],
+    global: 'swissElementLogger',
+    name: 'logger',
+    input: 'fixtures/middleware/logger/src/logger.js',
+    sourcemap: true
+  },
+  {
+    formats: [UMD],
     global: 'swissElementCounter',
     name: 'counter',
     input: 'fixtures/renderers/stage0/src/counter.js',
     sourcemap: true
-  },
+  }
 ];

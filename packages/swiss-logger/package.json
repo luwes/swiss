@@ -1,0 +1,22 @@
+{
+  "name": "swiss-logger",
+  "version": "0.0.1",
+  "description": "Logging middleware for Swiss Element.",
+  "module": "dist/swiss-logger.mjs",
+  "main": "dist/swiss-logger.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../.. && yarn build)"
+  },
+  "peerDependencies": {
+    "swiss-element": ">= 0.6.0"
+  },
+  "dependencies": {
+    "diff-match-patch": "^1.0.4",
+    "js-beautify": "^1.8.9"
+  }
+}
