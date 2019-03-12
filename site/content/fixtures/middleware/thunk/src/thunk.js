@@ -1,4 +1,4 @@
-import { applyMiddleware, element } from 'swiss-element';
+import { applyMiddleware, compose, element, renderer } from 'swiss-element';
 import thunk from 'swiss-thunk';
 
 function Nav() {
@@ -12,7 +12,7 @@ function Nav() {
   };
 }
 
-element('s-nav', Nav, applyMiddleware(thunk));
+element('s-nav', Nav, compose(applyMiddleware(thunk), renderer()));
 
 function Message() {
   return `

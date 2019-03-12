@@ -1,3 +1,5 @@
+import defaultRenderer from '../default-renderer.js';
+
 /**
  * Adds a simple way to define your own renderer.
  * Verified libraries working by passing just the `render` or `patch` function:
@@ -11,11 +13,11 @@
  *
  * @return {Function}
  */
-function renderer(customRenderer) {
-  return createElement => (...args) => {
-    const element = createElement(...args);
-
-    const renderWays = [
+function renderer(customRenderer = defaultRenderer) {
+  return createElement => options => {
+    const element = createElement(options);
+    let renderer;
+    let renderWays = [
       // default
       (root, html, old) => customRenderer(root, html, old),
       // lit-html, htm-preact
@@ -37,16 +39,19 @@ function renderer(customRenderer) {
      * @param  {Number} i
      * @return {*}
      */
-    function findRenderWay(root, html, old, i = 0) {
-      element.renderer = renderWays[i];
+    function findRenderWay(root, html, old) {
+      if (renderer) return renderer(root, html, old);
+
+      renderer = renderWays[0];
+      renderWays = renderWays.slice(1);
 
       let result;
       try {
-        result = element.renderer(root, html, old);
+        result = renderer(root, html, old);
       } catch (err) {
-        i += 1;
-        if (i < renderWays.length) {
-          return findRenderWay(root, html, old, i);
+        if (renderWays.length > 0) {
+          renderer = null;
+          return findRenderWay(root, html, old);
         }
       }
 

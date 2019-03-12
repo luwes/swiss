@@ -8,19 +8,20 @@ import { compose } from '../utils.js';
  * @return {Function}
  */
 function applyMiddleware(...middleware) {
-  return createElement => (...args) => {
-    const element = createElement(...args);
-
+  return createElement => options => {
+    const element = createElement(options);
     let render = () => {
       throw new Error();
     };
 
     const middlewareAPI = {
-      render: (...args) => render(...args)
+      nodeName: element.nodeName,
+      render: html => render(html),
+      getTree: () => element.outerHTML
     };
 
     const chain = middleware.map(mw => mw(middlewareAPI));
-    render = compose(...chain)(element.render && element.render.bind(element));
+    render = compose(...chain)(element.render);
 
     element.render = render;
     return element;

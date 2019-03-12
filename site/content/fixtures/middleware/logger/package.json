@@ -1,0 +1,10 @@
+{
+  "name": "swiss-element-logger-fixture",
+  "private": true,
+  "version": "0.0.1",
+  "dependencies": {
+    "stage0": "^0.0.19",
+    "swiss-element": "0.11.0",
+    "swiss-logger": "0.0.1"
+  }
+}
