@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "dependencies": {
-    "swiss-element": "0.11.0",
+    "swiss-element": "0.12.0",
     "swiss-thunk": "0.0.1"
   }
 }

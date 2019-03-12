@@ -4,7 +4,7 @@
   "version": "0.2.0",
   "dependencies": {
     "lit-html": "^1.0.0",
-    "swiss-element": "0.11.0",
+    "swiss-element": "0.12.0",
     "swiss-hooks": "0.0.1"
   }
 }
