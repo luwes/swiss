@@ -34,11 +34,13 @@ export function camelCase(name) {
 }
 
 export function append(parent, nodes) {
-  return [].concat(nodes).map(node =>
-    parent.appendChild(
-      node instanceof Node ? node : document.createTextNode(String(node))
-    )
-  );
+  return []
+    .concat(nodes)
+    .map(node =>
+      parent.appendChild(
+        node instanceof Node ? node : document.createTextNode(String(node))
+      )
+    );
 }
 
 export function extend(Base, init) {

@@ -1,9 +1,11 @@
-import { append, isString } from '../utils.js';
+import defaultRenderer from '../default-renderer.js';
+import { isUndefined } from '../utils.js';
 
-function component(defaultComponent) {
+function componentEnhancer(component) {
   return createElement => options => {
+    const comp = component || options.component;
+
     const el = createElement(options);
-    const comp = defaultComponent || options.component;
     let oldHtml;
 
     if (options.shadow) {
@@ -11,24 +13,21 @@ function component(defaultComponent) {
     }
 
     function update() {
-      const html = comp.call(el, el);
-      el.render(html);
+      // If `renderer` is defined, the generated html is passed to `render`.
+      // This is for elements that don't mutate the element in the component.
+      el.render(el.renderer && comp.call(el, el));
     }
 
     function render(html) {
-      el.renderer(el.renderRoot(), html, oldHtml);
-      oldHtml = html;
-    }
-
-    function renderer(root, html, old) {
-      if (html !== old) {
-        if (isString(html)) {
-          root.innerHTML = html;
-        } else {
-          root.innerHTML = '';
-          append(root, html);
-        }
+      if (isUndefined(html)) {
+        // By default the html is generated in the `render` function.
+        // This is for components that mutate the element in the component.
+        html = comp.call(el, el);
       }
+
+      const renderer = el.renderer || defaultRenderer;
+      renderer(el.renderRoot(), html, oldHtml);
+      oldHtml = html;
     }
 
     function renderRoot() {
@@ -50,15 +49,14 @@ function component(defaultComponent) {
     }
 
     return Object.assign(el, {
-      render,
-      renderer,
-      renderRoot,
       connectedCallback,
       attributeChangedCallback,
+      shouldUpdate,
       update,
-      shouldUpdate
+      render,
+      renderRoot
     });
   };
 }
 
-export default component;
+export default componentEnhancer;
