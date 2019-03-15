@@ -2,3 +2,6 @@
 	path = packages/pwa-starter-kit
 	url = https://github.com/luwes/pwa-starter-kit.git
 	branch = template-minimal-ui
+[submodule "site"]
+	path = site
+	url = https://github.com/luwes/swiss-element-site.git
