@@ -23,8 +23,5 @@
   "bugs": {
     "url": "https://github.com/luwes/swiss-element/issues"
   },
-  "homepage": "https://github.com/luwes/swiss-element#readme",
-  "dependencies": {
-    "swiss-core": "0.0.1"
-  }
+  "homepage": "https://github.com/luwes/swiss-element#readme"
 }

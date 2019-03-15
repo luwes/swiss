@@ -1,4 +1,4 @@
-import { element as core } from 'swiss-core';
+import { element as core } from '../core/src/core.js';
 import component from './enhancers/component.js';
 import propsToAttrs from './enhancers/props-to-attrs.js';
 import { compose, isArray, isFunction, isUndefined } from './utils.js';
