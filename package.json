@@ -6,6 +6,8 @@
   "workspaces": {
     "packages": [
       "packages/*",
+      "packages/swiss-element/core",
+      "packages/swiss-element/hooks",
       "site/content/fixtures/**/*"
     ]
   },

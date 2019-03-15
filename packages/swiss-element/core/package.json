@@ -1,0 +1,15 @@
+{
+  "name": "swiss-core",
+  "version": "0.0.1",
+  "description": "Swiss Core to create Custom Elements w/ enhancers.",
+  "module": "dist/swiss-core.mjs",
+  "main": "dist/swiss-core.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
+  }
+}

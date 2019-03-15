@@ -9,6 +9,12 @@ export const bundleFormats = {
 export const bundles = [
   {
     formats: [ESM, UMD],
+    global: 'swissCore',
+    name: 'swiss-core',
+    input: 'packages/swiss-element/core/src/core.js',
+  },
+  {
+    formats: [ESM, UMD],
     global: 'swissElement',
     name: 'swiss-element',
     input: 'packages/swiss-element/src/index.js'
@@ -18,7 +24,7 @@ export const bundles = [
     formats: [ESM, UMD],
     global: 'swissHooks',
     name: 'swiss-hooks',
-    input: 'packages/swiss-hooks/src/index.js'
+    input: 'packages/swiss-element/hooks/src/index.js',
   },
   {
     external: ['swiss-hooks'],

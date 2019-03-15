@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "lint": "eslint src",
-    "prepublishOnly": "yarn lint && (cd ../.. && yarn build)"
+    "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
   },
   "peerDependencies": {
     "swiss-element": ">= 0.10.0"

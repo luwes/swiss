@@ -1,6 +1,5 @@
 import path from 'path';
 import * as R from 'ramda';
-import { ESM, UMD, bundles, fixtures } from '../bundles';
 import babel from 'rollup-plugin-babel';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
@@ -9,6 +8,8 @@ import bundleSize from 'rollup-plugin-size';
 import replace from 'rollup-plugin-replace';
 import gzip from 'rollup-plugin-gzip';
 import minimist from 'minimist';
+
+import { ESM, UMD, bundles, fixtures } from '../bundles.js';
 
 const formatOptions = {
   [ESM]: { ext: '.mjs' },
@@ -53,7 +54,7 @@ function shouldSkipBundle(bundleName, bundleType) {
   return false;
 }
 
-function getConfig({ name, global, input, dist, format, external, sourcemap }) {
+function getConfig({ name, global, input, dest, format, external, sourcemap }) {
   return {
     input,
     external,
@@ -63,8 +64,8 @@ function getConfig({ name, global, input, dist, format, external, sourcemap }) {
     output: {
       format,
       sourcemap,
-      file: dist
-        ? `${dist}/${name}${formatOptions[format].ext}`
+      file: dest
+        ? `${dest}/${name}${formatOptions[format].ext}`
         : path.join(
             path.dirname(input),
             '..',
