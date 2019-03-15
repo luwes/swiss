@@ -11,7 +11,6 @@
       "site/content/fixtures/**/*"
     ]
   },
-  "main": "index.js",
   "scripts": {
     "clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && yarn cache clean",
     "lint": "eslint packages/*/src",

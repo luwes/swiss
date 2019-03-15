@@ -6,7 +6,13 @@
   "main": "dist/swiss-element.js",
   "files": [
     "dist",
-    "src"
+    "src",
+    "core/dist",
+    "core/src",
+    "core/package.json",
+    "hooks/dist",
+    "hooks/src",
+    "hooks/package.json"
   ],
   "keywords": [
     "functional",
