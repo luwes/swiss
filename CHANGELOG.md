@@ -2,6 +2,34 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.14.0 - 2019-03-15
+
+### Added
+
+- Added `swiss-hooks` also as `swiss-element/hooks`
+- Added `swiss-core` and added `swiss-element/core`, this standalone package makes it easy to create a custom element without classes but with the composition pattern. It's tiny 700 bytes gzipped.
+
+## 0.13.0 - 2019-03-15
+
+### Changed
+
+- Added the `core` folder and moved the `hooks` folder in `swiss-element`.
+
+## 0.12.0 - 2019-02-18
+
+### Changed
+
+- Improved the middleware enhancer for the new `swiss-logger` middleware.
+
+## 0.11.0 - 2019-02-18
+
+### Changed
+
+- Improved the default renderer:
+
+  - The dom will only be updated if the old html is not the same as the newly generated html.
+  - If it is a string `root.innerHTML` is used, else the root is cleared and the nodes are appended.
+
 ## 0.10.1 - 2019-02-16
 
 ### Changed
