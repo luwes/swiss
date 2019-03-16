@@ -1,7 +1,7 @@
 {
   "name": "swiss-hooks",
   "version": "0.0.1",
-  "description": "Hooks enhancer for Swiss Element.",
+  "description": "Hooks enhancer for Swiss.",
   "module": "dist/swiss-hooks.mjs",
   "main": "dist/swiss-hooks.js",
   "files": [

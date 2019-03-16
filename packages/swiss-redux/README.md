@@ -1,4 +1,4 @@
-### Redux hooks for Swiss Element
+### Redux hooks for Swiss
 
 ```js
 import { html, render } from '../node_modules/htm/preact/standalone.mjs';

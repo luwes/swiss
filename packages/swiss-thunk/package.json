@@ -1,7 +1,7 @@
 {
   "name": "swiss-thunk",
   "version": "0.0.1",
-  "description": "Thunk middleware for Swiss Element.",
+  "description": "Thunk middleware for Swiss.",
   "module": "dist/swiss-thunk.mjs",
   "main": "dist/swiss-thunk.js",
   "files": [

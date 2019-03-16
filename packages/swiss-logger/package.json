@@ -1,7 +1,7 @@
 {
   "name": "swiss-logger",
   "version": "0.0.1",
-  "description": "Logging middleware for Swiss Element.",
+  "description": "Logging middleware for Swiss.",
   "module": "dist/swiss-logger.mjs",
   "main": "dist/swiss-logger.js",
   "files": [
