@@ -54,21 +54,21 @@ export const fixtures = [
     formats: [UMD],
     global: 'swissElementCounter',
     name: 'counter',
-    input: 'fixtures/redux/src/counter.js',
+    input: 'fixtures/state/redux/src/counter.js',
     sourcemap: true
   },
   {
     formats: [UMD],
     global: 'swissElementFullname',
-    name: 'fullname',
-    input: 'fixtures/renderers/lighterhtml/src/fullname.js',
+    name: 'app',
+    input: 'fixtures/renderers/lighterhtml/src/app.js',
     sourcemap: true
   },
   {
     formats: [UMD],
     global: 'swissElementFullname',
-    name: 'fullname',
-    input: 'fixtures/renderers/lit-html/src/fullname.js',
+    name: 'app',
+    input: 'fixtures/renderers/lit-html/src/app.js',
     sourcemap: true
   },
   {
