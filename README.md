@@ -1,7 +1,7 @@
-# <a href="https://github.com/luwes/swiss-element"><img src="https://raw.githubusercontent.com/luwes/swiss-element/master/media/swiss-logo.svg?sanitize=true" height="36" alt="Swiss" /></a>
+# <a href="https://github.com/luwes/swiss"><img src="https://raw.githubusercontent.com/luwes/swiss/master/media/swiss-logo.svg?sanitize=true" height="36" alt="Swiss" /></a>
 
-[![Build Status](https://img.shields.io/travis/luwes/swiss-element/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/swiss-element)
-[![codecov](https://img.shields.io/codecov/c/github/luwes/swiss-element.svg?style=flat-square&version=v0.12.0)](https://codecov.io/gh/luwes/swiss-element)
+[![Build Status](https://img.shields.io/travis/luwes/swiss/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/swiss)
+[![codecov](https://img.shields.io/codecov/c/github/luwes/swiss.svg?style=flat-square&version=v0.12.0)](https://codecov.io/gh/luwes/swiss)
 ![Badge size](http://img.badgesize.io/https://unpkg.com/swiss-element@latest/dist/swiss-element.js?compression=gzip&label=gzip&style=flat-square&version=v0.12.0)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
@@ -15,13 +15,13 @@ Swiss provides a functional way of defining custom elements.
 - React-like [hooks](https://reactjs.org/docs/hooks-intro.html) (useEffect, useState, useCallback, useMemo, useReducer, useRef)
 - Extend the custom element with composition via [enhancers](#enhancers)
 - Observed attributes are also accessible via element properties
-- Choose your own renderer
-  - [Lighterhtml](site/content/fixtures/renderers/lighterhtml)
-  - [Lit-html](site/content/fixtures/renderers/lit-html)
-  - [Htm-preact](site/content/fixtures/renderers/htm-preact) (vdom)
-  - [Superfine](site/content/fixtures/renderers/superfine) (vdom)
-  - [Nanomorph](site/content/fixtures/renderers/nanomorph)
-  - everything that outputs DOM...
+- Choose your own renderer: 
+[`Htm-preact`](https://swiss.netlify.com/fixtures/renderers/htm-preact)
+[`Lighterhtml`](https://swiss.netlify.com/fixtures/renderers/lighterhtml/)
+[`Lit-html`](https://swiss.netlify.com/fixtures/renderers/lit-html)
+[`Nanomorph`](https://swiss.netlify.com/fixtures/renderers/nanomorph)
+[`Stage0`](https://swiss.netlify.com/fixtures/renderers/stage0)
+[`Superfine`](https://swiss.netlify.com/fixtures/renderers/superfine)
 
 ### Example - Counter
 
