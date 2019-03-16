@@ -34,7 +34,7 @@ export function element(name, component, enhancer, options) {
   }
 
   if (!isUndefined(enhancer) && !isFunction(enhancer)) {
-    throw new Error('Expected the enhancer to be a function.');
+    throw new Error('Enhancer should be a function.');
   }
 
   // To shorten syntax if options is an array assume it's `observedAttributes`.

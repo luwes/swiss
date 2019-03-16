@@ -4,7 +4,7 @@ export * from './swiss-element.js';
 export { default as component } from './enhancers/component.js';
 export { default as propsToAttrs } from './enhancers/props-to-attrs.js';
 
-// These enhancers are optional an can be passed in the `element` function.
+// These enhancers are optional and can be passed in the `element` function.
 export { default as renderer } from './enhancers/renderer.js';
 export { default as applyMiddleware } from './enhancers/apply-middleware.js';
 

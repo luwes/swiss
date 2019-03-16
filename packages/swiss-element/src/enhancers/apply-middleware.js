@@ -11,7 +11,7 @@ function applyMiddleware(...middleware) {
   return createElement => options => {
     const element = createElement(options);
     let render = () => {
-      throw new Error();
+      throw new Error('Middleware should not render in setup.');
     };
 
     const middlewareAPI = {

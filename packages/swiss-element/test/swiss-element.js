@@ -65,7 +65,7 @@ it('non function enhancer throws', function() {
   assert.throws(
     () => element('s-3', RenderButton, [], {}),
     Error,
-    'Expected the enhancer to be a function.'
+    'Enhancer should be a function.'
   );
 });
 
