@@ -4,6 +4,7 @@
 const nodeResolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
+const alias = require('rollup-plugin-alias');
 
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
@@ -18,7 +19,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: 'packages/*/test/**/*.js', type: 'module', watched: false }
+      { pattern: config.grep ||
+        'packages/**/test/**/*.js', type: 'module', watched: false },
     ],
 
     // list of files / patterns to exclude
@@ -31,7 +33,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'packages/*/test/**/*.js': ['rollup']
+      'packages/**/test/**/*.js': ['rollup']
     },
 
     rollupPreprocessor: {
@@ -42,14 +44,20 @@ module.exports = function(config) {
       },
       preserveSymlinks: true,
       plugins: [
+        alias({
+          'swiss-element': __dirname + '/packages/swiss-element/src/index.js'
+        }),
         nodeResolve({
           module: true
         }),
         commonjs(),
         istanbul({
-          include: 'packages/*/src/**/*.js'
+          include: config.grep ?
+            config.grep.replace('/test/', '/src/') :
+            'packages/**/src/**/*.js'
         })
-      ]
+      ],
+      onwarn: (msg) => /eval/.test(msg) && void 0
     },
 
     // test results reporter to use
@@ -60,6 +68,20 @@ module.exports = function(config) {
     coverageReporter: {
       reporters: [{ type: 'text' }, { type: 'lcov' }]
     },
+
+    mochaReporter: {
+      showDiff: true
+    },
+
+    browserLogOptions: { terminal: true },
+    browserConsoleLogOptions: { terminal: true },
+
+    browserNoActivityTimeout: 5 * 60 * 1000,
+
+    // Use only two browsers concurrently, works better with open source Sauce Labs remote testing
+    concurrency: 2,
+
+    captureTimeout: 0,
 
     // web server port
     port: 9876,

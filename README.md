@@ -15,13 +15,13 @@ Swiss provides a functional way of defining custom elements.
 - React-like [hooks](https://reactjs.org/docs/hooks-intro.html) (useEffect, useState, useCallback, useMemo, useReducer, useRef)
 - Extend the custom element with composition via [enhancers](#enhancers)
 - Observed attributes are also accessible via element properties
-- Choose your own renderer: 
-[`Htm-preact`](https://swiss.netlify.com/fixtures/renderers/htm-preact)
-[`Lighterhtml`](https://swiss.netlify.com/fixtures/renderers/lighterhtml/)
-[`Lit-html`](https://swiss.netlify.com/fixtures/renderers/lit-html)
-[`Nanomorph`](https://swiss.netlify.com/fixtures/renderers/nanomorph)
-[`Stage0`](https://swiss.netlify.com/fixtures/renderers/stage0)
-[`Superfine`](https://swiss.netlify.com/fixtures/renderers/superfine)
+- Choose your own renderer:
+  [`Htm-preact`](https://swiss.netlify.com/fixtures/renderers/htm-preact/)
+  [`Lighterhtml`](https://swiss.netlify.com/fixtures/renderers/lighterhtml/)
+  [`Lit-html`](https://swiss.netlify.com/fixtures/renderers/lit-html/)
+  [`Nanomorph`](https://swiss.netlify.com/fixtures/renderers/nanomorph/)
+  [`Stage0`](https://swiss.netlify.com/fixtures/renderers/stage0/)
+  [`Superfine`](https://swiss.netlify.com/fixtures/renderers/superfine/)
 
 ### Example - Counter
 
