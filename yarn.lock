@@ -8889,9 +8889,9 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
 
-preact@luwes/preact#no-components:
+"preact@https://github.com/luwes/preact.git#no-components":
   version "10.0.0-alpha.2"
-  resolved "https://codeload.github.com/luwes/preact/tar.gz/9e58104f62c81abd129633a3cbb4efff6113efe1"
+  resolved "https://github.com/luwes/preact.git#9e58104f62c81abd129633a3cbb4efff6113efe1"
   dependencies:
     prop-types "^15.6.2"
 

@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "htm": "^2.1.1",
-    "preact": "luwes/preact#no-components"
+    "preact": "https://github.com/luwes/preact.git#no-components"
   }
 }
