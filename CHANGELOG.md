@@ -2,6 +2,22 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.16.0 - 2019-03-24
+
+### Added
+
+- Added `swiss-element/html` for real.
+
+## 0.15.0 - 2019-03-24
+
+### Added
+
+- Added `swiss-html` also under `swiss-element/html`. Swiss HTML is a slimmed down version of HTM+Preact with some changes to make it better work with custom elements. For example the `props` are added to the custom element so these are accessible in the component function. All the logic of Preact components and context is removed as this functionality can be got with Swiss hooks.
+
+### Changed
+
+- Re-factored swiss hooks completely with an adapted version of Preact's hooks implementation.
+
 ## 0.14.0 - 2019-03-15
 
 ### Added

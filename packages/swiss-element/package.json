@@ -1,6 +1,6 @@
 {
   "name": "swiss-element",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "🇨🇭 Swiss Element library",
   "module": "dist/swiss-element.mjs",
   "main": "dist/swiss-element.js",
@@ -12,7 +12,10 @@
     "core/package.json",
     "hooks/dist",
     "hooks/src",
-    "hooks/package.json"
+    "hooks/package.json",
+    "html/dist",
+    "html/src",
+    "html/package.json"
   ],
   "keywords": [
     "functional",
