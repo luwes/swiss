@@ -134,6 +134,7 @@ Swiss doesn't use ES6 classes, Proxy, Shadow DOM (can be configured), etc becaus
 
 # Credits
 
-- [Augmentor](https://github.com/WebReflection/augmentor) the only dependency that provides the hooks
-- [React](https://reactjs.org/) for the hooks concept
-- [Redux](https://redux.js.org/) for concepts and adapted docs (writings docs is hard (:)
+- [Preact](https://github.com/developit/preact) adopted code for Swiss hooks and html
+- [React](https://github.com/facebook/react) for the hooks concept
+- [Redux](https://github.com/reduxjs/redux) for concepts and adapted docs
+- [Augmentor](https://github.com/WebReflection/augmentor) formerly used for the hooks
