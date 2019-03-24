@@ -28,7 +28,7 @@ Swiss provides a functional way of defining custom elements.
 ```js
 import { html, render } from 'lit-html';
 import { element, renderer } from 'swiss-element';
-import { useState } from 'swiss-hooks';
+import { useState } from 'swiss-element/hooks';
 
 function Counter(element) {
   const [count, setCount] = useState(0);
