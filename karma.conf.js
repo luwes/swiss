@@ -19,8 +19,11 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      { pattern: config.grep ||
-        'packages/**/test/**/*.js', type: 'module', watched: false },
+      {
+        pattern: config.grep || 'packages/**/test/**/*.js',
+        type: 'module',
+        watched: false
+      },
     ],
 
     // list of files / patterns to exclude
@@ -45,6 +48,8 @@ module.exports = function(config) {
       preserveSymlinks: true,
       plugins: [
         alias({
+          'swiss-element/hooks': __dirname + '/packages/swiss-element/hooks/src/index.js',
+          'swiss-element/html': __dirname + '/packages/swiss-element/html/src/index.js',
           'swiss-element': __dirname + '/packages/swiss-element/src/index.js'
         }),
         nodeResolve({
@@ -78,9 +83,6 @@ module.exports = function(config) {
 
     browserNoActivityTimeout: 5 * 60 * 1000,
 
-    // Use only two browsers concurrently, works better with open source Sauce Labs remote testing
-    concurrency: 2,
-
     captureTimeout: 0,
 
     // web server port
@@ -103,10 +105,6 @@ module.exports = function(config) {
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false,
-
-    // Concurrency level
-    // how many browser should be started simultaneous
-    concurrency: Infinity,
 
     customLaunchers: {
       ChromeCustom: {
