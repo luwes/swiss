@@ -12,9 +12,10 @@ describe('useState', () => {
   afterEach(() => tearDown(scratch));
 
   it('can be set by another component', async () => {
-
     const Increment = element(el => {
-      return html`<button onclick=${el.props.increment} />`;
+      return html`
+        <button onclick=${el.props.increment} />
+      `;
     });
 
     const StateContainer = element(() => {
