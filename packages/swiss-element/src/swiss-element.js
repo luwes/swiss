@@ -1,7 +1,13 @@
 import { element as core } from '../core/src/core.js';
 import component from './enhancers/component.js';
 import propsToAttrs from './enhancers/props-to-attrs.js';
-import { compose, isArray, isFunction, isUndefined } from './utils.js';
+import {
+  compose,
+  isArray,
+  isFunction,
+  isUndefined,
+  uniqueId
+} from './utils.js';
 
 /**
  * Quick and dirty way to add default enhancers and options.
@@ -28,6 +34,13 @@ export const defaults = {
  * @return {HTMLElement}
  */
 export function element(name, component, enhancer, options) {
+  if (isFunction(name)) {
+    options = enhancer;
+    enhancer = component;
+    component = name;
+    name = uniqueId('s-');
+  }
+
   if (!isFunction(enhancer) && isUndefined(options)) {
     options = enhancer;
     enhancer = undefined;

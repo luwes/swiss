@@ -29,3 +29,9 @@ export function append(parent, nodes) {
       )
     );
 }
+
+self._id = 0;
+export function uniqueId(prefix) {
+  const id = ++self._id;
+  return `${prefix}${id}`;
+}

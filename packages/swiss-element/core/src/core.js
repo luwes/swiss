@@ -1,5 +1,5 @@
 import { createFactory } from './create-element.js';
-import { CustomEvent, extend, getNativeConstructor } from './utils.js';
+import { extend, getNativeConstructor } from './utils.js';
 
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
@@ -33,6 +33,7 @@ export function element(name, enhancer, options) {
   const oa = options.observedAttributes || [];
   options.observedAttributes = oa;
   SwissElement.observedAttributes = oa;
+  SwissElement.toString = () => name;
 
   customElements.define(name, SwissElement, options);
 
@@ -42,14 +43,15 @@ export function element(name, enhancer, options) {
 function forwardCallbacks(proto, callbacks) {
   callbacks.forEach(name => {
     const cb = name + 'Callback';
+    let dispatching;
     proto[cb] = function(...args) {
+      if (dispatching) return;
+
       // eslint-disable-next-line fp/no-this
       const el = this;
-      if (!el[cb]._) {
-        el[cb](...args);
-        el.dispatchEvent(new CustomEvent(name.toLowerCase()));
-      }
+      dispatching = true;
+      el[cb](...args);
+      dispatching = false;
     };
-    proto[cb]._ = 1;
   });
 }

@@ -6,15 +6,6 @@ export function isFunction(value) {
   return typeof value === 'function';
 }
 
-export const CustomEvent =
-  (isFunction(self.CustomEvent) && self.CustomEvent) || CustomEventPonyfill;
-
-export function CustomEventPonyfill(name, params = {}) {
-  const newEvent = document.createEvent('CustomEvent');
-  newEvent.initCustomEvent(name, params.bubbles, params.cancelable, params);
-  return newEvent;
-}
-
 export function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
 }

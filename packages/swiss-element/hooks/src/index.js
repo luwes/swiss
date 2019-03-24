@@ -3,15 +3,6 @@ import hooks from './swiss-hooks.js';
 
 defaults.enhancers = [].concat(hooks, defaults.enhancers);
 
-export {
-  useCallback,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-  createContext,
-  useContext
-} from 'augmentor';
-
-export { useEffect, useLayoutEffect } from './use-effect.js';
-export { useElement } from './use-element.js';
+export { createContext } from './create-context.js';
+export * from './core-hooks.js';
+export * from './swiss-hooks.js';

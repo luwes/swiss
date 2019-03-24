@@ -90,7 +90,10 @@ function getConfig({ name, global, input, dest, format, external, sourcemap }) {
         terser({
           warnings: true,
           mangle: {
-            module: true
+            module: true,
+            properties: {
+              regex: /^_/
+            }
           }
         }),
       sourcemap && gzip()
