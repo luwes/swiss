@@ -1,8 +1,13 @@
 import { spy } from 'sinon';
-import { setUpScratch, tearDown, render, oneDefer } from '../../test/_utils.js';
-import { html, render as htm } from 'htm/preact/standalone';
-import { element, renderer } from '../../src/index.js';
-import { useState } from '../src/index.js';
+import {
+  setUpScratch,
+  tearDown,
+  render,
+  oneDefer,
+} from '../../test/_utils.js';
+import { element } from 'swiss-element';
+import { html } from 'swiss-element/html';
+import { useState } from 'swiss-element/hooks';
 
 describe('useState', () => {
   /** @type {HTMLDivElement} */
@@ -17,6 +22,7 @@ describe('useState', () => {
     const El = element(() => {
       const [state] = useState({ a: 1 });
       stateHistory.push(state);
+      return null;
     });
 
     render(El, scratch);
@@ -33,6 +39,7 @@ describe('useState', () => {
 
     const El = element(() => {
       useState(initState);
+      return null;
     });
 
     render(El, scratch);
@@ -49,6 +56,7 @@ describe('useState', () => {
       const [state, setState] = useState(0);
       lastState = state;
       doSetState = setState;
+      return null;
     });
 
     const El = element(Comp);
@@ -70,32 +78,29 @@ describe('useState', () => {
   });
 
   it('can be set by another component', async () => {
-    const htmElement = (...args) => element(...args, renderer(htm));
-
-    const Increment = props => {
+    const Increment = element(el => {
       return html`
-        <button onclick=${props.increment} />
+        <button onclick=${el.props.increment} />
       `;
-    };
+    });
 
-    const StateContainer = htmElement(() => {
+    const StateContainer = element(() => {
       const [count, setCount] = useState(0);
-      const result = html`
+      return html`
         <div>
           <p>Count: ${count}</p>
           <${Increment} increment=${() => setCount(c => c + 10)} />
         </div>
       `;
-      return result;
     });
 
     render(StateContainer, scratch);
-    expect(scratch.textContent).to.include('Count: 0');
+    expect(scratch.textContent.trim()).to.include('Count: 0');
 
     const button = scratch.querySelector('button');
     button.click();
 
     await oneDefer();
-    expect(scratch.textContent).to.include('Count: 10');
+    expect(scratch.textContent.trim()).to.include('Count: 10');
   });
 });

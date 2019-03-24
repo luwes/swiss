@@ -1,9 +1,9 @@
 {
-  "name": "swiss-hooks",
+  "name": "swiss-html",
   "version": "0.0.1",
-  "description": "Hooks enhancer for Swiss.",
-  "module": "dist/swiss-hooks.mjs",
-  "main": "dist/swiss-hooks.js",
+  "description": "Swiss HTML",
+  "module": "dist/swiss-html.mjs",
+  "main": "dist/swiss-html.js",
   "files": [
     "dist",
     "src"
@@ -14,5 +14,9 @@
   },
   "peerDependencies": {
     "swiss-element": ">= 0.14.0"
+  },
+  "dependencies": {
+    "htm": "^2.1.1",
+    "preact": "luwes/preact#no-components"
   }
 }

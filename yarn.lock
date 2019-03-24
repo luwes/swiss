@@ -8667,6 +8667,12 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
 
+preact@luwes/preact#no-components:
+  version "10.0.0-alpha.2"
+  resolved "https://codeload.github.com/luwes/preact/tar.gz/9e58104f62c81abd129633a3cbb4efff6113efe1"
+  dependencies:
+    prop-types "^15.6.2"
+
 prebuild-install@^5.2.1:
   version "5.2.4"
   resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-5.2.4.tgz#8cc41a217ef778a31d3a876fe6668d05406db750"
@@ -8744,6 +8750,15 @@ progress@2.0.3, progress@^2.0.1:
 progress@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.0.tgz#8a1be366bf8fc23db2bd23f10c6fe920b4389d1f"
+
+prop-types@^15.6.2:
+  version "15.7.2"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
+  integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
+  dependencies:
+    loose-envify "^1.4.0"
+    object-assign "^4.1.1"
+    react-is "^16.8.1"
 
 proto-list@~1.2.1:
   version "1.2.4"
@@ -8916,6 +8931,11 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.2.7:
     ini "~1.3.0"
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
+
+react-is@^16.8.1:
+  version "16.8.4"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
+  integrity sha512-PVadd+WaUDOAciICm/J1waJaSvgq+4rHE/K70j0PFqKhkTBsPv/82UGQJNXAngz1fOQLLxI6z1sEDmJDQhCTAA==
 
 read-all-stream@^3.0.0:
   version "3.1.0"
@@ -9495,7 +9515,16 @@ rollup-pluginutils@^2.3.0:
     estree-walker "^0.5.2"
     micromatch "^2.3.11"
 
-rollup@^1.3.0, rollup@^1.6.0:
+rollup@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.0.2.tgz#df88abda5cfe96afaa07dbd540510f87e60d1baf"
+  integrity sha512-FkkSrWUVo1WliS+/GIgEmKQPILubgVdBRTWampfdhkasxx7sM2nfwSfKiX3paIBVnN0HG3DvkTy13RfjkyBX9w==
+  dependencies:
+    "@types/estree" "0.0.39"
+    "@types/node" "*"
+    acorn "^6.0.4"
+
+rollup@^1.3.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.6.0.tgz#4329f4634718197c678d18491724d50d8b7ee76c"
   integrity sha512-qu9iWyuiOxAuBM8cAwLuqPclYdarIpayrkfQB7aTGTiyYPbvx+qVF33sIznfq4bxZCiytQux/FvZieUBAXivCw==
