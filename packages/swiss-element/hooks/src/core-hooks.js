@@ -6,12 +6,12 @@ let currentIndex;
 let afterPaintEffects = [];
 
 export function run(cleaner, callback) {
-  function update() {
+  function update(a, b, c) {
     currentUpdate = update;
     currentIndex = 0;
 
     runBeforeLifeCycles();
-    callback();
+    callback(a, b, c);
     runAfterLifeCycles();
 
     cleaner.__hooks = currentUpdate.__hooks;

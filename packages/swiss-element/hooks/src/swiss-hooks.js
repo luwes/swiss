@@ -7,8 +7,8 @@ function hooks(createElement) {
     const el = createElement(options);
 
     const oldUpdate = el.update;
-    el.update = run(el, function() {
-      if (oldUpdate) oldUpdate.call(el);
+    el.update = run(el, function(a, b, c) {
+      if (oldUpdate) oldUpdate.call(el, a, b, c);
       currentElement = el;
     });
 

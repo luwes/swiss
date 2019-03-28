@@ -2,7 +2,6 @@ import { spy } from 'sinon';
 import {
   setUpScratch,
   tearDown,
-  render,
   oneAnimationFrame
 } from '../../test/_utils.js';
 import { element } from '../../src/swiss-element.js';
@@ -19,7 +18,8 @@ describe('useEffect', () => {
     const cleanupFunction = spy();
     const callback = spy(() => cleanupFunction);
 
-    const el = render(element('swiss-el', () => useEffect(callback)), scratch);
+    const el = element(() => useEffect(callback))();
+    scratch.append(el);
 
     await oneAnimationFrame();
     expect(callback).to.have.been.calledOnce;
@@ -36,13 +36,14 @@ describe('useEffect', () => {
       useEffect(callback);
     });
 
-    render(El, scratch);
-    render(El, scratch);
+    const el = El();
+    el.update();
+    el.update();
 
     expect(cleanupFunction).to.be.not.called;
     expect(callback).to.be.calledOnce;
 
-    render(El, scratch);
+    el.update();
 
     expect(cleanupFunction).to.be.calledOnce;
     expect(callback).to.be.calledTwice;

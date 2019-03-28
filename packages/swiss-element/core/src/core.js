@@ -1,5 +1,4 @@
-import { createFactory } from './create-element.js';
-import { extend, getNativeConstructor } from './utils.js';
+import { extend, getNativeConstructor, isUndefined } from './utils.js';
 
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
@@ -16,9 +15,15 @@ import { extend, getNativeConstructor } from './utils.js';
  */
 export function element(name, enhancer, options) {
   const Native = getNativeConstructor(options.extends);
-  const SwissElement = extend(Native, function(supr) {
+  const SwissElement = extend(Native, function(supr, props) {
+    function createElement(opt, enh) {
+      if (!isUndefined(enh)) {
+        return enhancer(createElement)(opt);
+      }
+      return Object.assign(supr(), props);
+    }
     const opts = Object.assign({}, options);
-    return createFactory(supr)(opts, enhancer);
+    return createElement(opts, enhancer);
   });
 
   // Callbacks have to be on the prototype before construction.

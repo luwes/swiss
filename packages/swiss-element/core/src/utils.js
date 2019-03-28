@@ -11,12 +11,12 @@ export function getNativeConstructor(ext) {
 }
 
 export function extend(Base, init) {
-  function Class() {
+  function Class(a, b, c) {
     // eslint-disable-next-line fp/no-this
     const el = this;
 
     if (!(el instanceof Class)) {
-      return new Class();
+      return new Class(a, b, c);
     }
 
     const supr = () => {
@@ -25,7 +25,7 @@ export function extend(Base, init) {
         : Reflect.construct(Base, [], el.constructor);
     };
 
-    return init.call(el, supr);
+    return init.call(el, supr, a, b, c);
   }
 
   Class.prototype = Object.create(Base.prototype);

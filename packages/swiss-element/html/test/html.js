@@ -1,5 +1,5 @@
 // import { spy } from 'sinon';
-import { setUpScratch, tearDown, render, oneDefer } from '../../test/_utils.js';
+import { setUpScratch, tearDown, oneDefer } from '../../test/_utils.js';
 import { element } from 'swiss-element';
 import { useState } from 'swiss-element/hooks';
 import { html } from 'swiss-element/html';
@@ -14,7 +14,7 @@ describe('useState', () => {
   it('can be set by another component', async () => {
     const Increment = element(el => {
       return html`
-        <button onclick=${el.props.increment} />
+        <button onclick=${el.increment} />
       `;
     });
 
@@ -28,7 +28,7 @@ describe('useState', () => {
       `;
     });
 
-    render(StateContainer, scratch);
+    scratch.append(StateContainer());
 
     await oneDefer();
 

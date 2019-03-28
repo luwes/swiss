@@ -12,7 +12,9 @@ function componentEnhancer(component) {
       el.attachShadow({ mode: options.shadow });
     }
 
-    function update() {
+    function update(props) {
+      if (props) Object.assign(el, props);
+
       // If `renderer` is defined, the generated html is passed to `render`.
       // This is for elements that don't mutate the element in the component.
       el.render(el.renderer && comp.call(el, el));

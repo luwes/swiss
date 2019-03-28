@@ -1,5 +1,5 @@
 import { spy } from 'sinon';
-import { setUpScratch, tearDown, render, oneDefer } from '../../test/_utils.js';
+import { setUpScratch, tearDown, oneDefer } from '../../test/_utils.js';
 import { element } from 'swiss-element';
 import { html } from 'swiss-element/html';
 import { useState } from 'swiss-element/hooks';
@@ -20,25 +20,25 @@ describe('useState', () => {
       return null;
     });
 
-    render(El, scratch);
-    render(El, scratch);
+    const el = El();
+    el.update();
+    el.update();
 
     expect(stateHistory).to.deep.equal([{ a: 1 }, { a: 1 }]);
     expect(stateHistory[0]).to.equal(stateHistory[1]);
   });
 
   it('can initialize the state via a function', () => {
-    const initState = spy(() => {
-      1;
-    });
+    const initState = spy(() => 1);
 
     const El = element(() => {
       useState(initState);
       return null;
     });
 
-    render(El, scratch);
-    render(El, scratch);
+    const el = El();
+    el.update();
+    el.update();
 
     expect(initState).to.be.calledOnce;
   });
@@ -56,7 +56,9 @@ describe('useState', () => {
 
     const El = element(Comp);
 
-    render(El, scratch);
+    const el = El();
+    el.update();
+
     expect(lastState).to.equal(0);
     expect(Comp).to.be.calledOnce;
 
@@ -75,7 +77,7 @@ describe('useState', () => {
   it('can be set by another component', async () => {
     const Increment = element(el => {
       return html`
-        <button onclick=${el.props.increment} />
+        <button onclick=${el.increment} />
       `;
     });
 
@@ -89,7 +91,8 @@ describe('useState', () => {
       `;
     });
 
-    render(StateContainer, scratch);
+    scratch.append(StateContainer());
+
     expect(scratch.textContent.trim()).to.include('Count: 0');
 
     const button = scratch.querySelector('button');

@@ -30,8 +30,8 @@ export function append(parent, nodes) {
     );
 }
 
-self._id = 0;
+let idx = 0;
 export function uniqueId(prefix) {
-  const id = ++self._id;
-  return `${prefix}${id}`;
+  const id = `${prefix}${++idx}`;
+  return customElements.get(id) ? uniqueId(prefix) : id;
 }

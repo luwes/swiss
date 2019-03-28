@@ -26,15 +26,6 @@ export function tag(tagName) {
   return `<${tagName}></${tagName}>`;
 }
 
-export function render(SwissElement, parent) {
-  if (SwissElement._instance) {
-    SwissElement._instance.update();
-    return SwissElement._instance;
-  }
-  SwissElement._instance = SwissElement();
-  return parent.appendChild(SwissElement._instance);
-}
-
 export function oneAnimationFrame() {
   return new Promise(resolve => requestAnimationFrame(resolve));
 }

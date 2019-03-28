@@ -13,4 +13,4 @@ function renderer() {
 defaults.enhancers = [].concat(renderer(), defaults.enhancers);
 
 export const html = htm.bind(h);
-export { h, render };
+export * from 'preact';

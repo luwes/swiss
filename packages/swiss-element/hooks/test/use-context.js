@@ -1,4 +1,4 @@
-import { setUpScratch, tearDown, tag, render } from '../../test/_utils.js';
+import { setUpScratch, tearDown, tag } from '../../test/_utils.js';
 
 import { element } from '../../src/swiss-element.js';
 import { useContext, createContext } from '../src/index.js';
@@ -14,21 +14,19 @@ describe('useContext', () => {
     const values = [];
     const Context = createContext(13);
 
-    function Comp() {
+    const Consumer = element(() => {
       const value = useContext(Context);
       values.push(value);
       return null;
-    }
+    });
 
-    render(element('s-consumer', Comp), scratch);
-    render(
-      element('s-provider', () => Context.provide(42) && tag('s-consumer')),
-      scratch
-    );
-    render(
-      element('s-provider2', () => Context.provide(69) && tag('s-consumer')),
-      scratch
-    );
+    scratch.append(Consumer());
+
+    const Provider = element(() => Context.provide(42) && tag(Consumer));
+    scratch.append(Provider());
+
+    const Provider2 = element(() => Context.provide(69) && tag(Consumer));
+    scratch.append(Provider2());
 
     expect(values).to.deep.equal([13, 42, 69]);
   });
