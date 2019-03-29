@@ -1,7 +1,7 @@
-import { defaults } from 'swiss-element';
+import { options } from 'swiss';
 import hooks from './swiss-hooks.js';
 
-defaults.enhancers = [].concat(hooks, defaults.enhancers);
+options.enhancers = [].concat(hooks, options.enhancers);
 
 export { createContext } from './create-context.js';
 export * from './core-hooks.js';

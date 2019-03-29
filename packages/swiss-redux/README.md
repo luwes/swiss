@@ -3,7 +3,7 @@
 ```js
 import { html, render } from '../node_modules/htm/preact/standalone.mjs';
 import { context, useSelector, useAction } from 'swiss-redux';
-import { compose, element, renderer } from 'swiss-element';
+import { compose, element, renderer } from 'swiss';
 import { createStore } from 'redux';
 
 function counter(state = 0, action) {

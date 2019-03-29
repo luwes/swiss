@@ -1,8 +1,8 @@
 import { spy } from 'sinon';
 import { setUpScratch, tearDown, oneDefer } from '../../test/_utils.js';
-import { element } from 'swiss-element';
-import { html } from 'swiss-element/html';
-import { useState } from 'swiss-element/hooks';
+import { element } from 'swiss';
+import { html } from 'swiss/html';
+import { useState } from 'swiss/hooks';
 
 describe('useState', () => {
   /** @type {HTMLDivElement} */

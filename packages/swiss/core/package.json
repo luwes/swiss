@@ -1,6 +1,7 @@
 {
   "name": "swiss-core",
-  "version": "0.0.1",
+  "private": true,
+  "version": "1.0.0",
   "description": "Swiss Core to create Custom Elements w/ enhancers.",
   "module": "dist/swiss-core.mjs",
   "main": "dist/swiss-core.js",

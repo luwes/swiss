@@ -1,6 +1,6 @@
 {
   "name": "swiss-logger",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Logging middleware for Swiss.",
   "module": "dist/swiss-logger.mjs",
   "main": "dist/swiss-logger.js",
@@ -13,7 +13,7 @@
     "prepublishOnly": "yarn lint && (cd ../.. && yarn build)"
   },
   "peerDependencies": {
-    "swiss-element": ">= 0.6.0"
+    "swiss": "^1.0.0"
   },
   "dependencies": {
     "diff-match-patch": "^1.0.4",

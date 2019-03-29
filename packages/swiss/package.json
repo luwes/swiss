@@ -1,9 +1,9 @@
 {
-  "name": "swiss-element",
-  "version": "0.16.0",
+  "name": "swiss",
+  "version": "1.0.0",
   "description": "🇨🇭 Swiss Element library",
-  "module": "dist/swiss-element.mjs",
-  "main": "dist/swiss-element.js",
+  "module": "dist/swiss.mjs",
+  "main": "dist/swiss.js",
   "files": [
     "dist",
     "src",
@@ -26,11 +26,11 @@
     "lint": "eslint src",
     "prepublishOnly": "rm README.md && cp ../../README.md . && yarn lint && (cd ../.. && yarn test --single-run && yarn build)"
   },
-  "repository": "luwes/swiss-element",
+  "repository": "luwes/swiss",
   "author": "Wesley Luyten <me@wesleyluyten.com> (https://wesleyluyten.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/luwes/swiss-element/issues"
+    "url": "https://github.com/luwes/swiss/issues"
   },
-  "homepage": "https://github.com/luwes/swiss-element#readme"
+  "homepage": "https://github.com/luwes/swiss#readme"
 }

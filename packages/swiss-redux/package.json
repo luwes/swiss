@@ -1,6 +1,6 @@
 {
   "name": "swiss-redux",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Provides Redux hooks for Swiss.",
   "module": "dist/swiss-redux.mjs",
   "main": "dist/swiss-redux.js",
@@ -13,6 +13,6 @@
     "prepublishOnly": "yarn lint && (cd ../.. && yarn build)"
   },
   "peerDependencies": {
-    "swiss-hooks": ">= 0.0.1"
+    "swiss": "^1.0.0"
   }
 }

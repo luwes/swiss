@@ -2,11 +2,11 @@
 
 [![Build Status](https://img.shields.io/travis/luwes/swiss/master.svg?style=flat-square&label=Travis+CI)](https://travis-ci.org/luwes/swiss)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/swiss.svg?style=flat-square&version=v0.16.0)](https://codecov.io/gh/luwes/swiss)
-![Badge size](http://img.badgesize.io/https://unpkg.com/swiss-element@0.16.0/dist/swiss-element.js?compression=gzip&label=gzip&style=flat-square&version=v0.16.0)
+![Badge size](http://img.badgesize.io/https://unpkg.com/swiss@latest/dist/swiss.js?compression=gzip&label=gzip&style=flat-square&version=v0.16.0)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-**npm**: `npm install swiss-element --save`  
-**cdn**: https://unpkg.com/swiss-element@latest/dist/swiss-element.js
+**npm**: `npm install swiss --save`  
+**cdn**: https://unpkg.com/swiss@latest/dist/swiss.js
 
 ### Intro
 
@@ -27,8 +27,8 @@ Swiss provides a functional way of defining custom elements.
 
 ```js
 import { html, render } from 'lit-html';
-import { element, renderer } from 'swiss-element';
-import { useState } from 'swiss-element/hooks';
+import { element, renderer } from 'swiss';
+import { useState } from 'swiss/hooks';
 
 function Counter(element) {
   const [count, setCount] = useState(0);

@@ -20,7 +20,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       {
-        pattern: config.grep || 'packages/swiss-*/**/test/*.js',
+        pattern: config.grep || 'packages/swiss*/**/test/*.js',
         type: 'module',
         watched: false
       },
@@ -36,21 +36,21 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'packages/swiss-*/**/test/*.js': ['rollup']
+      'packages/swiss*/**/test/*.js': ['rollup']
     },
 
     rollupPreprocessor: {
       output: {
         format: 'iife', // Helps prevent naming collisions.
-        name: 'swissElementTest', // Required for 'iife' format.
+        name: 'swissTest', // Required for 'iife' format.
         sourcemap: 'inline' // Sensible for testing.
       },
       preserveSymlinks: true,
       plugins: [
         alias({
-          'swiss-element/hooks': __dirname + '/packages/swiss-element/hooks/src/index.js',
-          'swiss-element/html': __dirname + '/packages/swiss-element/html/src/index.js',
-          'swiss-element': __dirname + '/packages/swiss-element/src/index.js'
+          'swiss/hooks': __dirname + '/packages/swiss/hooks/src/index.js',
+          'swiss/html': __dirname + '/packages/swiss/html/src/index.js',
+          'swiss': __dirname + '/packages/swiss/src/index.js'
         }),
         nodeResolve({
           module: true

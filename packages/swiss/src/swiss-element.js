@@ -14,7 +14,7 @@ import {
  * @type {Object}
  * @ignore
  */
-export const defaults = {
+export const options = {
   enhancers: [propsToAttrs(), component()]
 };
 
@@ -33,16 +33,16 @@ export const defaults = {
  *
  * @return {HTMLElement}
  */
-export function element(name, component, enhancer, options) {
+export function element(name, component, enhancer, opts) {
   if (isFunction(name)) {
-    options = enhancer;
+    opts = enhancer;
     enhancer = component;
     component = name;
     name = uniqueId('s-');
   }
 
-  if (!isFunction(enhancer) && isUndefined(options)) {
-    options = enhancer;
+  if (!isFunction(enhancer) && isUndefined(opts)) {
+    opts = enhancer;
     enhancer = undefined;
   }
 
@@ -50,18 +50,18 @@ export function element(name, component, enhancer, options) {
     throw new Error('Enhancer should be a function.');
   }
 
-  // To shorten syntax if options is an array assume it's `observedAttributes`.
-  if (isArray(options)) {
-    options = { observedAttributes: options };
+  // To shorten syntax if opts is an array assume it's `observedAttributes`.
+  if (isArray(opts)) {
+    opts = { observedAttributes: opts };
   }
 
-  options = Object.assign({ component }, defaults.options, options);
+  opts = Object.assign({ component }, options, opts);
   enhancer = compose(
     enhancer,
-    ...defaults.enhancers
+    ...options.enhancers
   );
 
-  return core(name, enhancer, options);
+  return core(name, enhancer, opts);
 }
 
 export { component, propsToAttrs };

@@ -1,4 +1,4 @@
-import { useEffect, useState, useElement, useRef } from 'swiss-hooks';
+import { useEffect, useState, useElement, useRef } from 'swiss/hooks';
 
 import shallowEqual from './shallow-equal.js';
 

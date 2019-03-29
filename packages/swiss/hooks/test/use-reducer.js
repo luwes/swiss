@@ -1,7 +1,7 @@
 import { setUpScratch, tearDown, oneDefer } from '../../test/_utils.js';
-import { element } from 'swiss-element';
-import { html } from 'swiss-element/html';
-import { useReducer } from 'swiss-element/hooks';
+import { element } from 'swiss';
+import { html } from 'swiss/html';
+import { useReducer } from 'swiss/hooks';
 
 describe('useState', () => {
   /** @type {HTMLDivElement} */

@@ -6,9 +6,9 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "packages/swiss-element/core",
-      "packages/swiss-element/hooks",
-      "packages/swiss-element/html",
+      "packages/swiss/core",
+      "packages/swiss/hooks",
+      "packages/swiss/html",
       "site/content/fixtures/**/*"
     ]
   },
@@ -17,8 +17,8 @@
     "lint": "eslint 'packages/{*,*/*}/src/**/*.js'",
     "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**'",
     "test": "karma start",
-    "test:hooks": "karma start --grep=packages/swiss-element/hooks/test/**.js",
-    "test:html": "karma start --grep=packages/swiss-element/html/test/**.js",
+    "test:hooks": "karma start --grep=packages/swiss/hooks/test/**.js",
+    "test:html": "karma start --grep=packages/swiss/html/test/**.js",
     "coverage": "codecov",
     "build": "rollup -c scripts/rollup/config.js --silent",
     "watch": "cross-env NODE_ENV=dev rollup -wc scripts/rollup/config.js --silent",
@@ -27,7 +27,7 @@
     "docs": "node scripts/docs.js && npm run format:docs",
     "format:docs": "prettier --write '**/*.md'"
   },
-  "repository": "luwes/swiss-element",
+  "repository": "luwes/swiss",
   "keywords": [
     "functional",
     "custom",
@@ -36,9 +36,9 @@
   "author": "Wesley Luyten <me@wesleyluyten.com> (https://wesleyluyten.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/luwes/swiss-element/issues"
+    "url": "https://github.com/luwes/swiss/issues"
   },
-  "homepage": "https://github.com/luwes/swiss-element#readme",
+  "homepage": "https://github.com/luwes/swiss#readme",
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",

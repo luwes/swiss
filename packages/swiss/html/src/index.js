@@ -1,16 +1,16 @@
 import htm from 'htm';
-import { defaults } from 'swiss-element';
+import { options } from 'swiss';
 import { h, render } from 'preact';
 
-function renderer() {
-  return createElement => options => {
+function renderer(createElement) {
+  return options => {
     const element = createElement(options);
     element.renderer = (root, html) => render(html, root);
     return element;
   };
 }
 
-defaults.enhancers = [].concat(renderer(), defaults.enhancers);
+options.enhancers = [].concat(renderer, options.enhancers);
 
 export const html = htm.bind(h);
 export * from 'preact';

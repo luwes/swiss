@@ -1,6 +1,6 @@
 import { setUpScratch, tearDown } from '../../test/_utils.js';
-import { element } from 'swiss-element';
-import { useRef } from 'swiss-element/hooks';
+import { element } from 'swiss';
+import { useRef } from 'swiss/hooks';
 
 describe('useRef', () => {
   /** @type {HTMLDivElement} */

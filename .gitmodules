@@ -4,4 +4,4 @@
 	branch = template-minimal-ui
 [submodule "site"]
 	path = site
-	url = https://github.com/luwes/swiss-element-site.git
+	url = https://github.com/luwes/swiss-site.git

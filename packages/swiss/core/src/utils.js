@@ -1,11 +1,3 @@
-export function isUndefined(value) {
-  return typeof value === 'undefined';
-}
-
-export function isFunction(value) {
-  return typeof value === 'function';
-}
-
 export function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
 }

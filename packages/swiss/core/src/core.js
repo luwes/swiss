@@ -1,4 +1,4 @@
-import { extend, getNativeConstructor, isUndefined } from './utils.js';
+import { extend, getNativeConstructor } from './utils.js';
 
 /**
  * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
@@ -17,7 +17,7 @@ export function element(name, enhancer, options) {
   const Native = getNativeConstructor(options.extends);
   const SwissElement = extend(Native, function(supr, props) {
     function createElement(opt, enh) {
-      if (!isUndefined(enh)) {
+      if (typeof enh !== 'undefined') {
         return enhancer(createElement)(opt);
       }
       return Object.assign(supr(), props);

@@ -1,6 +1,6 @@
 import { setUpScratch, tearDown } from '../../test/_utils.js';
-import { element } from 'swiss-element';
-import { useCallback } from 'swiss-element/hooks';
+import { element } from 'swiss';
+import { useCallback } from 'swiss/hooks';
 
 describe('useCallback', () => {
   /** @type {HTMLDivElement} */
