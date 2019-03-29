@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.0 - 2019-03-29
+
+### Changed
+
+- Renamed `swiss-element` to `swiss`!
+- Renamed the `defaults` export to a more generic `options` which can be used to set default options or enhancers app wide before a `element` function call.
+
 ## 0.16.0 - 2019-03-24
 
 ### Added
