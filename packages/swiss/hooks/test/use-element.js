@@ -1,5 +1,5 @@
-import { element } from '../../src/swiss-element.js';
-import { useElement } from '../src/index.js';
+import { element } from 'swiss';
+import { useElement } from 'swiss/hooks';
 
 it('useElement should be the current element', function() {
   document.body.appendChild(

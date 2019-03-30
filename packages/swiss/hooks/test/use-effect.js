@@ -4,8 +4,9 @@ import {
   tearDown,
   oneAnimationFrame
 } from '../../test/_utils.js';
-import { element } from '../../src/swiss-element.js';
-import { useEffect } from '../src/index.js';
+
+import { element } from 'swiss';
+import { useEffect } from 'swiss/hooks';
 
 describe('useEffect', () => {
   /** @type {HTMLDivElement} */

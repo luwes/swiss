@@ -1,5 +1,6 @@
 import { spy } from 'sinon';
 import { setUpScratch, tearDown, oneDefer } from '../../test/_utils.js';
+
 import { element } from 'swiss';
 import { html } from 'swiss/html';
 import { useState } from 'swiss/hooks';

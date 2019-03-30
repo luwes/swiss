@@ -1,7 +1,7 @@
 import { setUpScratch, tearDown, tag } from '../../test/_utils.js';
 
-import { element } from '../../src/swiss-element.js';
-import { useContext, createContext } from '../src/index.js';
+import { element } from 'swiss';
+import { useContext, createContext } from 'swiss/hooks';
 
 describe('useContext', () => {
   /** @type {HTMLDivElement} */
