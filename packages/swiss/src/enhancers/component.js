@@ -12,6 +12,20 @@ function componentEnhancer(component) {
       el.attachShadow({ mode: options.shadow });
     }
 
+    function connectedCallback() {
+      el.update();
+    }
+
+    function attributeChangedCallback(name, oldValue, newValue) {
+      if (el.shouldUpdate(name, oldValue, newValue)) {
+        el.update();
+      }
+    }
+
+    function shouldUpdate(name, oldValue, newValue) {
+      return oldValue !== newValue;
+    }
+
     function update(props) {
       if (props) Object.assign(el, props);
 
@@ -34,20 +48,6 @@ function componentEnhancer(component) {
 
     function renderRoot() {
       return el.shadowRoot || el._shadowRoot || el;
-    }
-
-    function connectedCallback() {
-      el.update();
-    }
-
-    function attributeChangedCallback(name, oldValue, newValue) {
-      if (el.shouldUpdate(name, oldValue, newValue)) {
-        el.update();
-      }
-    }
-
-    function shouldUpdate(name, oldValue, newValue) {
-      return oldValue !== newValue;
     }
 
     return Object.assign(el, {

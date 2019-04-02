@@ -4,18 +4,20 @@ function propsToAttrs() {
   return createElement => options => {
     const el = createElement(options);
     const proto = Object.getPrototypeOf(el);
+    const props = {};
 
     options.observedAttributes.forEach(name => {
-      // it is possible to redefine the behavior at any time
-      // simply overwriting get prop() and set prop(value)
-      if (!(name in proto)) {
+      const propName = camelCase(name);
+      if (!(propName in proto)) {
         // eslint-disable-next-line fp/no-mutating-methods
-        Object.defineProperty(proto, camelCase(name), {
+        Object.defineProperty(proto, propName, {
           configurable: true,
           get() {
-            return el.getAttribute(name);
+            return props[propName];
           },
           set(value) {
+            props[propName] = value;
+
             if (value == null) el.removeAttribute(name);
             else el.setAttribute(name, value);
           }

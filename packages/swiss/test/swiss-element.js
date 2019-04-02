@@ -1,15 +1,15 @@
 import { element, renderer } from '../src/index.js';
 
-it('element returns a function', function() {
+it('element returns a function', () => {
   element('s-10', () => `Say cheese`).should.be.a('function');
 });
 
-it('element creator returns a function', function() {
+it('element creator returns a function', () => {
   const SwissElement = element('s-11', () => `Say cheese`);
   SwissElement.should.be.a('function');
 });
 
-it('custom element lifecycle callbacks work', function() {
+it('custom element lifecycle callbacks work', () => {
   const customLifecycle = createElement => options => {
     const el = createElement(options);
     el.connectedCallback = sinon.spy();
@@ -31,7 +31,7 @@ it('custom element lifecycle callbacks work', function() {
   expect(cheese.attributeChangedCallback).to.have.been.calledOnce;
 });
 
-it('element can be enhanced', function() {
+it('element can be enhanced', () => {
   const customRender = sinon.spy((root, html) => (root.innerHTML = html));
 
   element('swiss-element', () => `Say cheese`, renderer(customRender));
@@ -43,7 +43,7 @@ it('element can be enhanced', function() {
   expect(customRender).to.have.been.called;
 });
 
-it('element can extend a native', function() {
+it('element can extend a native', () => {
   function RenderButton() {
     return `I am button`;
   }
@@ -57,7 +57,7 @@ it('element can extend a native', function() {
   expect(button instanceof HTMLElement).to.be.true;
 });
 
-it('non function enhancer throws', function() {
+it('non function enhancer throws', () => {
   function RenderButton() {
     return `I am button`;
   }
@@ -69,7 +69,7 @@ it('non function enhancer throws', function() {
   );
 });
 
-it('update triggers a render', function() {
+it('update triggers a render', () => {
   let count = 0;
   const el = element('s-14', () => count++)();
   document.body.appendChild(el);

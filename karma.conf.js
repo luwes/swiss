@@ -28,6 +28,7 @@ module.exports = function(config) {
 
     // list of files / patterns to exclude
     exclude: [
+      'packages/swiss/html/node_modules/preact/**',
       'packages/pwa-starter-kit/**',
       'packages/swiss-redux/**',
       'packages/swiss-thunk/**',

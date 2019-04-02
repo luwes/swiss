@@ -1,6 +1,6 @@
 import { element, renderer } from '../src/index.js';
 
-it('renderer enhancer supports multiple signature types', function() {
+it('renderer enhancer supports multiple signature types', () => {
   const renderWays = [
     sinon.spy((root, html) => (root.innerHTML = html)),
     sinon.spy((html, root) => (root.innerHTML = html)),

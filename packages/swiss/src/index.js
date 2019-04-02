@@ -1,4 +1,4 @@
-export * from './swiss-element.js';
+export * from './swiss.js';
 
 // These enhancers are added by default but can be mixed and matched with the core.
 export { default as component } from './enhancers/component.js';

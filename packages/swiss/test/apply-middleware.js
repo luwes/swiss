@@ -1,8 +1,8 @@
 import { element, applyMiddleware } from '../src/index.js';
 
-it('middleware should be triggered when rendering', function() {
-  const middleware = sinon.spy(() => next => fragment => {
-    next(fragment);
+it('middleware should be triggered when rendering', () => {
+  const middleware = sinon.spy(() => next => html => {
+    next(html);
   });
 
   element('mw-element', () => `Say cheese`, applyMiddleware(middleware));
@@ -10,7 +10,6 @@ it('middleware should be triggered when rendering', function() {
   const swissElement = document.createElement('mw-element');
   document.body.appendChild(swissElement);
 
-  expect(swissElement.innerHTML).to.equal('Say cheese');
   expect(middleware).to.have.been.called;
 });
 

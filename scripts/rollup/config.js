@@ -90,9 +90,16 @@ function getConfig({ name, global, input, dest, format, external, sourcemap }) {
         terser({
           warnings: true,
           mangle: {
-            module: true,
             properties: {
               regex: /^_/
+            }
+          },
+          nameCache: {
+            props: {
+              cname: 6,
+              props: {
+                "$_dirty": "__d",
+              }
             }
           }
         }),
