@@ -12,6 +12,7 @@ function propsToAttrs() {
         // eslint-disable-next-line fp/no-mutating-methods
         Object.defineProperty(proto, propName, {
           configurable: true,
+          enumerable: true,
           get() {
             return properties[propName];
           },
