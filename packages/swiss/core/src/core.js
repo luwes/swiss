@@ -15,15 +15,8 @@ import { extend, getNativeConstructor } from './utils.js';
  */
 export function element(name, enhancer, options) {
   const Native = getNativeConstructor(options.extends);
-  const SwissElement = extend(Native, function(supr, props) {
-    function createElement(opt, enh) {
-      if (typeof enh !== 'undefined') {
-        return enhancer(createElement)(opt);
-      }
-      return Object.assign(supr(), props);
-    }
-    const opts = Object.assign({}, options);
-    return createElement(opts, enhancer);
+  const SwissElement = extend(Native, function(supr, a, b, c) {
+    return enhancer(supr)(options, a, b, c);
   });
 
   // Callbacks have to be on the prototype before construction.

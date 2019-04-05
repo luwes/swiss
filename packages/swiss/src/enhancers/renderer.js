@@ -1,4 +1,5 @@
 import defaultRenderer from '../default-renderer.js';
+import { extend } from '../utils.js';
 
 /**
  * Adds a simple way to define your own renderer.
@@ -13,10 +14,10 @@ import defaultRenderer from '../default-renderer.js';
  *
  * @return {Function}
  */
-function renderer(customRenderer = defaultRenderer) {
-  return createElement => options => {
-    const element = createElement(options);
-    let renderer;
+function rendererEnhancer(customRenderer = defaultRenderer) {
+  return createElement => (...args) => {
+    const element = createElement(...args);
+    let render;
     let renderWays = [
       // default
       (root, html, old) => customRenderer(root, html, old),
@@ -39,28 +40,29 @@ function renderer(customRenderer = defaultRenderer) {
      * @param  {Number} i
      * @return {*}
      */
-    function findRenderWay(root, html, old) {
-      if (renderer) return renderer(root, html, old);
+    function renderer(root, html, old) {
+      if (render) return render(root, html, old);
 
-      renderer = renderWays[0];
+      render = renderWays[0];
       renderWays = renderWays.slice(1);
 
       let result;
       try {
-        result = renderer(root, html, old);
+        result = render(root, html, old);
       } catch (err) {
         if (renderWays.length > 0) {
-          renderer = null;
-          return findRenderWay(root, html, old);
+          render = null;
+          return renderer(root, html, old);
         }
       }
 
       return result || '';
     }
 
-    element.renderer = findRenderWay;
-    return element;
+    return extend(element, {
+      renderer
+    });
   };
 }
 
-export default renderer;
+export default rendererEnhancer;

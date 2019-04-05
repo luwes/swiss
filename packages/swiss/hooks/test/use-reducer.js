@@ -4,7 +4,7 @@ import { element } from 'swiss';
 import { html } from 'swiss/html';
 import { useReducer } from 'swiss/hooks';
 
-describe('useState', () => {
+describe('useReducer', () => {
   /** @type {HTMLDivElement} */
   let scratch;
 

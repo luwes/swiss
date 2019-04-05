@@ -1,4 +1,4 @@
-import { compose } from '../utils.js';
+import { compose, extend } from '../utils.js';
 
 /**
  * Middleware lets you wrap the element's render method for fun and profit. The key feature of middleware is that it is composable. Multiple middleware can be combined together, where each middleware requires no knowledge of what comes before or after it in the chain.
@@ -8,8 +8,8 @@ import { compose } from '../utils.js';
  * @return {Function}
  */
 function applyMiddleware(...middleware) {
-  return createElement => options => {
-    const element = createElement(options);
+  return createElement => (...args) => {
+    const element = createElement(...args);
     let render = () => {
       throw new Error('Middleware should not render in setup.');
     };
@@ -23,8 +23,9 @@ function applyMiddleware(...middleware) {
     const chain = middleware.map(mw => mw(middlewareAPI));
     render = compose(...chain)(element.render);
 
-    element.render = render;
-    return element;
+    return extend(element, {
+      render
+    });
   };
 }
 

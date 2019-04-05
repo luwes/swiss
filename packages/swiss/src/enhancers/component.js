@@ -1,11 +1,11 @@
 import defaultRenderer from '../default-renderer.js';
-import { isUndefined } from '../utils.js';
+import { isUndefined, extend } from '../utils.js';
 
 function componentEnhancer(component) {
-  return createElement => options => {
+  return createElement => (options, a, b, c) => {
     const comp = component || options.component;
 
-    const el = createElement(options);
+    const el = createElement(options, a, b, c);
     let oldHtml;
 
     if (options.shadow) {
@@ -27,7 +27,7 @@ function componentEnhancer(component) {
     }
 
     function update(props) {
-      if (props) Object.assign(el, props);
+      if (props) extend(el, props);
 
       // If `renderer` is defined, the generated html is passed to `render`.
       // This is for elements that don't mutate the element in the component.
@@ -50,7 +50,7 @@ function componentEnhancer(component) {
       return el.shadowRoot || el._shadowRoot || el;
     }
 
-    return Object.assign(el, {
+    return extend(el, {
       connectedCallback,
       attributeChangedCallback,
       shouldUpdate,

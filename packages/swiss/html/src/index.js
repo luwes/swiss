@@ -3,8 +3,8 @@ import { options } from 'swiss';
 import { h, render } from 'preact';
 
 function renderer(createElement) {
-  return options => {
-    const element = createElement(options);
+  return (...args) => {
+    const element = createElement(...args);
     element.renderer = (root, html) => render(html, root);
     return element;
   };

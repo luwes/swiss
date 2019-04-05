@@ -3,6 +3,7 @@ import component from './enhancers/component.js';
 import propsToAttrs from './enhancers/props-to-attrs.js';
 import {
   compose,
+  extend,
   isArray,
   isFunction,
   isUndefined,
@@ -55,7 +56,7 @@ export function element(name, component, enhancer, opts) {
     opts = { observedAttributes: opts };
   }
 
-  opts = Object.assign({ component }, options, opts);
+  opts = extend({ component }, options, opts);
   enhancer = compose(
     enhancer,
     ...options.enhancers

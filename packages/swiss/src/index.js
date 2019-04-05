@@ -8,4 +8,4 @@ export { default as propsToAttrs } from './enhancers/props-to-attrs.js';
 export { default as renderer } from './enhancers/renderer.js';
 export { default as applyMiddleware } from './enhancers/apply-middleware.js';
 
-export { compose } from './utils.js';
+export { compose, extend } from './utils.js';

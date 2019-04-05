@@ -1,10 +1,10 @@
-import { camelCase } from '../utils.js';
+import { camelCase, extend } from '../utils.js';
 
 function propsToAttrs() {
-  return createElement => options => {
-    const el = createElement(options);
+  return createElement => (options, props, b, c) => {
+    const el = createElement(options, props, b, c);
     const proto = Object.getPrototypeOf(el);
-    const props = {};
+    const properties = {};
 
     options.observedAttributes.forEach(name => {
       const propName = camelCase(name);
@@ -13,19 +13,30 @@ function propsToAttrs() {
         Object.defineProperty(proto, propName, {
           configurable: true,
           get() {
-            return props[propName];
+            return properties[propName];
           },
           set(value) {
-            props[propName] = value;
+            properties[propName] = value;
 
-            if (value == null) el.removeAttribute(name);
-            else el.setAttribute(name, value);
+            if (value == null) {
+              el.removeAttribute(name);
+            } else {
+              // Convert arrays and objects.
+              if (typeof value === 'object') {
+                try {
+                  value = JSON.stringify(value);
+                } catch (O_o) {
+                  // At least we tried.
+                }
+              }
+              el.setAttribute(name, value);
+            }
           }
         });
       }
     });
 
-    return el;
+    return extend(el, props);
   };
 }
 

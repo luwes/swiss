@@ -1,24 +1,26 @@
+import { extend } from 'swiss';
 import { run, clean } from './core-hooks.js';
 
 let currentElement;
 
 function hooks(createElement) {
-  return options => {
-    const el = createElement(options);
+  return (...args) => {
+    const el = createElement(...args);
 
-    const oldUpdate = el.update;
-    el.update = run(el, function(a, b, c) {
-      if (oldUpdate) oldUpdate.call(el, a, b, c);
+    const update = run(el, function(a, b, c) {
+      update.supr(a, b, c);
       currentElement = el;
     });
 
-    const oldDisconnected = el.disconnectedCallback;
-    el.disconnectedCallback = function() {
-      if (oldDisconnected) oldDisconnected.call(el);
+    function disconnectedCallback() {
+      disconnectedCallback.supr(el);
       clean(el);
-    };
+    }
 
-    return el;
+    return extend(el, {
+      update,
+      disconnectedCallback
+    });
   };
 }
 
