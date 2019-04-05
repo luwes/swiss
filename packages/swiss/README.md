@@ -23,6 +23,13 @@ Swiss provides a functional way of defining custom elements.
   [`Stage0`](https://swiss.netlify.com/fixtures/renderers/stage0/)
   [`Superfine`](https://swiss.netlify.com/fixtures/renderers/superfine/)
 
+### Add-ons
+
+| Size | Name | Description |
+| --- | --- | --- |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/swiss@latest/hooks/dist/swiss-hooks.js?compression=gzip&label=gzip&style=flat-square) | [`swiss/hooks`](./packages/swiss/hooks) | React-like hooks to handle state and lifecycle functions. |
+| ![Badge size](http://img.badgesize.io/https://unpkg.com/swiss@latest/html/dist/swiss-html.js?compression=gzip&label=gzip&style=flat-square) | [`swiss/html`](./packages/swiss/html) | A HTM/Preact based render engine stripped of all component functionality for maximum bundle size savings. |
+
 ### Example - Counter
 
 ```js
