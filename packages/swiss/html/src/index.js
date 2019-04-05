@@ -1,12 +1,20 @@
 import htm from 'htm';
-import { options } from 'swiss';
-import { h, render } from 'preact';
+import { extend, options } from 'swiss';
+import { h, render, options as o } from 'preact';
 
 function renderer(createElement) {
   return (...args) => {
     const element = createElement(...args);
-    element.renderer = (root, html) => render(html, root);
-    return element;
+    const renderer = (root, html) => render(html, root);
+
+    o.diffed = (newVNode) =>
+      typeof newVNode.type === 'function' &&
+        // `connectedCallback` already updates once.
+        element.isConnected && element.update();
+
+    return extend(element, {
+      renderer
+    });
   };
 }
 

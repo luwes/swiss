@@ -1,10 +1,10 @@
-// import { spy } from 'sinon';
+import { spy } from 'sinon';
 import { setUpScratch, tearDown, oneDefer } from '../../test/_utils.js';
 import { element } from 'swiss';
 import { useState } from 'swiss/hooks';
-import { html } from 'swiss/html';
+import { html, render } from 'swiss/html';
 
-describe('useState', () => {
+describe('html', () => {
   /** @type {HTMLDivElement} */
   let scratch;
 
@@ -28,16 +28,36 @@ describe('useState', () => {
       `;
     });
 
-    scratch.append(StateContainer());
-
+    render(html`<${StateContainer} />`, scratch);
     await oneDefer();
-
     expect(scratch.textContent).to.include('Count: 0');
 
     const button = scratch.querySelector('button');
     button.click();
-
     await oneDefer();
     expect(scratch.textContent).to.include('Count: 10');
+  });
+
+  it('updates on a render', async () => {
+    const Comp = spy(({ text }) => {
+      return html`<b>${text}</b>`;
+    });
+
+    const El = element(Comp);
+
+    render(html`<${El} text=99 />`, scratch);
+    expect(scratch.textContent).to.include('99');
+
+    expect(Comp).to.have.been.calledOnce;
+
+    render(html`<${El} text=99 />`, scratch);
+    render(html`<${El} text=99 />`, scratch);
+
+    expect(Comp).to.have.been.calledThrice;
+  });
+
+  it('incepts elements', async () => {
+    render(html`<${element(({ text }) => html`${text}`)} text=99 />`, scratch);
+    expect(scratch.textContent).to.include('99');
   });
 });

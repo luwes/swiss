@@ -8923,7 +8923,7 @@ posix-character-classes@^0.1.0:
 
 "preact@https://github.com/luwes/preact.git#no-components":
   version "10.0.0-alpha.2"
-  resolved "https://github.com/luwes/preact.git#846ae507d337c7115a027259704d70453ff98a3c"
+  resolved "https://github.com/luwes/preact.git#2c04bb42f41567725b1280957b3d93df71641da9"
   dependencies:
     prop-types "^15.6.2"
 
