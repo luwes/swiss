@@ -1,6 +1,6 @@
 {
   "name": "swiss",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "🇨🇭 Swiss Element library",
   "module": "dist/swiss.mjs",
   "main": "dist/swiss.js",
