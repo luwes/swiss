@@ -2,6 +2,20 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.1 - 2019-04-05
+
+### Changed
+
+- `swiss/html`: Update automatically on html render
+- Make props enumerable
+
+## 1.1.0 - 2019-04-04
+
+### Changed
+
+- Preserve type for set element properties
+- Stringify array and object attrs
+
 ## 1.0.0 - 2019-03-29
 
 ### Changed
