@@ -11,18 +11,18 @@ it('should say Hello world', () => {
 it('props are camel cased', () => {
   const el = element(() => null, ['observe-me'])({ observeMe: 3 });
 
-  el.should.have.property('observeMe');
-  el.observeMe.should.equal(3);
+  assert(el.observeMe);
+  assert.strictEqual(el.observeMe, 3);
 });
 
-it('props keep their type', async () => {
+it('props keep their type', () => {
   const el = element(() => null, ['observe-me'])({ observeMe: [1, 2, 3] });
 
-  el.should.have.property('observeMe');
-  el.observeMe.should.be.an('array');
+  assert(el.observeMe);
+  assert(Array.isArray(el.observeMe));
 });
 
-it('prop types are converted to attribute strings', async () => {
+it('prop types are converted to attribute strings', () => {
   const el = element(() => null, ['num', 'str', 'arr', 'obj'])({
     num: 4,
     str: 'stringy',
@@ -30,8 +30,31 @@ it('prop types are converted to attribute strings', async () => {
     obj: { key1: 1, key2: [9, 8, 7] }
   });
 
-  el.getAttribute('num').should.equal('4');
-  el.getAttribute('str').should.equal('stringy');
-  el.getAttribute('arr').should.equal('[1,2,3]');
-  el.getAttribute('obj').should.equal('{"key1":1,"key2":[9,8,7]}');
+  assert.equal(el.getAttribute('num'), '4');
+  assert.equal(el.getAttribute('str'), 'stringy');
+  assert.equal(el.getAttribute('arr'), '[1,2,3]');
+  assert.equal(el.getAttribute('obj'), '{"key1":1,"key2":[9,8,7]}');
+});
+
+it('attributes values are available as prop', () => {
+  element('my-element', () => null, ['hello', 'swiss']);
+
+  document.body.innerHTML = '<my-element hello="world"></my-element>';
+  const el = document.querySelector('my-element');
+
+  assert.strictEqual(el.hello, 'world');
+
+  el.setAttribute('swiss', 99);
+  assert.strictEqual(el.swiss, '99');
+});
+
+it('handles null properties', () => {
+  const el = element(() => null, ['observe-me'])({ hello: 'world' });
+
+  assert(el.hello);
+
+  el.hello = null;
+  assert.strictEqual(el.hello, null);
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute#Notes
+  assert.strictEqual(el.getAttribute('hello'), null);
 });

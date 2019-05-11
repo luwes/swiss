@@ -14,7 +14,7 @@ function propsToAttrs() {
           configurable: true,
           enumerable: true,
           get() {
-            return properties[propName];
+            return properties[propName] || el.getAttribute(name);
           },
           set(value) {
             properties[propName] = value;
