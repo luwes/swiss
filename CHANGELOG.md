@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.2 - 2019-05-11
+
+### Changed
+
+- Fix attribute to props issue [#15](https://github.com/luwes/swiss/issues/15)
+
 ## 1.1.1 - 2019-04-05
 
 ### Changed
