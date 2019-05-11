@@ -53,9 +53,7 @@ module.exports = function(config) {
           'swiss/html': __dirname + '/packages/swiss/html/src/index.js',
           'swiss': __dirname + '/packages/swiss/src/index.js'
         }),
-        nodeResolve({
-          module: true
-        }),
+        nodeResolve(),
         commonjs(),
         istanbul({
           include: config.grep ?
