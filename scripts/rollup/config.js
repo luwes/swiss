@@ -54,7 +54,8 @@ function shouldSkipBundle(bundleName, bundleType) {
   return false;
 }
 
-function getConfig({ name, global, input, dest, format, external, sourcemap }) {
+function getConfig(options) {
+  const { name, global, input, dest, format, external, sourcemap } = options;
   return {
     input,
     external,
@@ -85,7 +86,9 @@ function getConfig({ name, global, input, dest, format, external, sourcemap }) {
       }),
       nodeResolve(),
       commonjs(),
-      format === UMD && babel(),
+      format === UMD && babel({
+        plugins: options.babelPlugins || []
+      }),
       format === UMD &&
         terser({
           warnings: true,

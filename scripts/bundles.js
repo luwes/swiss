@@ -83,7 +83,8 @@ export const fixtures = [
     global: 'swissCounter',
     name: 'counter',
     input: 'fixtures/renderers/htm-preact/src/counter.js',
-    sourcemap: true
+    sourcemap: true,
+    babelPlugins: ['htm']
   },
   {
     formats: [UMD],
@@ -119,5 +120,13 @@ export const fixtures = [
     name: 'counter',
     input: 'fixtures/renderers/stage0/src/counter.js',
     sourcemap: true
+  },
+  {
+    formats: [UMD],
+    global: 'swissCounter',
+    name: 'counter',
+    input: 'fixtures/renderers/sinuous/src/counter.js',
+    sourcemap: true,
+    babelPlugins: ['htm']
   }
 ];

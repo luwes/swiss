@@ -2295,6 +2295,13 @@ babel-messages@^6.23.0:
   dependencies:
     babel-runtime "^6.22.0"
 
+babel-plugin-htm@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-htm/-/babel-plugin-htm-2.1.0.tgz#3aa9adb190bfc7933407ab74c09fdd259f5a3df6"
+  integrity sha512-72PmVL8B0MlJ8yp5kDK198+VAvM/51MUakDJAsJb/FFdh2Q+W/eVgWWCifaPVZeZ94DWDpAj2deSJGO5ailKIg==
+  dependencies:
+    htm "^2.0.0"
+
 babel-plugin-minify-builtins@^0.4.0-alpha.caaefb4c:
   version "0.4.3"
   resolved "https://registry.yarnpkg.com/babel-plugin-minify-builtins/-/babel-plugin-minify-builtins-0.4.3.tgz#9ea3d59f4ac4a7bb958d712d29556a1f86f7f81e"
@@ -5937,7 +5944,7 @@ hpack.js@^2.1.6:
     readable-stream "^2.0.1"
     wbuf "^1.1.0"
 
-htm@^2.1.1:
+htm@^2.0.0, htm@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/htm/-/htm-2.1.1.tgz#5a53e5f2845c3181b1672f95c9bffaf3d621bb0e"
   integrity sha512-jgvB9nvlOE5xpI1W+juW8DPCe+Pn7mRDNaE4EOQNFqROm0O3l5deOvefK8C8hUaL1OHIX45mDEBSj7BMt+22VQ==
@@ -9059,7 +9066,7 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
 
-"preact@https://github.com/luwes/preact.git#no-components":
+preact@10.0.0-alpha.2, "preact@https://github.com/luwes/preact.git#no-components":
   version "10.0.0-alpha.2"
   resolved "https://github.com/luwes/preact.git#2c04bb42f41567725b1280957b3d93df71641da9"
   dependencies:
@@ -10223,6 +10230,11 @@ sinon@^7.3.2:
     lolex "^4.0.1"
     nise "^1.4.10"
     supports-color "^5.5.0"
+
+sinuous@0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/sinuous/-/sinuous-0.6.1.tgz#73bf9651bff4fda359c6e680402d88f0dbe83873"
+  integrity sha512-VcR989j2IW6JyHY6t2Po/sTwVLok96fy8Ob0A31Zz6d/6J1SNZOF2N3ih9+fG8c8Ij2r1FyCNn3wTkGxB2MKLA==
 
 slash@^1.0.0:
   version "1.0.0"
