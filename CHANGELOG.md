@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.1.3 - 2019-06-25
+
+### Fixed
+
+- Fixed context hook issue [#15](https://github.com/luwes/swiss/issues/16)
+
 ## 1.1.2 - 2019-05-11
 
 ### Changed

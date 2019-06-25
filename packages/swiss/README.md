@@ -20,6 +20,7 @@ Swiss provides a functional way of defining custom elements.
   [`Lighterhtml`](https://swiss.netlify.com/fixtures/renderers/lighterhtml/)
   [`Lit-html`](https://swiss.netlify.com/fixtures/renderers/lit-html/)
   [`Nanomorph`](https://swiss.netlify.com/fixtures/renderers/nanomorph/)
+  [`Sinuous`](https://swiss.netlify.com/fixtures/renderers/sinuous/)
   [`Stage0`](https://swiss.netlify.com/fixtures/renderers/stage0/)
   [`Superfine`](https://swiss.netlify.com/fixtures/renderers/superfine/)
 
