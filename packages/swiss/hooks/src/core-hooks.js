@@ -19,26 +19,25 @@ export function run(cleaner, callback) {
   return update;
 }
 
-export function clean(cleaner) {
-  cleaner.__hooks &&
-    cleaner.__hooks._list.forEach(hook => hook._cleanup && hook._cleanup());
-}
-
 function runBeforeLifeCycles() {
   const hooks = currentUpdate.__hooks;
-  if (!hooks) return;
-
-  // Is possible if a 2nd render is called before the flush after paint.
-  hooks._pendingEffects.forEach(invokeEffect);
-  hooks._pendingEffects = [];
+  if (hooks) {
+    // Is possible if a 2nd render is called before the flush after paint.
+    hooks._pendingEffects = handleEffects(hooks._pendingEffects);
+  }
 }
 
 function runAfterLifeCycles() {
   const hooks = currentUpdate.__hooks;
-  if (!hooks) return;
+  if (hooks) {
+    hooks._pendingLayoutEffects = handleEffects(hooks._pendingLayoutEffects);
+  }
+}
 
-  hooks._pendingLayoutEffects.forEach(invokeEffect);
-  hooks._pendingLayoutEffects = [];
+export function clean(cleaner) {
+  if (cleaner.__hooks) {
+    cleaner.__hooks._list.forEach(invokeCleanup);
+  }
 }
 
 /**
@@ -152,16 +151,16 @@ export function useCallback(callback, args) {
 }
 
 export function useContext(context) {
-  const provider = context._provider;
-  if (provider == null) return context._defaultValue;
+  const subscribe = context.provide._subscribe;
+  if (!subscribe) return context.value;
 
   const state = getHookState(currentIndex++);
   if (state._value == null) {
     state._value = true;
-    provider._subscribe(currentUpdate);
+    subscribe(currentUpdate);
   }
 
-  return provider.value;
+  return context.value;
 }
 
 /**
@@ -188,10 +187,19 @@ function scheduleFlushAfterPaint() {
 function flushAfterPaintEffects() {
   afterPaintEffects.forEach(update => {
     update._afterPaintQueued = false;
-    update.__hooks._pendingEffects.forEach(invokeEffect);
-    update.__hooks._pendingEffects = [];
+    update.__hooks._pendingEffects = handleEffects(update.__hooks._pendingEffects);
   });
   afterPaintEffects = [];
+}
+
+function handleEffects(effects) {
+  effects.forEach(invokeCleanup);
+  effects.forEach(invokeEffect);
+  return [];
+}
+
+function invokeCleanup(hook) {
+  if (hook._cleanup) hook._cleanup();
 }
 
 /**
@@ -199,7 +207,6 @@ function flushAfterPaintEffects() {
  * @param {Object} hook
  */
 function invokeEffect(hook) {
-  if (hook._cleanup) hook._cleanup();
   const result = hook._value();
   if (typeof result === 'function') hook._cleanup = result;
 }

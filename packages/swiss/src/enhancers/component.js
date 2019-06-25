@@ -42,6 +42,7 @@ function componentEnhancer(component) {
       }
 
       const renderer = el.renderer || defaultRenderer;
+      // Leave render debouncing up to the render library.
       renderer(el.renderRoot(), html, oldHtml);
       oldHtml = html;
     }

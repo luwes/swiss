@@ -1,4 +1,5 @@
-import { setUpScratch, tearDown, tag } from '../../test/_utils.js';
+import { spy } from 'sinon';
+import { setUpScratch, tearDown } from '../../test/_utils.js';
 
 import { element } from 'swiss';
 import { useContext, createContext } from 'swiss/hooks';
@@ -11,23 +12,29 @@ describe('useContext', () => {
   afterEach(() => tearDown(scratch));
 
   it('gets values from context', () => {
-    const values = [];
+    let value;
     const Context = createContext(13);
+    assert(Context.value === 13, 'default value is 13');
 
-    const Consumer = element(() => {
-      const value = useContext(Context);
-      values.push(value);
+    const Comp = spy(() => {
+      value = useContext(Context);
       return null;
     });
 
+    // There must be a "Provider" before `useContext` will work.
+    Context.provide(13);
+    assert(Comp.notCalled);
+
+    const Consumer = element(Comp);
     scratch.append(Consumer());
 
-    const Provider = element(() => Context.provide(42) && tag(Consumer));
-    scratch.append(Provider());
+    assert(value === 13, 'value is 13');
+    assert(Comp.calledOnce);
 
-    const Provider2 = element(() => Context.provide(69) && tag(Consumer));
-    scratch.append(Provider2());
+    Context.provide(42);
+    Context.provide(42);
 
-    expect(values).to.deep.equal([13, 42, 69]);
+    assert(value === 42, 'value is 42');
+    assert(Comp.calledTwice);
   });
 });
