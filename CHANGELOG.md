@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.2.0 - 2019-10-04
+
+### Removed (BREAKING CHANGES)
+
+- Deprecate `swiss/html`. Not worth maintaining a separate Preact version if there are many other possibilities for rendering.
+
 ## 1.1.3 - 2019-06-25
 
 ### Fixed
