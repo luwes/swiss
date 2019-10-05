@@ -28,7 +28,6 @@ module.exports = function(config) {
 
     // list of files / patterns to exclude
     exclude: [
-      'packages/swiss/html/node_modules/preact/**',
       'packages/pwa-starter-kit/**',
       'packages/swiss-redux/**',
       'packages/swiss-thunk/**',
@@ -50,7 +49,6 @@ module.exports = function(config) {
       plugins: [
         alias({
           'swiss/hooks': __dirname + '/packages/swiss/hooks/src/index.js',
-          'swiss/html': __dirname + '/packages/swiss/html/src/index.js',
           'swiss': __dirname + '/packages/swiss/src/index.js'
         }),
         nodeResolve(),

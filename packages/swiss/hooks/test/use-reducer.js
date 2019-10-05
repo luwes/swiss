@@ -1,7 +1,8 @@
 import { setUpScratch, tearDown, oneDefer } from '../../test/_utils.js';
 
-import { element } from 'swiss';
-import { html } from 'swiss/html';
+import { element, options, renderer } from 'swiss';
+import { html, render } from 'lit-html';
+options.enhancers = [].concat(renderer(render), options.enhancers);
 import { useReducer } from 'swiss/hooks';
 
 describe('useReducer', () => {
@@ -51,12 +52,12 @@ describe('useReducer', () => {
       const [state, dispatch] = useReducer(reducer, initState);
       return html`<div>
         <p>Count: ${state.count}</p>
-        <${DispatcherEl} dispatch=${dispatch} />
+        <dispatcher-el .dispatch=${dispatch}></dispatcher-el>
       </div>`;
     });
 
-    const DispatcherEl = element(({ dispatch }) =>
-      html`<button onclick=${() => dispatch({ type: 'increment', by: 10 })}>Increment</button>`);
+    element('dispatcher-el', ({ dispatch }) =>
+      html`<button @click=${() => dispatch({ type: 'increment', by: 10 })}>Increment</button>`);
 
     scratch.append(ReducerEl());
 

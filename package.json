@@ -8,7 +8,6 @@
       "packages/*",
       "packages/swiss/core",
       "packages/swiss/hooks",
-      "packages/swiss/html",
       "site/content/fixtures/**/*"
     ]
   },
@@ -18,7 +17,6 @@
     "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**'",
     "test": "karma start",
     "test:hooks": "karma start --grep=packages/swiss/hooks/test/**.js",
-    "test:html": "karma start --grep=packages/swiss/html/test/**.js",
     "coverage": "codecov",
     "build": "rollup -c scripts/rollup/config.js --silent",
     "watch": "cross-env NODE_ENV=dev rollup -wc scripts/rollup/config.js --silent",
@@ -67,6 +65,7 @@
     "karma-rollup-preprocessor": "^7.0.0",
     "karma-sinon": "^1.0.5",
     "karma-sinon-chai": "^2.0.2",
+    "lit-html": "^1.1.2",
     "minimist": "^1.2.0",
     "mocha": "^6.1.4",
     "npm-run-all": "^4.1.5",

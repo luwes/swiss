@@ -1,8 +1,9 @@
 import { spy } from 'sinon';
 import { setUpScratch, tearDown, oneDefer } from '../../test/_utils.js';
 
-import { element } from 'swiss';
-import { html } from 'swiss/html';
+import { element, options, renderer } from 'swiss';
+import { html, render } from 'lit-html';
+options.enhancers = [].concat(renderer(render), options.enhancers);
 import { useState } from 'swiss/hooks';
 
 describe('useState', () => {
@@ -76,9 +77,9 @@ describe('useState', () => {
   });
 
   it('can be set by another component', async () => {
-    const Increment = element(el => {
+    element('increment-el', el => {
       return html`
-        <button onclick=${el.increment} />
+        <button @click=${el.increment} />
       `;
     });
 
@@ -87,7 +88,7 @@ describe('useState', () => {
       return html`
         <div>
           <p>Count: ${count}</p>
-          <${Increment} increment=${() => setCount(c => c + 10)} />
+          <increment-el .increment=${() => setCount(c => c + 10)}></increment-el>
         </div>
       `;
     });

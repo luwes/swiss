@@ -29,13 +29,6 @@ export const bundles = [
   {
     external: ['swiss'],
     formats: [ESM, UMD],
-    global: 'swissHtml',
-    name: 'swiss-html',
-    input: 'packages/swiss/html/src/index.js'
-  },
-  {
-    external: ['swiss'],
-    formats: [ESM, UMD],
     global: 'swissRedux',
     name: 'swiss-redux',
     input: 'packages/swiss-redux/src/swiss-redux.js'
@@ -62,7 +55,8 @@ export const fixtures = [
     global: 'swissCounter',
     name: 'counter',
     input: 'fixtures/state/redux/src/counter.js',
-    sourcemap: true
+    sourcemap: true,
+    babelPlugins: ['htm']
   },
   {
     formats: [UMD],

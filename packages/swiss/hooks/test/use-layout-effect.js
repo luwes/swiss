@@ -4,9 +4,10 @@ import {
   tearDown
 } from '../../test/_utils.js';
 
-import { element } from 'swiss';
+import { element, options, renderer } from 'swiss';
+import { html, render } from 'lit-html';
+options.enhancers = [].concat(renderer(render), options.enhancers);
 import { useLayoutEffect } from 'swiss/hooks';
-import { html } from 'swiss/html';
 
 describe('useLayoutEffect', () => {
   /** @type {HTMLDivElement} */
@@ -43,12 +44,12 @@ describe('useLayoutEffect', () => {
     const Parent = element(() => {
       return html`
         <div>
-          <${Child} />
+          <child-el></child-el>
         </div>
       `;
     });
 
-    const Child = element(() => {
+    element('child-el', () => {
       useLayoutEffect(callback);
       return null;
     });
