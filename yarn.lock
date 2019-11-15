@@ -5689,11 +5689,6 @@ supports-color@^6.1.0:
   dependencies:
     has-flag "^3.0.0"
 
-swiss@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/swiss/-/swiss-1.2.0.tgz#08792876ffc2ec8cef6fd11a99514f220612e272"
-  integrity sha512-vSJS6Dl6C1zNTxZZQA7BD5IosFB5b8/Q/NAYu4lsilK/LKdRxkm5AYCqb4wH8VbVsNcazdy0ixsc50jm0SkpoA==
-
 symbol-observable@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"

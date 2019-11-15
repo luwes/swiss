@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.2.1 - 2019-11-15
+
+### Fixed
+
+- Fixed attribute bug [#24](https://github.com/luwes/swiss/issues/24)
+
 ## 1.2.0 - 2019-10-04
 
 ### Removed (BREAKING CHANGES)

@@ -5,11 +5,12 @@
   "description": "Functional custom element library",
   "workspaces": {
     "packages": [
+      "packages/swiss",
+      "packages/swiss/core",
+      "packages/swiss/hooks",
       "packages/swiss-logger",
       "packages/swiss-redux",
       "packages/swiss-thunk",
-      "packages/swiss/core",
-      "packages/swiss/hooks",
       "site/content/fixtures/**/*"
     ]
   },
