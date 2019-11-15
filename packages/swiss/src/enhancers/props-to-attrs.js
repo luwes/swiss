@@ -14,13 +14,15 @@ function propsToAttrs() {
           configurable: true,
           enumerable: true,
           get() {
-            return properties[propName] || el.getAttribute(name);
+            // eslint-disable-next-line fp/no-this
+            return properties[propName] || this.getAttribute(name);
           },
           set(value) {
             properties[propName] = value;
 
             if (value == null) {
-              el.removeAttribute(name);
+              // eslint-disable-next-line fp/no-this
+              this.removeAttribute(name);
             } else {
               // Convert arrays and objects.
               if (typeof value === 'object') {
@@ -30,7 +32,8 @@ function propsToAttrs() {
                   // At least we tried.
                 }
               }
-              el.setAttribute(name, value);
+              // eslint-disable-next-line fp/no-this
+              this.setAttribute(name, value);
             }
           }
         });
