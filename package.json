@@ -53,7 +53,7 @@
     "babel-eslint": "^10.0.3",
     "babel-plugin-htm": "^2.2.0",
     "chai": "^4.2.0",
-    "codecov": "^3.6.1",
+    "codecov": "^3.6.5",
     "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-plugin-fp": "^2.3.0",
