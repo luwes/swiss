@@ -6,8 +6,6 @@ const commonjs = require('rollup-plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
 const alias = require('rollup-plugin-alias');
 
-process.env.CHROME_BIN = require('puppeteer').executablePath();
-
 module.exports = function(config) {
   config.set({
     // base path that will be used to resolve all patterns (eg. files, exclude)
