@@ -28,7 +28,6 @@ module.exports = function(config) {
 
     // list of files / patterns to exclude
     exclude: [
-      'packages/pwa-starter-kit/**',
       'packages/swiss-redux/**',
       'packages/swiss-thunk/**',
     ],
