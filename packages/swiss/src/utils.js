@@ -1,16 +1,3 @@
-export const isArray = Array.isArray;
-
-export function isString(value) {
-  return typeof value === 'string';
-}
-
-export function isFunction(value) {
-  return typeof value === 'function';
-}
-
-export function isUndefined(value) {
-  return typeof value === 'undefined';
-}
 
 export function compose(...fns) {
   return x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
@@ -23,7 +10,7 @@ export function camelCase(name) {
 export function extend(target, ...sources) {
   sources.filter(Boolean).forEach((source) => {
     for (const key in source) { // eslint-disable-line fp/no-loops
-      if (isFunction(target[key]) && isFunction(source[key])) {
+      if (typeof target[key] === 'function' && typeof source[key] === 'function') {
         source[key].supr = target[key];
       }
       target[key] = source[key];

@@ -1,8 +1,8 @@
-import { append, isString } from './utils.js';
+import { append } from './utils.js';
 
 export default function renderer(root, html, old) {
   if (html !== old) {
-    if (isString(html)) {
+    if (typeof html === 'string') {
       root.innerHTML = html;
     } else {
       root.innerHTML = '';

@@ -4,9 +4,6 @@ import propsToAttrs from './enhancers/props-to-attrs.js';
 import {
   compose,
   extend,
-  isArray,
-  isFunction,
-  isUndefined,
   uniqueId
 } from './utils.js';
 
@@ -35,24 +32,24 @@ export const options = {
  * @return {HTMLElement}
  */
 export function element(name, component, enhancer, opts) {
-  if (isFunction(name)) {
+  if (typeof name === 'function') {
     opts = enhancer;
     enhancer = component;
     component = name;
     name = uniqueId('s-');
   }
 
-  if (!isFunction(enhancer) && isUndefined(opts)) {
+  if (typeof enhancer !== 'function' && opts == null) {
     opts = enhancer;
     enhancer = undefined;
   }
 
-  if (!isUndefined(enhancer) && !isFunction(enhancer)) {
+  if (enhancer != null && typeof enhancer !== 'function') {
     throw new Error('Enhancer should be a function.');
   }
 
   // To shorten syntax if opts is an array assume it's `observedAttributes`.
-  if (isArray(opts)) {
+  if (Array.isArray(opts)) {
     opts = { observedAttributes: opts };
   }
 

@@ -1,5 +1,5 @@
 import defaultRenderer from '../default-renderer.js';
-import { isUndefined, extend } from '../utils.js';
+import { extend } from '../utils.js';
 
 function componentEnhancer(component) {
   return createElement => (options, a, b, c) => {
@@ -35,7 +35,7 @@ function componentEnhancer(component) {
     }
 
     function render(html) {
-      if (isUndefined(html)) {
+      if (html === undefined) {
         // By default the html is generated in the `render` function.
         // This is for components that mutate the element in the component.
         html = comp.call(el, el);
