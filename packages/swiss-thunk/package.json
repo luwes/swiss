@@ -2,9 +2,10 @@
   "name": "swiss-thunk",
   "version": "0.1.0",
   "description": "Thunk middleware for Swiss.",
-  "module": "dist/swiss-thunk.mjs",
+  "module": "module/swiss-thunk.js",
   "main": "dist/swiss-thunk.js",
   "files": [
+    "module",
     "dist",
     "src"
   ],

@@ -3,8 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "description": "Swiss Core to create Custom Elements w/ enhancers.",
-  "module": "dist/swiss-core.mjs",
-  "main": "dist/swiss-core.js",
+  "module": "../module/swiss-core.js",
+  "main": "../dist/swiss-core.js",
   "files": [
     "dist",
     "src"

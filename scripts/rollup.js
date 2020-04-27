@@ -12,7 +12,7 @@ import minimist from 'minimist';
 import { ESM, UMD, bundles, fixtures } from './bundles.js';
 
 const formatOptions = {
-  [ESM]: { ext: '.mjs' },
+  [ESM]: { ext: '.js' },
   [UMD]: { ext: '.js' }
 };
 
@@ -56,6 +56,12 @@ function shouldSkipBundle(bundleName, bundleType) {
 
 function getConfig(options) {
   const { name, global, input, dest, format, external, sourcemap } = options;
+  const output = dest
+    ? `${dest(format)}/${name}${formatOptions[format].ext}`
+    : path.join(
+        path.dirname(input),
+        `../dist/${name}${formatOptions[format].ext}`
+      );
   return {
     input,
     external,
@@ -65,13 +71,7 @@ function getConfig(options) {
     output: {
       format,
       sourcemap,
-      file: dest
-        ? `${dest}/${name}${formatOptions[format].ext}`
-        : path.join(
-            path.dirname(input),
-            '..',
-            `dist/${name}${formatOptions[format].ext}`
-          ),
+      file: output,
       name: global,
       exports: 'named'
     },
@@ -89,7 +89,7 @@ function getConfig(options) {
       format === UMD && babel({
         plugins: options.babelPlugins || []
       }),
-      format === UMD &&
+      [ESM, UMD].includes(format) &&
         terser({
           warnings: true,
           mangle: {
@@ -102,12 +102,13 @@ function getConfig(options) {
               cname: 6,
               props: {
                 "$_dirty": "__d",
+                "$__hooks": "__h"
               }
             }
           }
         }),
       sourcemap && gzip()
-    ].filter(Boolean),
+    ],
     onwarn: function(warning) {
       // https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
       if (

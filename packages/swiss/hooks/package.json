@@ -3,8 +3,8 @@
   "private": true,
   "version": "1.0.0",
   "description": "Hooks enhancer for Swiss.",
-  "module": "dist/swiss-hooks.mjs",
-  "main": "dist/swiss-hooks.js",
+  "module": "../module/swiss-hooks.js",
+  "main": "../dist/swiss-hooks.js",
   "files": [
     "dist",
     "src"
@@ -12,8 +12,5 @@
   "scripts": {
     "lint": "eslint src",
     "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
-  },
-  "peerDependencies": {
-    "swiss": "^1.0.0"
   }
 }

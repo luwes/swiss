@@ -2,20 +2,16 @@
   "name": "swiss",
   "version": "1.2.1",
   "description": "🇨🇭 Swiss Element library",
-  "module": "dist/swiss.mjs",
+  "module": "module/swiss.js",
   "main": "dist/swiss.js",
   "files": [
+    "module",
     "dist",
     "src",
-    "core/dist",
     "core/src",
     "core/package.json",
-    "hooks/dist",
     "hooks/src",
-    "hooks/package.json",
-    "html/dist",
-    "html/src",
-    "html/package.json"
+    "hooks/package.json"
   ],
   "keywords": [
     "functional",

@@ -7,4 +7,5 @@ coverage
 *.lcov
 
 /site/public/
-dist
+dist/
+module/

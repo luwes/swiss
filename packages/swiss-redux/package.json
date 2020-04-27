@@ -2,9 +2,10 @@
   "name": "swiss-redux",
   "version": "1.0.0",
   "description": "Provides Redux hooks for Swiss.",
-  "module": "dist/swiss-redux.mjs",
+  "module": "module/swiss-redux.js",
   "main": "dist/swiss-redux.js",
   "files": [
+    "module",
     "dist",
     "src"
   ],

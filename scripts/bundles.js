@@ -6,46 +6,56 @@ export const bundleFormats = {
   UMD
 };
 
+const dest = (pkg = 'swiss', path = '') => format => {
+  return `packages/${pkg}/${format === ESM ? 'module' : 'dist'}${path}`;
+};
+
 export const bundles = [
   {
     formats: [ESM, UMD],
     global: 'swissCore',
     name: 'swiss-core',
-    input: 'packages/swiss/core/src/core.js'
+    input: 'packages/swiss/core/src/core.js',
+    dest: dest()
   },
   {
     formats: [ESM, UMD],
     global: 'swiss',
     name: 'swiss',
-    input: 'packages/swiss/src/index.js'
+    input: 'packages/swiss/src/index.js',
+    dest: dest()
   },
   {
     external: ['swiss'],
     formats: [ESM, UMD],
     global: 'swissHooks',
     name: 'swiss-hooks',
-    input: 'packages/swiss/hooks/src/index.js'
+    input: 'packages/swiss/hooks/src/index.js',
+    dest: dest()
   },
   {
     external: ['swiss'],
     formats: [ESM, UMD],
     global: 'swissRedux',
     name: 'swiss-redux',
-    input: 'packages/swiss-redux/src/swiss-redux.js'
+    input: 'packages/swiss-redux/src/swiss-redux.js',
+    dest: dest('swiss-redux')
   },
   {
     external: ['swiss'],
     formats: [ESM, UMD],
     global: 'swissThunk',
     name: 'swiss-thunk',
-    input: 'packages/swiss-thunk/src/swiss-thunk.js'
+    input: 'packages/swiss-thunk/src/swiss-thunk.js',
+    dest: dest('swiss-thunk')
   },
   {
     external: ['swiss'],
     formats: [ESM, UMD],
     global: 'swissLogger',
     name: 'swiss-logger',
-    input: 'packages/swiss-logger/src/swiss-logger.js'
+    input: 'packages/swiss-logger/src/swiss-logger.js',
+    dest: dest('swiss-logger')
   }
 ];
 
