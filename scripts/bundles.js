@@ -56,7 +56,9 @@ export const fixtures = [
     name: 'counter',
     input: 'fixtures/state/redux/src/counter.js',
     sourcemap: true,
-    babelPlugins: ['htm']
+    babelPlugins: [["htm", {
+      "import": "preact"
+    }]]
   },
   {
     formats: [UMD],
@@ -78,7 +80,9 @@ export const fixtures = [
     name: 'counter',
     input: 'fixtures/renderers/htm-preact/src/counter.js',
     sourcemap: true,
-    babelPlugins: ['htm']
+    babelPlugins: [["htm", {
+      "import": "preact"
+    }]]
   },
   {
     formats: [UMD],
