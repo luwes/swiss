@@ -9,7 +9,7 @@ import replace from 'rollup-plugin-replace';
 import gzip from 'rollup-plugin-gzip';
 import minimist from 'minimist';
 
-import { ESM, UMD, bundles, fixtures } from '../bundles.js';
+import { ESM, UMD, bundles, fixtures } from './bundles.js';
 
 const formatOptions = {
   [ESM]: { ext: '.mjs' },
