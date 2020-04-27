@@ -15,7 +15,6 @@
     ]
   },
   "scripts": {
-    "clean": "find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + && yarn cache clean",
     "lint": "eslint 'packages/{*,*/*}/src/**/*.js'",
     "format": "prettier --write 'packages/**/{src,test}/**/*.js' 'scripts/**/*.js' '**/*.md' '!**/build/**'",
     "test": "karma start",
