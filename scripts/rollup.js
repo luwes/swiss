@@ -92,6 +92,9 @@ function getConfig(options) {
       [ESM, UMD].includes(format) &&
         terser({
           warnings: true,
+          compress: {
+            passes: 2
+          },
           mangle: {
             properties: {
               regex: /^_/
