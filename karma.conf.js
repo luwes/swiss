@@ -45,8 +45,10 @@ module.exports = function(config) {
       preserveSymlinks: true,
       plugins: [
         alias({
-          'swiss/hooks': __dirname + '/packages/swiss/hooks/src/index.js',
-          'swiss': __dirname + '/packages/swiss/src/index.js'
+          entries: {
+            'swiss/hooks': __dirname + '/packages/swiss/hooks/src/index.js',
+            'swiss': __dirname + '/packages/swiss/src/index.js'
+          }
         }),
         nodeResolve(),
         commonjs(),
