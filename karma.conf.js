@@ -1,39 +1,142 @@
-// Karma configuration
-// Generated on Fri Jan 18 2019 07:34:40 GMT-0500 (Eastern Standard Time)
-
-const nodeResolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
+const path = require('path');
+const alias = require('@rollup/plugin-alias');
+const nodeResolve = require('@rollup/plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
 const istanbul = require('rollup-plugin-istanbul');
-const alias = require('rollup-plugin-alias');
+const babel = require('@rollup/plugin-babel');
+const minimist = require('minimist');
+const c = require('ansi-colors');
+const argv = minimist(process.argv.slice(2));
+
+var coverage = String(process.env.COVERAGE) === 'true',
+  ci = String(process.env.CI).match(/^(1|true)$/gi),
+  pullRequest = !String(process.env.TRAVIS_PULL_REQUEST).match(/^(0|false|undefined)$/gi),
+  masterBranch = String(process.env.TRAVIS_BRANCH).match(/^master$/gi),
+  sauceLabs = ci && !pullRequest && masterBranch;
+
+var sauceLabsLaunchers = {
+  sl_chrome: {
+    base: 'SauceLabs',
+    browserName: 'chrome',
+    platform: 'Windows 10'
+  },
+  sl_firefox: {
+    base: 'SauceLabs',
+    browserName: 'firefox',
+    platform: 'Windows 10'
+  },
+  sl_safari: {
+    base: 'SauceLabs',
+    browserName: 'safari',
+    platform: 'OS X 10.11'
+  },
+  sl_edge: {
+    base: 'SauceLabs',
+    browserName: 'MicrosoftEdge',
+    platform: 'Windows 10'
+  },
+  sl_ie_11: {
+    base: 'SauceLabs',
+    browserName: 'internet explorer',
+    version: '11.0',
+    platform: 'Windows 7'
+  }
+};
+
+var localLaunchers = {
+  ChromeNoSandboxHeadless: {
+    base: 'Chrome',
+    flags: [
+      '--no-sandbox',
+      // See https://chromium.googlesource.com/chromium/src/+/lkgr/headless/README.md
+      '--headless',
+      '--disable-gpu',
+      '--disable-translate',
+      '--disable-extensions',
+      // Without a remote debugging port, Google Chrome exits immediately.
+      '--remote-debugging-port=9333',
+      // Removes that crazy long prefix HeadlessChrome 79.0.3945 (Mac OS X 10.15.2)
+      '--user-agent='
+    ]
+  }
+};
 
 module.exports = function(config) {
   config.set({
-    // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: '',
+    browsers: sauceLabs
+      ? Object.keys(sauceLabsLaunchers)
+      : Object.keys(localLaunchers),
 
-    // frameworks to use
-    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'sinon-chai'],
+    customLaunchers: sauceLabs ? sauceLabsLaunchers : localLaunchers,
 
-    // list of files / patterns to load in the browser
+    sauceLabs: {
+      build: 'CI #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')',
+      tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER || ('local'+require('./package.json').version),
+      connectLocationForSERelay: 'localhost',
+      connectPortForSERelay: 4445,
+      startConnect: false
+    },
+
+    // browserLogOptions: { terminal: true },
+    // browserConsoleLogOptions: { terminal: true },
+    browserConsoleLogOptions: {
+      level: 'warn', // Filter on warn messages.
+      format: '%b %T: %m',
+      terminal: true
+    },
+
+    browserNoActivityTimeout: 60 * 60 * 1000,
+
+    // Use only one browser, works better with open source Sauce Labs remote testing
+    concurrency: 2,
+
+    captureTimeout: 0,
+
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_DISABLE,
+
+    client: { captureConsole: !!argv.console },
+
+    // test results reporter to use
+    // possible values: 'dots', 'progress'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['tap-pretty'].concat(
+      coverage ? 'coverage' : [],
+      sauceLabs ? 'saucelabs' : []
+    ),
+
+    tapReporter: {
+      prettify: require('faucet') // require('tap-spec')
+    },
+
+    formatError(msg) {
+      msg = msg.replace(/\([^<]+/gm, '');
+      msg = msg.replace(/(\bat\s.*)/gms, argv.stack ? c.dim('$1') : '');
+      return msg;
+    },
+
+    coverageReporter: {
+      dir: path.join(__dirname, 'coverage'),
+      reporters: [
+        { type: 'text' },
+        { type: 'html' },
+        { type: 'lcovonly', subdir: '.', file: 'lcov.info' }
+      ]
+    },
+
+    frameworks: ['tap'],
+
     files: [
+      'https://polyfill.io/v3/polyfill.min.js?features=Element.prototype.dataset%2CArray.from',
       {
-        pattern: config.grep || 'packages/swiss*/**/test/*.js',
-        type: 'module',
+        pattern: config.grep || 'packages/swiss*/**/test.js',
         watched: false
       },
     ],
 
-    // list of files / patterns to exclude
-    exclude: [
-      'packages/swiss-redux/**',
-      'packages/swiss-thunk/**',
-    ],
-
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'packages/swiss*/**/test/*.js': ['rollup']
+      'packages/swiss*/**/test.js': ['rollup']
     },
 
     rollupPreprocessor: {
@@ -46,7 +149,7 @@ module.exports = function(config) {
       plugins: [
         alias({
           entries: {
-            'swiss/hooks': __dirname + '/packages/swiss/hooks/src/index.js',
+            tape: 'tape-browser',
             'swiss': __dirname + '/packages/swiss/src/index.js'
           }
         }),
@@ -55,73 +158,15 @@ module.exports = function(config) {
         istanbul({
           include: config.grep ?
             config.grep.replace('/test/', '/src/') :
-            'packages/**/src/**/*.js'
+            'packages/*/**/src/**/*.js'
+        }),
+        sauceLabs && babel({
+          include: [
+            'packages/swiss/**'
+          ]
         })
-      ],
+      ].filter(Boolean),
       onwarn: (msg) => /eval/.test(msg) && void 0
-    },
-
-    // test results reporter to use
-    // possible values: 'dots', 'progress'
-    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'coverage'],
-
-    coverageReporter: {
-      reporters: [{ type: 'text' }, { type: 'lcov' }]
-    },
-
-    mochaReporter: {
-      showDiff: true
-    },
-
-    browserLogOptions: { terminal: true },
-    browserConsoleLogOptions: { terminal: true },
-
-    browserNoActivityTimeout: 5 * 60 * 1000,
-
-    captureTimeout: 0,
-
-    // web server port
-    port: 9876,
-
-    // enable / disable colors in the output (reporters and logs)
-    colors: true,
-
-    // level of logging
-    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
-
-    // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
-
-    // start these browsers
-    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['ChromeCustom'],
-
-    // Continuous Integration mode
-    // if true, Karma captures browsers, runs the tests and exits
-    singleRun: false,
-
-    customLaunchers: {
-      ChromeCustom: {
-        base: 'ChromeHeadless',
-        options: {
-          settings: {
-            webSecurityEnabled: false
-          }
-        },
-        flags: [
-          '--headless',
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-gpu',
-          '--disable-web-security',
-          '--disable-translate',
-          '--disable-extensions',
-          '--remote-debugging-port=9223'
-        ],
-        debug: true
-      }
     }
   });
 };

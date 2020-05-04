@@ -1,32 +1,51 @@
 
-export function compose(...fns) {
-  return x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
+export function getNativeConstructor(ext) {
+  return ext ? document.createElement(ext).constructor : HTMLElement;
 }
 
-export function camelCase(name) {
-  return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
-}
-
-export function extend(target, ...sources) {
-  sources.filter(Boolean).forEach((source) => {
-    for (const key in source) { // eslint-disable-line fp/no-loops
-      if (typeof target[key] === 'function' && typeof source[key] === 'function') {
-        source[key].supr = target[key];
-      }
-      target[key] = source[key];
+export function customElement(Base, init) {
+  const CE = class extends Base {
+    constructor() {
+      super();
+      init(this);
     }
+
+    connectedCallback() {
+      this.connected && this.connected();
+    }
+
+    disconnectedCallback() {
+      this.disconnected && this.disconnected();
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+      this.attributeChanged && this.attributeChanged(name, oldValue, newValue);
+    }
+  };
+  return CE;
+}
+
+export function completeAssign(target, ...sources) {
+  const options = {
+    enumerable: true,
+    configurable: true,
+    writeable: false
+  };
+  sources.forEach((source) => {
+      for (const prop in source) {
+          const descriptor = Object.getOwnPropertyDescriptor(source, prop);
+          Object.defineProperty(target, prop, Object.assign(descriptor, options));
+      }
   });
   return target;
 }
 
-export function append(parent, nodes) {
-  return []
-    .concat(nodes)
-    .map(node =>
-      parent.appendChild(
-        node instanceof Node ? node : document.createTextNode('' + node)
-      )
-    );
+export function kebabCase(name) {
+  return name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+
+export function camelCase(name) {
+  return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 }
 
 let idx = 0;

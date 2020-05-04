@@ -2,31 +2,49 @@
   "name": "swiss",
   "version": "1.2.1",
   "description": "🇨🇭 Swiss Element library",
-  "module": "module/swiss.js",
-  "main": "dist/swiss.js",
-  "files": [
-    "module",
-    "dist",
-    "src",
-    "core/src",
-    "core/package.json",
-    "hooks/src",
-    "hooks/package.json"
-  ],
   "keywords": [
     "functional",
-    "custom",
-    "element"
+    "custom element",
+    "dom"
   ],
-  "scripts": {
-    "lint": "eslint src",
-    "prepublishOnly": "rm README.md && cp ../../README.md . && yarn lint && (cd ../.. && yarn test --single-run && yarn build)"
-  },
-  "repository": "luwes/swiss",
-  "author": "Wesley Luyten <me@wesleyluyten.com> (https://wesleyluyten.com)",
-  "license": "MIT",
+  "homepage": "https://github.com/luwes/swiss#readme",
   "bugs": {
     "url": "https://github.com/luwes/swiss/issues"
   },
-  "homepage": "https://github.com/luwes/swiss#readme"
+  "repository": "luwes/swiss",
+  "license": "MIT",
+  "author": "Wesley Luyten <me@wesleyluyten.com> (https://wesleyluyten.com)",
+  "main": "dist/swiss.js",
+  "module": "module/swiss.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "rollup -c --silent",
+    "dev": "rollup -wc --silent",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "@rollup/plugin-alias": "^3.0.1",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-replace": "^2.3.1",
+    "@webcomponents/custom-elements": "^1.4.1",
+    "babel-plugin-transform-async-to-promises": "^0.8.15",
+    "eslint": "^6.8.0",
+    "eslint-plugin-fp": "^2.3.0",
+    "eslint-plugin-import": "^2.20.1",
+    "rollup": "^2.1.0",
+    "@rollup/plugin-babel": "^5.0.0",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-gzip": "^2.3.0",
+    "rollup-plugin-istanbul": "^2.0.1",
+    "rollup-plugin-livereload": "^1.1.0",
+    "rollup-plugin-size": "^0.2.2",
+    "rollup-plugin-sourcemaps": "^0.6.1",
+    "rollup-plugin-terser": "^5.3.0"
+  }
 }
