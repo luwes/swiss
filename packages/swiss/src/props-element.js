@@ -43,6 +43,8 @@ function setup(element) {
   let ignoreAttributeChange;
   let ignorePropChange;
 
+  Object.keys(propConfigs).forEach(updateAttr);
+
 
   function set(name, value) {
     const oldValue = getProp(name);
@@ -69,7 +71,10 @@ function setup(element) {
     cache[name] = value;
 
     if (ignorePropChange) return;
+    updateAttr(name);
+  }
 
+  function updateAttr(name) {
     ignoreAttributeChange = true;
     propToAttr(name);
     ignoreAttributeChange = false;
@@ -82,16 +87,26 @@ function setup(element) {
     if (value == null || value === false) {
       element.removeAttribute(kebabCase(propName));
     } else {
+      // https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
+      // Boolean attributes are considered to be true if they're present on
+      // the element at all, regardless of their actual value; as a rule,
+      // you should specify the empty string ("") in value.
       if (isBooleanProp(propName)) value = '';
+
+      // Convert arrays and objects.
+      if (typeof value === 'object') {
+        try {
+          value = JSON.stringify(value);
+        } catch (O_o) {
+          // At least we tried.
+        }
+      }
+
       element.setAttribute(kebabCase(propName), '' + value);
     }
   }
 
   function isBooleanProp(propName) {
-    // https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
-    // Boolean attributes are considered to be true if they're present on
-    // the element at all, regardless of their actual value; as a rule,
-    // you should specify the empty string ("") in value.
     return propConfigs[propName].value === false ||
       propConfigs[propName].value === true;
   }

@@ -7,3 +7,17 @@ export function property(value, options) {
     ...options,
   };
 }
+
+export function readonly(props) {
+  for (let prop in props) {
+    props[prop] = property(props[prop], { set: undefined });
+  }
+  return props;
+}
+
+export function reflect(props) {
+  for (let prop in props) {
+    props[prop] = property(props[prop], { reflect: true });
+  }
+  return props;
+}

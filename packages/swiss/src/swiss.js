@@ -10,6 +10,7 @@ import { customElement, getNativeConstructor } from './utils.js';
 export const enhancers = [propsElement, updatingElement];
 
 export function define(name, opts = {}) {
+
   const CE = customElement(getNativeConstructor(opts.extends), [
     ...enhancers,
     opts.setup,
@@ -17,4 +18,8 @@ export function define(name, opts = {}) {
 
   customElements.define(name, CE);
   return CE;
+}
+
+export function element(...args) {
+  return () => new (define(...args))();
 }

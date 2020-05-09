@@ -3027,6 +3027,11 @@ isobject@^4.0.0:
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-4.0.0.tgz#3f1c9155e73b192022a80819bacd0343711697b0"
   integrity sha512-S/2fF5wH8SJA/kmwr6HYhK/RI/OkhD84k8ntalo0iJjZikgq1XFvR5M8NPT1x5F7fBwCG3qHfnzeP/Vh/ZxCUA==
 
+ispy@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/ispy/-/ispy-0.1.2.tgz#8486940c16ec71c30a93b413843f8febcff51857"
+  integrity sha1-hIaUDBbsccMKk7QThD+P68/1GFc=
+
 isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
