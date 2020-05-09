@@ -43,6 +43,7 @@ function setup(element) {
   let ignoreAttributeChange;
   let ignorePropChange;
 
+  element.getProp = getProp;
   Object.keys(propConfigs).forEach(updateAttr);
 
 

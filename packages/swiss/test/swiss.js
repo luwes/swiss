@@ -1,6 +1,6 @@
 import test from 'tape';
 import spy from 'ispy';
-import { define, element, reflect } from 'swiss';
+import { define, element, reflect, readonly } from 'swiss';
 
 test('define returns a function', (t) => {
   t.equal(typeof define('s-10'), 'function');
@@ -27,6 +27,14 @@ test('custom element lifecycle callbacks work', (t) => {
   t.equal(cheese.connected.callCount, 1);
   t.equal(cheese.disconnected.callCount, 1);
   t.equal(cheese.attributeChanged.callCount, 1);
+  t.end();
+});
+
+test('attrs are kebab cased', (t) => {
+  const el = element('s-4', { props: reflect({ observeMe: 3 }) })();
+
+  t.assert(el.observeMe);
+  t.strictEqual(el.getAttribute('observe-me'), '3');
   t.end();
 });
 
@@ -84,5 +92,81 @@ test('props keep their type', (t) => {
 
   t.assert(el.observeMe);
   t.assert(Array.isArray(el.observeMe));
+  t.end();
+});
+
+test('prop sets queue an update on changes', async (t) => {
+  const el = element('s-5', {
+    props: {
+      autoplay: false,
+      muted: false
+    }
+  })();
+
+  el.update = spy();
+
+  el.autoplay = true;
+  el.muted = true;
+
+  await Promise.resolve();
+
+  t.equal(el.update.callCount, 1);
+  t.end();
+});
+
+test('prop sets dont queue an update on no changes', async (t) => {
+  const el = element('s-6', {
+    props: {
+      autoplay: false,
+      muted: false
+    }
+  })();
+
+  el.update = spy();
+
+  el.autoplay = false;
+  el.muted = false;
+
+  await Promise.resolve();
+
+  t.equal(el.update.callCount, 0);
+  t.end();
+});
+
+test('prop configs', (t) => {
+  const el = element('s-7', {
+    props: {
+      first: 'Tatiana',
+      last: {
+        get: (host, value = 'Luyten') => value,
+      },
+      fullname: {
+        get: ({ first, last }) => `${first} ${last}`,
+        reflect: true,
+      },
+      power: {
+        get: (host, value) => value,
+        set: (host, value) => value ** 2,
+      },
+      ...readonly({
+        duration: 17
+      })
+    }
+  })();
+
+  t.throws(() => el.last = 'Ilina', /^TypeError: Cannot set property/);
+
+  t.equal(el.fullname, 'Tatiana Luyten');
+  t.equal(el.getAttribute('fullname'), 'Tatiana Luyten', 'reflects attribute');
+
+  el.first = 'Wesley';
+  t.equal(el.fullname, 'Wesley Luyten');
+
+  el.power = 10;
+  t.equal(el.power, 100);
+
+  t.equal(el.duration, 17);
+  t.throws(() => el.duration = 53, /^TypeError: Cannot set property/);
+
   t.end();
 });
