@@ -3,11 +3,13 @@ export function getNativeConstructor(ext) {
   return ext ? document.createElement(ext).constructor : HTMLElement;
 }
 
-export function customElement(Base, init) {
+export function customElement(Base, enhancers, opts) {
   const CE = class extends Base {
     constructor() {
       super();
-      init(this);
+      setups.forEach((setup) => {
+        completeAssign(this, setup && setup(this));
+      });
     }
 
     connectedCallback() {
@@ -22,6 +24,8 @@ export function customElement(Base, init) {
       this.attributeChanged && this.attributeChanged(name, oldValue, newValue);
     }
   };
+
+  const setups = enhancers.map((enhancer) => enhancer && enhancer(CE, opts));
   return CE;
 }
 
@@ -32,10 +36,12 @@ export function completeAssign(target, ...sources) {
     writeable: false
   };
   sources.forEach((source) => {
-      for (const prop in source) {
-          const descriptor = Object.getOwnPropertyDescriptor(source, prop);
-          Object.defineProperty(target, prop, Object.assign(descriptor, options));
+    for (const prop in source) {
+      const descriptor = Object.getOwnPropertyDescriptor(source, prop);
+      if (descriptor) {
+        Object.defineProperty(target, prop, Object.assign(descriptor, options));
       }
+    }
   });
   return target;
 }

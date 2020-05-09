@@ -55,8 +55,8 @@ export default [
     plugins: [
       ...config.plugins,
       babel({
+        babelHelpers: 'bundled',
         compact: false,
-        babelHelpers: 'bundled'
       })
     ]
   },
