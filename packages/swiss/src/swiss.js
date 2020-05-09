@@ -1,25 +1,53 @@
 import { propsElement } from './props-element.js';
 import { updatingElement } from './updating-element.js';
-import { customElement, getNativeConstructor } from './utils.js';
+import { completeAssign, kebabCase } from './utils.js';
 
 /**
- * Quick and dirty way to add default enhancers.
- * @type {Object}
+ * Quick and dirty way to add default mixins.
+ * @type {Array}
  * @ignore
  */
-export const enhancers = [propsElement, updatingElement];
+export const mixins = [propsElement, updatingElement];
 
-export function define(name, opts = {}) {
 
-  const CE = customElement(getNativeConstructor(opts.extends), [
-    ...enhancers,
-    opts.setup,
-  ], opts);
+export function Element(opts = {}, Base = HTMLElement) {
+  const CE = class extends Base {
 
-  customElements.define(name, CE);
+    static get observedAttributes() {
+      const props = opts.props || {};
+
+      CE.setups = [...CE.mixins, opts.setup]
+        .map(mix => mix && mix(CE, opts));
+
+      return Object.keys(props).map(kebabCase);
+    }
+
+    constructor() {
+      super();
+      CE.setups.forEach((setup) => {
+        completeAssign(this, setup && setup(this));
+      });
+    }
+
+    connectedCallback() {
+      this.connected && this.connected();
+    }
+
+    disconnectedCallback() {
+      this.disconnected && this.disconnected();
+    }
+
+    attributeChangedCallback(attr, oldValue, newValue) {
+      this.attributeChanged && this.attributeChanged(attr, oldValue, newValue);
+    }
+  };
+
+  CE.mixins = [...mixins];
   return CE;
 }
 
-export function element(...args) {
-  return () => new (define(...args))();
+export function define(name, opts) {
+  const CE = Element(opts);
+  customElements.define(name, CE);
+  return CE;
 }

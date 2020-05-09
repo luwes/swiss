@@ -1,12 +1,9 @@
-import { property } from './property.js';
+import { property, toAttribute, fromAttribute } from './property.js';
 import { camelCase, kebabCase } from './utils.js';
 
-export const propsElement = (CE, options) => {
-  const { props = {} } = options;
-
+export const propsElement = (CE, { props = {} }) => {
   CE.propConfigs = {};
   CE.defineProp = defineProp;
-  CE.observedAttributes = Object.keys(props).map(kebabCase);
 
   Object.keys(props)
     .forEach((key) => CE.defineProp(key, props[key]));
@@ -51,8 +48,6 @@ function setup(element) {
     const oldValue = getProp(name);
     setProp(name, value);
 
-    if (ignorePropChange) return;
-
     element.requestUpdate(name, oldValue);
   }
 
@@ -69,6 +64,7 @@ function setup(element) {
     if (propConfigs[name] && propConfigs[name].set) {
       value = propConfigs[name].set(element, value, cache[name]);
     }
+
     cache[name] = value;
 
     if (ignorePropChange) return;
@@ -82,58 +78,33 @@ function setup(element) {
   }
 
   function propToAttr(propName) {
+    const config = propConfigs[propName];
     let value = getProp(propName);
-    if (value === undefined || !propConfigs[propName].reflect) return;
+
+    if (value === undefined || !config.reflect) return;
 
     if (value == null || value === false) {
       element.removeAttribute(kebabCase(propName));
     } else {
-      // https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute
-      // Boolean attributes are considered to be true if they're present on
-      // the element at all, regardless of their actual value; as a rule,
-      // you should specify the empty string ("") in value.
-      if (isBooleanProp(propName)) value = '';
-
-      // Convert arrays and objects.
-      if (typeof value === 'object') {
-        try {
-          value = JSON.stringify(value);
-        } catch (O_o) {
-          // At least we tried.
-        }
-      }
-
+      value = (config.toAttribute || toAttribute)(value, config);
       element.setAttribute(kebabCase(propName), '' + value);
     }
-  }
-
-  function isBooleanProp(propName) {
-    return propConfigs[propName].value === false ||
-      propConfigs[propName].value === true;
   }
 
   function attributeChanged(name, oldValue, value) {
     if (ignoreAttributeChange) {
       return;
     }
+
     if (oldValue !== value) {
       ignorePropChange = true;
 
       const propName = camelCase(name);
-      element[propName] = attrToProp(propName, value);
+      const config = propConfigs[propName];
+      element[propName] = (config.fromAttribute || fromAttribute)(value, config);
 
       ignorePropChange = false;
     }
-  }
-
-  function attrToProp(propName, value) {
-    const defaultPropValue = propConfigs[propName].value;
-    if (defaultPropValue === false || defaultPropValue === true) {
-      return value != null;
-    } else if (value != null && typeof defaultPropValue === 'number') {
-      return Number(value);
-    }
-    return value;
   }
 
   return {

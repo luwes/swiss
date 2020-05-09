@@ -1,7 +1,7 @@
 
 export const updatingElement = () => element => {
   let changedProps = {};
-  let updatePromise = Promise.resolve();
+  let updatePromise;
   let hasRequestedUpdate;
   let getProp = element.getProp;
 
@@ -20,7 +20,9 @@ export const updatingElement = () => element => {
   async function enqueueUpdate() {
     await updatePromise;
 
-    element.update && element.update(changedProps);
+    if (element.update) {
+      element.update(changedProps);
+    }
 
     changedProps = {};
     hasRequestedUpdate = false;

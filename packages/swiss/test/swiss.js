@@ -1,6 +1,7 @@
 import test from 'tape';
 import spy from 'ispy';
-import { define, element, reflect, readonly } from 'swiss';
+import { define, reflect, readonly } from 'swiss';
+import { element } from './_utils.js';
 
 test('define returns a function', (t) => {
   t.equal(typeof define('s-10'), 'function');
@@ -18,7 +19,7 @@ test('custom element lifecycle callbacks work', (t) => {
   const cheese = element('s-cheese', {
     props: { hole: 0 },
     setup: customLifecycle
-  })();
+  });
 
   document.body.appendChild(cheese);
   cheese.setAttribute('hole', 1);
@@ -31,27 +32,43 @@ test('custom element lifecycle callbacks work', (t) => {
 });
 
 test('attrs are kebab cased', (t) => {
-  const el = element('s-4', { props: reflect({ observeMe: 3 }) })();
+  const el = element('s-4', { props: reflect({ observeMe: 3 }) });
 
   t.assert(el.observeMe);
   t.strictEqual(el.getAttribute('observe-me'), '3');
   t.end();
 });
 
-test('prop types are converted to attribute strings', (t) => {
+test('prop types are converted to attribute strings and back', (t) => {
   const el = element('s-1', {
-    props: reflect({
-      num: 4,
-      str: 'stringy',
-      arr: [1, 2, 3],
-      obj: { key1: 1, key2: [9, 8, 7] }
-    })
-  })();
+    props: {
+      ...reflect({
+        num: 4,
+        str: 'stringy',
+      }),
+      arr: {
+        get: (host, val = [1, 2, 3]) => val,
+        toAttribute: JSON.stringify,
+        reflect: true,
+      },
+      obj: {
+        get: (host, val = { key1: 1, key2: [9, 8, 7] }) => val,
+        set: (host, val) => val,
+        toAttribute: JSON.stringify,
+        fromAttribute: JSON.parse,
+        reflect: true,
+      }
+    }
+  });
 
   t.equal(el.getAttribute('num'), '4');
   t.equal(el.getAttribute('str'), 'stringy');
   t.equal(el.getAttribute('arr'), '[1,2,3]');
   t.equal(el.getAttribute('obj'), '{"key1":1,"key2":[9,8,7]}');
+
+  el.setAttribute('obj', '{"keanu":4}');
+  t.deepEqual(el.obj, { keanu: 4 });
+
   t.end();
 });
 
@@ -74,7 +91,7 @@ test('attributes values are available as prop', (t) => {
 });
 
 test('handles null properties', (t) => {
-  const el = element('s-2', { props: reflect({ hello: 'world' }) })();
+  const el = element('s-2', { props: reflect({ hello: 'world' }) });
 
   t.assert(el.hello);
 
@@ -85,10 +102,21 @@ test('handles null properties', (t) => {
   t.end();
 });
 
+test('handles bool properties', (t) => {
+  const el = element('s-22', { props: reflect({ checked: false }) });
+
+  t.assert(!el.checked);
+
+  el.checked = true;
+  t.strictEqual(el.checked, true);
+  t.strictEqual(el.getAttribute('checked'), '');
+  t.end();
+});
+
 test('props keep their type', (t) => {
   const el = element('s-3', {
     props: reflect({ observeMe: [1, 2, 3] })
-  })();
+  });
 
   t.assert(el.observeMe);
   t.assert(Array.isArray(el.observeMe));
@@ -101,7 +129,7 @@ test('prop sets queue an update on changes', async (t) => {
       autoplay: false,
       muted: false
     }
-  })();
+  });
 
   el.update = spy();
 
@@ -120,7 +148,7 @@ test('prop sets dont queue an update on no changes', async (t) => {
       autoplay: false,
       muted: false
     }
-  })();
+  });
 
   el.update = spy();
 
@@ -152,7 +180,7 @@ test('prop configs', (t) => {
         duration: 17
       })
     }
-  })();
+  });
 
   t.throws(() => el.last = 'Ilina', /^TypeError: Cannot set property/);
 
