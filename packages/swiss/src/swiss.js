@@ -9,7 +9,7 @@ import { customElement, getNativeConstructor } from './utils.js';
  */
 export const enhancers = [propsElement, updatingElement];
 
-export function define(name, opts) {
+export function define(name, opts = {}) {
   const CE = customElement(getNativeConstructor(opts.extends), [
     ...enhancers,
     opts.setup,

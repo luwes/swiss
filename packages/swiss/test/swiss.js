@@ -1,13 +1,7 @@
 import test from 'tape';
 import { define } from 'swiss';
 
-test('simple', function(t) {
-
-  define('s-1', {
-    props: {
-      autoplay: false
-    }
-  });
-
+test('define returns a function', (t) => {
+  t.equal(typeof define('s-10'), 'function');
   t.end();
 });

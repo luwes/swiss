@@ -2,7 +2,7 @@ import { property } from './property.js';
 import { camelCase, kebabCase } from './utils.js';
 
 export const propsElement = (CE, options) => {
-  const { props } = options;
+  const { props = {} } = options;
 
   CE.propConfigs = {};
   CE.defineProp = defineProp;
