@@ -138,7 +138,7 @@ test('prop sets queue an update on changes', async (t) => {
 
   await Promise.resolve();
 
-  t.equal(el.update.callCount, 1);
+  t.equal(el.update.callCount, 2);
   t.end();
 });
 
@@ -157,7 +157,7 @@ test('prop sets dont queue an update on no changes', async (t) => {
 
   await Promise.resolve();
 
-  t.equal(el.update.callCount, 0);
+  t.equal(el.update.callCount, 1);
   t.end();
 });
 

@@ -5,6 +5,8 @@ export const updatingElement = () => element => {
   let hasRequestedUpdate;
   let getProp = element.getProp;
 
+  enqueueUpdate(); // Initital update.
+
 
   function requestUpdate(name, oldValue) {
     if (getProp(name) == oldValue) return;
