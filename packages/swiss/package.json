@@ -17,6 +17,7 @@
   "main": "dist/swiss.js",
   "module": "module/swiss.js",
   "files": [
+    "module",
     "dist",
     "src"
   ],
