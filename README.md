@@ -7,8 +7,6 @@
 **npm**: `npm i swiss`  
 **cdn**: https://unpkg.com/swiss
 
-### Intro
-
 Swiss provides a functional way of defining custom elements.
 
 - Extend the custom element with composition via mixins.
