@@ -7,15 +7,13 @@
 **npm**: `npm i swiss`  
 **cdn**: https://unpkg.com/swiss
 
-### Intro
-
 Swiss provides a functional way of defining custom elements.
 
 - Extend the custom element with composition via mixins.
 - Easy configuration of props, syncing to attributes and vice versa.
 - Batched property sets to a single update callback.
 
-> Looking for [v1](./tree/v1)?
+> Looking for [v1](https://github.com/luwes/swiss/tree/v1)?
 
 ### Example - Counter
 
