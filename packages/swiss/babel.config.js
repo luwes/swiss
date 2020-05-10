@@ -13,7 +13,8 @@ module.exports = {
     ]
   ],
   plugins: [
-    ['@babel/plugin-transform-object-assign'],
-    ['@babel/plugin-proposal-object-rest-spread', { 'loose': true }]
+    ['babel-plugin-transform-async-to-promises', {
+      inlineHelpers: true
+    }],
   ],
 };

@@ -1,36 +1,24 @@
 
-export function compose(...fns) {
-  return x => fns.filter(Boolean).reduceRight((y, f) => f(y), x);
-}
-
-export function camelCase(name) {
-  return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
-}
-
-export function extend(target, ...sources) {
-  sources.filter(Boolean).forEach((source) => {
-    for (const key in source) { // eslint-disable-line fp/no-loops
-      if (typeof target[key] === 'function' && typeof source[key] === 'function') {
-        source[key].supr = target[key];
+export function completeAssign(target, ...sources) {
+  const options = {
+    enumerable: true,
+    configurable: true,
+  };
+  sources.forEach((source) => {
+    for (const prop in source) {
+      const descriptor = Object.getOwnPropertyDescriptor(source, prop);
+      if (descriptor) {
+        Object.defineProperty(target, prop, Object.assign(descriptor, options));
       }
-      target[key] = source[key];
     }
   });
   return target;
 }
 
-export function append(parent, nodes) {
-  return []
-    .concat(nodes)
-    .map(node =>
-      parent.appendChild(
-        node instanceof Node ? node : document.createTextNode('' + node)
-      )
-    );
+export function kebabCase(name) {
+  return name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 }
 
-let idx = 0;
-export function uniqueId(prefix) {
-  const id = `${prefix}${++idx}`;
-  return customElements.get(id) ? uniqueId(prefix) : id;
+export function camelCase(name) {
+  return name.replace(/-([a-z])/g, ($0, $1) => $1.toUpperCase());
 }

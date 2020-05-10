@@ -1,3 +1,9 @@
+import { define } from 'swiss';
+
+export function element(...args) {
+  return new (define(...args))();
+}
+
 export const defer =
   typeof Promise == 'function'
     ? Promise.prototype.then.bind(Promise.resolve())

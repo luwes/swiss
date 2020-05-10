@@ -1,65 +1,53 @@
-import { element as core } from '../core/src/core.js';
-import component from './enhancers/component.js';
-import propsToAttrs from './enhancers/props-to-attrs.js';
-import {
-  compose,
-  extend,
-  uniqueId
-} from './utils.js';
+import { propsElement } from './props-element.js';
+import { updatingElement } from './updating-element.js';
+import { completeAssign, kebabCase } from './utils.js';
 
 /**
- * Quick and dirty way to add default enhancers and options.
- * @type {Object}
+ * Quick and dirty way to add default mixins.
+ * @type {Array}
  * @ignore
  */
-export const options = {
-  enhancers: [propsToAttrs(), component()]
-};
+export const mixins = [propsElement, updatingElement];
 
-/**
- * Defines a custom element in the `CustomElementRegistry` which renders the component which is passed as an argument.
- *
- * @param {string} name - The tag name for the custom element.
- * @param {Function} comp - The component that is rendered in the element.
- * @param {Function} [enhancer] - The element enhancer. You may optionally specify it to enhance the element with third-party capabilities such as middleware, custom renderer, public API, etc. The only element enhancers that ship with Swiss are `applyMiddleware` and `renderer`.
- * @param {Object|Array} [options] - Options object or `observedAttributes` only array for shorter syntax.
- * @param {Array} [options.observedAttributes] - Attributes to observe for adding, removing or changing which will trigger a component update if needed.
- * @param {string} [options.extends] - Specifies the built-in element your element inherits from if any (e.g. `extends: 'button'`).
- * @param {('open'|'closed')} [options.shadow] - Defines the shadow root mode, by default no shadow root is created and everything is rendered straight on the custom element.
- *
- * The options object is also passed to all the enhancers.
- *
- * @return {HTMLElement}
- */
-export function element(name, component, enhancer, opts) {
-  if (typeof name === 'function') {
-    opts = enhancer;
-    enhancer = component;
-    component = name;
-    name = uniqueId('s-');
-  }
 
-  if (typeof enhancer !== 'function' && opts == null) {
-    opts = enhancer;
-    enhancer = undefined;
-  }
+export function Element(opts = {}, Base = HTMLElement) {
+  const CE = class extends Base {
 
-  if (enhancer != null && typeof enhancer !== 'function') {
-    throw new Error('Enhancer should be a function.');
-  }
+    static get observedAttributes() {
+      const props = opts.props || {};
 
-  // To shorten syntax if opts is an array assume it's `observedAttributes`.
-  if (Array.isArray(opts)) {
-    opts = { observedAttributes: opts };
-  }
+      CE.setups = [...CE.mixins, opts.setup]
+        .map(mix => mix && mix(CE, opts));
 
-  opts = extend({ component }, options, opts);
-  enhancer = compose(
-    enhancer,
-    ...options.enhancers
-  );
+      return Object.keys(props).map(kebabCase);
+    }
 
-  return core(name, enhancer, opts);
+    constructor() {
+      super();
+      CE.setups.forEach((setup) => {
+        completeAssign(this, setup && setup(this));
+      });
+    }
+
+    connectedCallback() {
+      this.connected && this.connected();
+    }
+
+    disconnectedCallback() {
+      this.disconnected && this.disconnected();
+    }
+
+    attributeChangedCallback(attr, oldValue, newValue) {
+      this.attributeChanged && this.attributeChanged(attr, oldValue, newValue);
+    }
+  };
+
+  CE.mixins = [...mixins];
+  return CE;
 }
 
-export { component, propsToAttrs };
+export function define(name, opts) {
+  const CE = Element(opts);
+  customElements.define(name, CE);
+  return CE;
+}

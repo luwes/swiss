@@ -1,87 +1,200 @@
-import { element, renderer } from '../src/index.js';
+import test from 'tape';
+import spy from 'ispy';
+import { define, reflect, readonly } from 'swiss';
+import { element } from './_utils.js';
 
-it('element returns a function', () => {
-  element('s-10', () => `Say cheese`).should.be.a('function');
+test('define returns a function', (t) => {
+  t.equal(typeof define('s-10'), 'function');
+  t.end();
 });
 
-it('element creator returns a function', () => {
-  const SwissElement = element('s-11', () => `Say cheese`);
-  SwissElement.should.be.a('function');
-});
-
-it('custom element lifecycle callbacks work', () => {
-  const customLifecycle = createElement => options => {
-    const el = createElement(options);
-    el.connectedCallback = sinon.spy();
-    el.disconnectedCallback = sinon.spy();
-    el.attributeChangedCallback = sinon.spy();
-    return el;
+test('custom element lifecycle callbacks work', (t) => {
+  const customLifecycle = () => el => {
+    el.connected = spy();
+    el.disconnected = spy();
+    el.attributeChanged = spy();
+    return {};
   };
 
-  const cheese = element('s-cheese', () => `Say cheese`, customLifecycle, {
-    observedAttributes: ['hole']
-  })();
+  const cheese = element('s-cheese', {
+    props: { hole: 0 },
+    setup: customLifecycle
+  });
 
   document.body.appendChild(cheese);
   cheese.setAttribute('hole', 1);
   cheese.remove();
 
-  expect(cheese.connectedCallback).to.have.been.calledOnce;
-  expect(cheese.disconnectedCallback).to.have.been.calledOnce;
-  expect(cheese.attributeChangedCallback).to.have.been.calledOnce;
+  t.equal(cheese.connected.callCount, 1);
+  t.equal(cheese.disconnected.callCount, 1);
+  t.equal(cheese.attributeChanged.callCount, 1);
+  t.end();
 });
 
-it('element can be enhanced', () => {
-  const customRender = sinon.spy((root, html) => (root.innerHTML = html));
+test('attrs are kebab cased', (t) => {
+  const el = element('s-4', { props: reflect({ observeMe: 3 }) });
 
-  element('swiss-element', () => `Say cheese`, renderer(customRender));
-
-  const swissElement = document.createElement('swiss-element');
-  document.body.appendChild(swissElement);
-
-  expect(swissElement.innerHTML).to.equal('Say cheese');
-  expect(customRender).to.have.been.called;
+  t.assert(el.observeMe);
+  t.strictEqual(el.getAttribute('observe-me'), '3');
+  t.end();
 });
 
-it('element can extend a native', () => {
-  function RenderButton() {
-    return `I am button`;
-  }
+test('prop types are converted to attribute strings and back', (t) => {
+  const el = element('s-1', {
+    props: {
+      ...reflect({
+        num: 4,
+        str: 'stringy',
+      }),
+      arr: {
+        get: (host, val = [1, 2, 3]) => val,
+        toAttribute: JSON.stringify,
+        reflect: true,
+      },
+      obj: {
+        get: (host, val = { key1: 1, key2: [9, 8, 7] }) => val,
+        set: (host, val) => val,
+        toAttribute: JSON.stringify,
+        fromAttribute: JSON.parse,
+        reflect: true,
+      }
+    }
+  });
 
-  const customRender = sinon.spy((root, html) => (root.innerHTML = html));
+  t.equal(el.getAttribute('num'), '4');
+  t.equal(el.getAttribute('str'), 'stringy');
+  t.equal(el.getAttribute('arr'), '[1,2,3]');
+  t.equal(el.getAttribute('obj'), '{"key1":1,"key2":[9,8,7]}');
 
-  const button = element('s-12', RenderButton, renderer(customRender))();
-  document.body.appendChild(button);
+  el.setAttribute('obj', '{"keanu":4}');
+  t.deepEqual(el.obj, { keanu: 4 });
 
-  expect(button.innerHTML).to.equal('I am button');
-  expect(button instanceof HTMLElement).to.be.true;
+  t.end();
 });
 
-it('non function enhancer throws', () => {
-  function RenderButton() {
-    return `I am button`;
-  }
+test('attributes values are available as prop', (t) => {
+  define('my-element', {
+    props: {
+      hello: '',
+      swiss: ''
+    }
+  });
 
-  assert.throws(
-    () => element('s-13', RenderButton, [], {}),
-    Error,
-    'Enhancer should be a function.'
-  );
+  document.body.innerHTML = '<my-element hello="world"></my-element>';
+  const el = document.querySelector('my-element');
+
+  t.strictEqual(el.hello, 'world');
+
+  el.setAttribute('swiss', 99);
+  t.strictEqual(el.swiss, '99');
+  t.end();
 });
 
-it('update triggers a render', () => {
-  let count = 0;
-  const el = element('s-14', () => count++)();
-  document.body.appendChild(el);
+test('handles null properties', (t) => {
+  const el = element('s-2', { props: reflect({ hello: 'world' }) });
 
-  el.update = sinon.spy(el.update);
-  el.render = sinon.spy(el.render);
-  el.renderer = sinon.spy(el.renderer);
+  t.assert(el.hello);
 
-  el.update();
-  assert(count, 1);
+  el.hello = null;
+  t.strictEqual(el.hello, null);
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute#Notes
+  t.strictEqual(el.getAttribute('hello'), null);
+  t.end();
+});
 
-  expect(el.update).to.have.been.calledOnce;
-  expect(el.render).to.have.been.calledOnce;
-  expect(el.renderer).to.have.been.calledOnce;
+test('handles bool properties', (t) => {
+  const el = element('s-22', { props: reflect({ checked: false }) });
+
+  t.assert(!el.checked);
+
+  el.checked = true;
+  t.strictEqual(el.checked, true);
+  t.strictEqual(el.getAttribute('checked'), '');
+  t.end();
+});
+
+test('props keep their type', (t) => {
+  const el = element('s-3', {
+    props: reflect({ observeMe: [1, 2, 3] })
+  });
+
+  t.assert(el.observeMe);
+  t.assert(Array.isArray(el.observeMe));
+  t.end();
+});
+
+test('prop sets queue an update on changes', async (t) => {
+  const el = element('s-5', {
+    props: {
+      autoplay: false,
+      muted: false
+    }
+  });
+
+  el.update = spy();
+
+  el.autoplay = true;
+  el.muted = true;
+
+  await Promise.resolve();
+
+  t.equal(el.update.callCount, 2);
+  t.end();
+});
+
+test('prop sets dont queue an update on no changes', async (t) => {
+  const el = element('s-6', {
+    props: {
+      autoplay: false,
+      muted: false
+    }
+  });
+
+  el.update = spy();
+
+  el.autoplay = false;
+  el.muted = false;
+
+  await Promise.resolve();
+
+  t.equal(el.update.callCount, 1);
+  t.end();
+});
+
+test('prop configs', (t) => {
+  const el = element('s-7', {
+    props: {
+      first: 'Tatiana',
+      last: {
+        get: (host, value = 'Luyten') => value,
+      },
+      fullname: {
+        get: ({ first, last }) => `${first} ${last}`,
+        reflect: true,
+      },
+      power: {
+        get: (host, value) => value,
+        set: (host, value) => value ** 2,
+      },
+      ...readonly({
+        duration: 17
+      })
+    }
+  });
+
+  t.throws(() => el.last = 'Ilina', /^TypeError: Cannot set property/);
+
+  t.equal(el.fullname, 'Tatiana Luyten');
+  t.equal(el.getAttribute('fullname'), 'Tatiana Luyten', 'reflects attribute');
+
+  el.first = 'Wesley';
+  t.equal(el.fullname, 'Wesley Luyten');
+
+  el.power = 10;
+  t.equal(el.power, 100);
+
+  t.equal(el.duration, 17);
+  t.throws(() => el.duration = 53, /^TypeError: Cannot set property/);
+
+  t.end();
 });
