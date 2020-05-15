@@ -17,6 +17,7 @@ export const updatingElement = () => element => {
       hasRequestedUpdate = true;
       updatePromise = enqueueUpdate();
     }
+    return updatePromise;
   }
 
   async function enqueueUpdate() {

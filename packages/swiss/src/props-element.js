@@ -46,9 +46,9 @@ function setup(element) {
 
   function set(name, value) {
     const oldValue = getProp(name);
-    setProp(name, value);
+    element.setProp(name, value);
 
-    element.requestUpdate(name, oldValue);
+    return element.requestUpdate(name, oldValue);
   }
 
   function getProp(name) {
