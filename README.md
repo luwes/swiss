@@ -39,6 +39,8 @@ define('s-counter', {
 });
 ```
 
+https://codesandbox.io/s/swiss-counter-cb45i
+
 ### Syntax
 
 ```js
