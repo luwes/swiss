@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+
+  <title>🇨🇭Swiss - Custom elements made easy.</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+
+  <style>
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    hr {
+      margin-bottom: 1rem;
+    }
+  </style>
+
+  <script src="https://unpkg.com/microlight@0.0.7/microlight.js"></script>
+  <script src="dist/swiss.js"></script>
+</head>
+<body>
+  <nav>
+    <img class="logo" src="swiss-logo.svg" width="150" alt="Swiss Custom Elements">
+    <a class="github" href="https://github.com/luwes/swiss">GitHub</a>
+  </nav>
+
+  <hr>
+
+  <main>
+    <p>Swiss provides a functional way of defining custom elements.</p>
+
+    <h2>Features</h2>
+
+    <ul>
+      <li>Extend the custom element with composition via mixins.
+      <li>Easy configuration of props, syncing to attributes and vice versa.
+      <li>Batched property sets to a single update callback.
+    </ul>
+
+    <h2>Example - Counter</h2>
+
+<pre><code class="microlight">
+  import { define } from 'swiss';
+  import { html, render } from 'lit-html';
+
+  const Counter = CE => el => ({
+    update: () =>
+      render(
+        html`
+          &lt;a href="#" @click="${() => el.count++}"&gt;
+            Clicked ${el.count} times
+          &lt;/a&gt;
+        `,
+        el
+      )
+  });
+
+  define('s-counter', {
+    props: { count: 0 },
+    setup: Counter
+  });
+</code></pre>
+
+    <a href="https://codesandbox.io/s/swiss-counter-cb45i" target="_blank">
+      https://codesandbox.io/s/swiss-counter-cb45i
+    </a>
+
+    <h2>Syntax</h2>
+
+<pre><code class="microlight">
+  import { define, mixins } from 'swiss';
+
+  // mixins is an array containing the default mixins set in Swiss.
+  // for global mixins push a function in the same format as setup below.
+
+  function setup(CE, options) {
+    // CE is the custom element class and options is the object defined below.
+    // This is called before the custom element is defined.
+    return (el) => {
+      // el is an instance of your custom element.
+      // anything that is returned in the object literal is mixed in the element.
+      return {
+        yell: () => console.log('Whahaaa')
+      }
+    };
+  }
+
+  define('s-counter', {
+    setup,
+    props: {
+      // shorthand property definition w/ default value 0
+      count: 0,
+
+      // readonly getter w/ default value of Steve
+      firstName: {
+        get: (el, val = 'Steve') => val,
+      },
+
+      // getter & setter w/ default value of King
+      lastName: {
+        get: (el, val = 'King') => val,
+        set: (host, value) => value,
+      },
+
+      // getter that reflects its value to the name attribute
+      name: {
+        get: ({ firstName, lastName }) => `${firstName} ${lastName}`,
+        reflect: true,
+      },
+
+      // prop config w/ custom to/from attribute converters
+      wheel: {
+        get: (host, val = { hub: 1, spokes: [9, 8, 7] }) => val,
+        set: (host, val) => val,
+        toAttribute: JSON.stringify,
+        fromAttribute: JSON.parse,
+        reflect: true,
+      }
+
+    }
+  });
+</code></pre>
+
+  </main>
+
+  <footer>
+    <p><strong>Swiss</strong> by <a class="underline" href="https://wesleyluyten.com">Wesley Luyten</a>. The source code is licensed <a class="underline" href="http://opensource.org/licenses/mit-license.php">MIT</a>.</p>
+  </footer>
+</body>
+</html>

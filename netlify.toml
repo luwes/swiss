@@ -1,0 +1,12 @@
+[build]
+  base    = ""
+  publish = "public"
+  command = "yarn build"
+
+[build.environment]
+  YARN_VERSION = "1.12.3"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

@@ -1,4 +1,4 @@
-# <a href="https://github.com/luwes/swiss"><img src="https://raw.githubusercontent.com/luwes/swiss/master/media/swiss-logo.svg?sanitize=true" height="36" alt="Swiss" /></a>
+# <a href="https://github.com/luwes/swiss"><img src="https://raw.githubusercontent.com/luwes/swiss/master/public/swiss-logo.svg?sanitize=true" height="36" alt="Swiss" /></a>
 
 [![Version](https://img.shields.io/npm/v/swiss.svg?color=success&style=flat-square)](https://www.npmjs.com/package/swiss)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/swiss.svg?style=flat-square&color=success)](https://codecov.io/gh/luwes/swiss)
