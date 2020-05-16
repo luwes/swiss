@@ -182,7 +182,7 @@ test('prop configs', (t) => {
     }
   });
 
-  t.throws(() => el.last = 'Ilina', /^TypeError: Cannot set property/);
+  t.throws(() => el.last = 'Ilina', /^TypeError/i);
 
   t.equal(el.fullname, 'Tatiana Luyten');
   t.equal(el.getAttribute('fullname'), 'Tatiana Luyten', 'reflects attribute');
@@ -194,7 +194,7 @@ test('prop configs', (t) => {
   t.equal(el.power, 100);
 
   t.equal(el.duration, 17);
-  t.throws(() => el.duration = 53, /^TypeError: Cannot set property/);
+  t.throws(() => el.duration = 53, /^TypeError/i);
 
   t.end();
 });
