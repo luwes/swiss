@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
     "@babel/preset-env": "^7.9.0",
     "@rollup/plugin-alias": "^3.0.1",
     "@rollup/plugin-babel": "^5.0.0",

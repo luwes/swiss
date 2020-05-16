@@ -80,7 +80,7 @@ module.exports = function(config) {
     // browserLogOptions: { terminal: true },
     // browserConsoleLogOptions: { terminal: true },
     browserConsoleLogOptions: {
-      level: 'warn', // Filter on warn messages.
+      level: sauceLabs ? 'log' : 'warn', // Filter on warn messages.
       format: '%b %T: %m',
       terminal: true
     },
@@ -163,6 +163,7 @@ module.exports = function(config) {
             'packages/*/**/src/**/*.js'
         }),
         sauceLabs && babel({
+          babelHelpers: 'bundled',
           include: [
             'packages/swiss/**'
           ]
