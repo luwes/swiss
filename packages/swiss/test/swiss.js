@@ -200,6 +200,28 @@ test('prop configs', (t) => {
   t.end();
 });
 
+test('prop configs 2', (t) => {
+  const el = element('s-8', {
+    props: {
+      autoplay: false,
+      volume: 1,
+      duration: {
+        value: 0
+      }
+    }
+  });
+
+  t.equal(el.getProp('duration'), 0);
+
+  el.setAttribute('autoplay', '');
+  t.equal(el.autoplay, true);
+
+  el.setAttribute('volume', '0.7');
+  t.equal(el.volume, 0.7);
+
+  t.end();
+});
+
 test('completeAssign - should mutate target and return same object', t => {
   const target = { a: 4 };
   const expected = { a: 4, b: 3 };

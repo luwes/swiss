@@ -52,7 +52,7 @@ function setup(element) {
   }
 
   function getProp(name) {
-    if (propConfigs[name]) {
+    if (propConfigs[name] && propConfigs[name].get) {
       return propConfigs[name].get(element, cache[name]);
     }
     return cache[name];
