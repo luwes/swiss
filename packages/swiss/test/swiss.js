@@ -211,7 +211,9 @@ test('prop configs 2', (t) => {
     }
   });
 
-  t.equal(el.getProp('duration'), 0);
+  t.equal(el.getProp('duration'), undefined);
+  el.setProp('duration', 5);
+  t.equal(el.getProp('duration'), 5);
 
   el.setAttribute('autoplay', '');
   t.equal(el.autoplay, true);
