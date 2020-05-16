@@ -1,6 +1,7 @@
 import test from 'tape';
 import spy from 'ispy';
 import { define, reflect, readonly } from 'swiss';
+import { completeAssign } from '../src/utils.js';
 import { element } from './_utils.js';
 
 test('define returns a function', (t) => {
@@ -23,7 +24,7 @@ test('custom element lifecycle callbacks work', (t) => {
 
   document.body.appendChild(cheese);
   cheese.setAttribute('hole', 1);
-  cheese.remove();
+  cheese.parentNode.removeChild(cheese);
 
   t.equal(cheese.connected.callCount, 1);
   t.equal(cheese.disconnected.callCount, 1);
@@ -195,6 +196,18 @@ test('prop configs', (t) => {
 
   t.equal(el.duration, 17);
   t.throws(() => el.duration = 53, /^TypeError/i);
+
+  t.end();
+});
+
+test('completeAssign - should mutate target and return same object', t => {
+  const target = { a: 4 };
+  const expected = { a: 4, b: 3 };
+
+  const actual = completeAssign(target, { b: 3 });
+
+  t.assert(actual === target);
+  t.deepEqual(actual, expected);
 
   t.end();
 });

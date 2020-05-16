@@ -128,7 +128,6 @@ module.exports = function(config) {
     frameworks: ['tap'],
 
     files: [
-      'https://polyfill.io/v3/polyfill.min.js?features=Element.prototype.dataset%2CArray.from',
       'https://unpkg.com/@webcomponents/custom-elements',
       'https://unpkg.com/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js',
       {

@@ -5,11 +5,11 @@ export function completeAssign(target, ...sources) {
     configurable: true,
   };
   sources.forEach((source) => {
-    for (const prop in source) {
-      const descriptor = Object.getOwnPropertyDescriptor(source, prop);
-      if (descriptor) {
+    if (source) {
+      Object.keys(source).forEach(prop => {
+        const descriptor = Object.getOwnPropertyDescriptor(source, prop);
         Object.defineProperty(target, prop, Object.assign(descriptor, options));
-      }
+      });
     }
   });
   return target;
