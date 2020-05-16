@@ -1,17 +1,15 @@
 sudo: true
-
 language: node_js
-
 node_js:
-  - "10"
-
-addons:
-  chrome: stable # have Travis install Chrome stable.
-
+  - "13"
 cache:
   yarn: true
   directories:
     - node_modules
+
+addons:
+  chrome: stable # have Travis install Chrome stable.
+  sauce_connect: true
 
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
@@ -21,7 +19,7 @@ install:
   - yarn
 
 script:
-  - yarn test --single-run
+  - COVERAGE=true yarn test --single-run --console --stack --log-level debug
 
 after_success:
   - yarn run coverage
