@@ -2,6 +2,15 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.0.0 - 2020-05-15
+
+### Created
+
+- Added Swiss v2 which is a major version so breaking changes w/ v1.
+- With v2 the goal was to have as little code as possible while providing a simple functional way of defining a custom element. 
+- It borrowed some concepts from Hybrids (prop descriptors), Lit-element and SkateJS (batched update) but has some differences too like synchronous updates/reflection of prop <-> attribute. 
+- The `setup` function uses the revealing module pattern and maintains the possibility to update the custom element's prototype and later mix-in methods in the element instance as well.
+
 ## 1.2.1 - 2019-11-15
 
 ### Fixed
