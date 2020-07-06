@@ -40,13 +40,10 @@ function setup(element) {
   let ignoreAttributeChange;
   let ignorePropChange;
 
-  element.getProp = getProp;
-  Object.keys(propConfigs).forEach(updateAttr);
-
 
   function set(name, value) {
     const oldValue = getProp(name);
-    element.setProp(name, value);
+    element.setProp(name, value, oldValue);
 
     return element.requestUpdate(name, oldValue);
   }
@@ -91,7 +88,13 @@ function setup(element) {
     }
   }
 
-  function attributeChanged(name, oldValue, value) {
+  function _connected() {
+    Object.keys(propConfigs).forEach(name => {
+      _attributeChanged(name, null, element.getAttribute(name));
+    });
+  }
+
+  function _attributeChanged(name, oldValue, value) {
     if (ignoreAttributeChange) {
       return;
     }
@@ -112,6 +115,7 @@ function setup(element) {
     set,
     getProp,
     setProp,
-    attributeChanged,
+    _connected,
+    _attributeChanged,
   };
 }

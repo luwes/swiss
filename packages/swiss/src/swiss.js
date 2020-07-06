@@ -30,6 +30,7 @@ export function Element(opts = {}, Base = HTMLElement) {
     }
 
     connectedCallback() {
+      this._connected();
       this.connected && this.connected();
     }
 
@@ -38,6 +39,7 @@ export function Element(opts = {}, Base = HTMLElement) {
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
+      this._attributeChanged && this._attributeChanged(attr, oldValue, newValue);
       this.attributeChanged && this.attributeChanged(attr, oldValue, newValue);
     }
   };
