@@ -48,8 +48,15 @@ export function Element(opts = {}, Base = HTMLElement) {
   return CE;
 }
 
-export function define(name, opts) {
-  const CE = Element(opts);
-  customElements.define(name, CE);
+export function define(name, opts, El = Element) {
+  let options, Base;
+  if (opts && opts.extends) {
+    options = { extends: opts.extends };
+    Base = document.createElement(opts.extends).constructor;
+  }
+  const CE = El(opts, Base);
+  if (!customElements.get(name)) {
+    customElements.define(name, CE, options);
+  }
   return CE;
 }
