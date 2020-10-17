@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.1.0 - 2020-10-17
+
+### Added
+
+- Added shorthand for custom element built-ins.
+
+```js
+define('x-button', { extends: 'button' })
+```
+
 ## 2.0.1 - 2020-07-5
 
 ### Fixed

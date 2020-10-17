@@ -62,6 +62,7 @@ function setup(CE, options) {
 }
 
 define('s-counter', {
+  // extends: 'button' // for custom element built-ins
   setup,
   props: {
     // shorthand property definition w/ default value 0
