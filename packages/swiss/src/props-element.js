@@ -2,8 +2,11 @@ import { property, toAttribute, fromAttribute } from './property.js';
 import { camelCase, kebabCase } from './utils.js';
 
 export const propsElement = (CE, { props = {} }) => {
-  CE.propConfigs = {};
-  CE.defineProp = defineProp;
+  // if the base class has these already don't override.
+  if (!CE.propConfigs) {
+    CE.propConfigs = {};
+    CE.defineProp = defineProp;
+  }
 
   Object.keys(props)
     .forEach((key) => CE.defineProp(key, props[key]));

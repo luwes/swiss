@@ -10,14 +10,14 @@ import { completeAssign, kebabCase } from './utils.js';
 export const mixins = [propsElement, updatingElement];
 
 
-export function Element(opts = {}, Base = HTMLElement) {
+export function Element(def = {}, Base = HTMLElement) {
   const CE = class extends Base {
 
     static get observedAttributes() {
-      const props = opts.props || {};
+      const props = def.props || {};
 
-      CE.setups = [...CE.mixins, opts.setup]
-        .map(mix => mix && mix(CE, opts));
+      CE.setups = [...CE.mixins, def.setup]
+        .map(mix => mix && mix(CE, def));
 
       return Object.keys(props).map(kebabCase);
     }
@@ -39,24 +39,33 @@ export function Element(opts = {}, Base = HTMLElement) {
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
-      this._attributeChanged && this._attributeChanged(attr, oldValue, newValue);
+      this._attributeChanged(attr, oldValue, newValue);
       this.attributeChanged && this.attributeChanged(attr, oldValue, newValue);
     }
   };
 
+  CE.base = Base;
   CE.mixins = [...mixins];
   return CE;
 }
 
-export function define(name, opts, El = Element) {
-  let options, Base;
-  if (opts && opts.extends) {
-    options = { extends: opts.extends };
-    Base = document.createElement(opts.extends).constructor;
+let constructors = {};
+
+export function define(name, def = {}, El = Element) {
+  def.name = name;
+
+  let Base;
+  if (def.extends) {
+    const Ctor = constructors[def.extends];
+    Base = Ctor || document.createElement(def.extends).constructor;
+    Base.extends = Ctor ? Ctor.extends : def.extends;
   }
-  const CE = El(opts, Base);
+
+  const CE = El(def, Base);
+  constructors[name] = CE;
+
   if (!customElements.get(name)) {
-    customElements.define(name, CE, options);
+    customElements.define(name, CE, { extends: Base ? Base.extends : undefined });
   }
   return CE;
 }
