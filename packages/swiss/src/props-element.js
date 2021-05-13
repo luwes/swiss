@@ -53,7 +53,7 @@ function setup(element) {
 
   function getProp(name) {
     if (propConfigs[name] && propConfigs[name].get) {
-      return propConfigs[name].get(element, cache[name]);
+      return propConfigs[name].get(element, cache[name], cache);
     }
     return cache[name];
   }
@@ -62,7 +62,7 @@ function setup(element) {
     // Read-only props don't have a config.set but
     // should still be update-able by setProp.
     if (propConfigs[name] && propConfigs[name].set) {
-      value = propConfigs[name].set(element, value, cache[name]);
+      value = propConfigs[name].set(element, value, cache[name], cache);
     }
 
     cache[name] = value;
