@@ -1,57 +1,17 @@
-import { propsElement } from './props-element.js';
-import { updatingElement } from './updating-element.js';
-import { completeAssign, kebabCase } from './utils.js';
+import { Element, mixins } from 'swiss/element';
+import { PropsMixin } from './mixin-props.js';
+import { UpdateMixin } from './mixin-update.js';
 
 /**
  * Quick and dirty way to add default mixins.
  * @type {Array}
  * @ignore
  */
-export const mixins = [propsElement, updatingElement];
-
-
-export function Element(def = {}, Base = HTMLElement) {
-  const CE = class extends Base {
-
-    static get observedAttributes() {
-      const props = def.props || {};
-
-      CE.setups = [...CE.mixins, def.setup]
-        .map(mix => mix && mix(CE, def));
-
-      return Object.keys(props).map(kebabCase);
-    }
-
-    constructor() {
-      super();
-      CE.setups.forEach((setup) => {
-        completeAssign(this, setup && setup(this));
-      });
-    }
-
-    connectedCallback() {
-      this._connected();
-      this.connected && this.connected();
-    }
-
-    disconnectedCallback() {
-      this.disconnected && this.disconnected();
-    }
-
-    attributeChangedCallback(attr, oldValue, newValue) {
-      this._attributeChanged(attr, oldValue, newValue);
-      this.attributeChanged && this.attributeChanged(attr, oldValue, newValue);
-    }
-  };
-
-  CE.base = Base;
-  CE.mixins = [...mixins];
-  return CE;
-}
+mixins.push(PropsMixin, UpdateMixin);
 
 let constructors = {};
 
-export function define(name, def = {}, El = Element) {
+function define(name, def = {}, El = Element) {
   def.name = name;
 
   let Base;
@@ -69,3 +29,11 @@ export function define(name, def = {}, El = Element) {
   }
   return CE;
 }
+
+export {
+  define,
+  mixins,
+  Element,
+  PropsMixin,
+  UpdateMixin
+};

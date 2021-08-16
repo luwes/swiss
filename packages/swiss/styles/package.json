@@ -1,0 +1,12 @@
+{
+  "name": "swiss-styles",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Swiss Styles",
+  "module": "../module/styles.js",
+  "main": "../dist/styles.js",
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
+  }
+}

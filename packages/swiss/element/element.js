@@ -1,0 +1,59 @@
+import { completeAssign, kebabCase } from '../src/utils.js';
+
+/**
+ * Quick and dirty way to add default mixins.
+ * @type {Array}
+ * @ignore
+ */
+export const mixins = [];
+
+
+export function Element(def = {}, Base = HTMLElement) {
+  const CE = class extends Base {
+
+    static get observedAttributes() {
+      const props = def.props || {};
+
+      CE.setups = [...CE.mixins, def.setup]
+        .map(mix => mix && mix(CE, def));
+
+      return Object.keys(props).map(kebabCase);
+    }
+
+    constructor() {
+      super();
+      CE.setups.forEach((setup) => {
+        completeAssign(this, setup && setup(this));
+      });
+    }
+
+    connectedCallback() {
+      this._connected && this._connected();
+      this.connected && this.connected();
+    }
+
+    disconnectedCallback() {
+      this.disconnected && this.disconnected();
+    }
+
+    attributeChangedCallback(attr, oldValue, newValue) {
+      this._attributeChanged && this._attributeChanged(attr, oldValue, newValue);
+      this.attributeChanged && this.attributeChanged(attr, oldValue, newValue);
+    }
+  };
+
+  CE.base = Base;
+  CE.mixins = [...mixins];
+  return CE;
+}
+
+export function define(name, def = {}, El = Element) {
+  def.name = name;
+
+  const CE = El(def);
+
+  if (!customElements.get(name)) {
+    customElements.define(name, CE);
+  }
+  return CE;
+}

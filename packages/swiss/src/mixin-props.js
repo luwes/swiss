@@ -1,7 +1,7 @@
 import { property, toAttribute, fromAttribute } from './property.js';
 import { camelCase, kebabCase } from './utils.js';
 
-export const propsElement = (CE, { props = {} }) => {
+export const PropsMixin = (CE, { props = {} }) => {
   // if the base class has these already don't override.
   if (!CE.propConfigs) {
     CE.propConfigs = {};

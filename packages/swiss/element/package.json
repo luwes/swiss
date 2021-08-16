@@ -1,0 +1,12 @@
+{
+  "name": "swiss-element",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Swiss Element",
+  "module": "../module/element.js",
+  "main": "../dist/element.js",
+  "scripts": {
+    "lint": "eslint src",
+    "prepublishOnly": "yarn lint && (cd ../../.. && yarn build)"
+  }
+}

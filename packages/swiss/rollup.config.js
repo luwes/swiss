@@ -17,7 +17,16 @@ const terserPlugin = terser({
     properties: {
       regex: /^_\w/
     }
-  }
+  },
+  nameCache: {
+    props: {
+      cname: 6,
+      props: {
+        $_connected: '__c',
+        $_attributeChanged: '__a',
+      },
+    },
+  },
 });
 
 const config = {
@@ -40,6 +49,56 @@ const config = {
 };
 
 export default [
+  {
+    ...config,
+    input: 'element/element.js',
+    output: {
+      ...config.output,
+      file: 'module/element.js',
+      format: 'es'
+    }
+  },
+  {
+    ...config,
+    input: 'element/element.js',
+    output: {
+      ...config.output,
+      file: 'dist/element.js',
+      format: 'umd'
+    },
+    plugins: [
+      ...config.plugins,
+      babel({
+        babelHelpers: 'bundled',
+        compact: false,
+      })
+    ]
+  },
+  {
+    ...config,
+    input: 'styles/styles.js',
+    output: {
+      ...config.output,
+      file: 'module/styles.js',
+      format: 'es'
+    }
+  },
+  {
+    ...config,
+    input: 'styles/styles.js',
+    output: {
+      ...config.output,
+      file: 'dist/styles.js',
+      format: 'umd'
+    },
+    plugins: [
+      ...config.plugins,
+      babel({
+        babelHelpers: 'bundled',
+        compact: false,
+      })
+    ]
+  },
   {
     ...config,
     output: {

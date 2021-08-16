@@ -151,6 +151,8 @@ module.exports = function(config) {
         alias({
           entries: {
             tape: 'tape-browser',
+            'swiss/element': __dirname + '/packages/swiss/element/element.js',
+            'swiss/styles': __dirname + '/packages/swiss/styles/styles.js',
             'swiss': __dirname + '/packages/swiss/src/index.js'
           }
         }),

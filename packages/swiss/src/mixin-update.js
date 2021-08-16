@@ -1,5 +1,5 @@
 
-export const updatingElement = () => element => {
+export const UpdateMixin = () => element => {
   let changedProps = {};
   let updatePromise;
   let hasRequestedUpdate;
