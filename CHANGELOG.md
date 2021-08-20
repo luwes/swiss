@@ -2,6 +2,54 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.3.0 - 2020-08-20
+
+### Added
+
+- Added `swiss/element` for just defining a functional custom element without automatic props/attributes handling. Must use getters/setters and the `attributeChanged` callback. 
+- Added `swiss/styles` for a handy styles mixin.
+
+```js
+import { Element, define, mixins } from 'swiss/element';
+import { StylesMixin, css } from 'swiss/styles';
+
+mixins.push(StylesMixin);
+
+const styles = (selector) => css`
+  ${selector} {
+    display: block;
+  }
+`;
+
+const props = (el) => {
+  get title() {
+    return el.getAttribute('title');
+  },
+  set title(title) {
+    el.setAttribute('title', title);
+  },
+}
+
+const setup = (CE) => (el) => {
+
+  function attributeChanged(name) {
+    console.log(name);
+  }
+
+  return {
+    ...props(el),
+    attributeChanged
+  };
+};
+
+export const PlxPreview = define('plx-preview', {
+  styles,
+  props,
+  setup,
+});
+
+```
+
 ## 2.2.0 - 2020-05-13
 
 ### Added

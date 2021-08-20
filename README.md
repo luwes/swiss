@@ -97,3 +97,46 @@ define('s-counter', {
   }
 });
 ```
+
+### Without auto props/attributes & update mixins
+
+```js
+import { Element, define, mixins } from 'swiss/element';
+import { StylesMixin, css } from 'swiss/styles';
+
+mixins.push(StylesMixin);
+
+const styles = (selector) => css`
+  ${selector} {
+    display: block;
+  }
+`;
+
+const props = (el) => {
+  get title() {
+    return el.getAttribute('title');
+  },
+  set title(title) {
+    el.setAttribute('title', title);
+  },
+}
+
+const setup = (CE) => (el) => {
+
+  function attributeChanged(name) {
+    console.log(name);
+  }
+
+  return {
+    ...props(el),
+    attributeChanged
+  };
+};
+
+export const PlxPreview = define('plx-preview', {
+  styles,
+  props,
+  setup,
+});
+
+```
