@@ -18,7 +18,9 @@
   "module": "dist/swiss.js",
   "files": [
     "dist",
-    "src"
+    "src",
+    "element.js",
+    "styles.js"
   ],
   "prettier": {
     "tabWidth": 2,
