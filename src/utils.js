@@ -1,3 +1,11 @@
+export function createElement(tag, attrs = {}, ...children) {
+  const el = document.createElement(tag);
+  Object.keys(attrs).forEach(
+    (name) => attrs[name] != null && el.setAttribute(name, attrs[name])
+  );
+  children.forEach((child) => el.appendChild(child));
+  return el;
+}
 
 export function completeAssign(target, ...sources) {
   const options = {
@@ -6,7 +14,7 @@ export function completeAssign(target, ...sources) {
   };
   sources.forEach((source) => {
     if (source) {
-      Object.keys(source).forEach(prop => {
+      Object.keys(source).forEach((prop) => {
         const descriptor = Object.getOwnPropertyDescriptor(source, prop);
         Object.defineProperty(target, prop, Object.assign(descriptor, options));
       });

@@ -1,12 +1,10 @@
-
-export const UpdateMixin = () => element => {
+export const UpdateMixin = () => (element) => {
   let changedProps = {};
   let updatePromise;
   let hasRequestedUpdate;
   let getProp = element.getProp;
 
   enqueueUpdate(); // Initital update.
-
 
   function requestUpdate(name, oldValue) {
     if (getProp(name) == oldValue) return;
@@ -32,6 +30,6 @@ export const UpdateMixin = () => element => {
   }
 
   return {
-    requestUpdate
+    requestUpdate,
   };
 };

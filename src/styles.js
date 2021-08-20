@@ -1,3 +1,4 @@
+import { createElement } from './utils.js';
 
 export const StylesMixin = (CE, { styles, name }) => {
   const { base } = CE;
@@ -9,7 +10,8 @@ export const StylesMixin = (CE, { styles, name }) => {
     await Promise.resolve();
 
     if (styles) {
-      const selector = base && base.extends ? `${base.extends}[is="${name}"]` : name;
+      const selector =
+        base && base.extends ? `${base.extends}[is="${name}"]` : name;
       const sheet = getStyle(el);
       sheet.firstChild.data += styles(
         selector,
@@ -38,7 +40,7 @@ export function getStyle(target = document.head) {
 
 export function addCssRule(selector, props = {}) {
   const rule = `${selector}{${Object.keys(props)
-    .map(prop => `${prop}:${cssNumber(props[prop], prop)};`)
+    .map((prop) => `${prop}:${cssNumber(props[prop], prop)};`)
     .join('')}}`;
   const sheet = getStyle().sheet;
   return sheet.cssRules[sheet.insertRule(rule, sheet.cssRules.length)];
@@ -59,19 +61,9 @@ export function cssRuleIndex(rule) {
 }
 
 export function cssNumber(number, property) {
-  if (number === 0 ||
-    property === 'z-index' ||
-    property === 'opacity') {
+  if (number === 0 || property === 'z-index' || property === 'opacity') {
     return '' + number;
   }
   if (parseInt(number) + '' == number) number += 'px';
   return number;
-}
-
-export function createElement(tag, attrs = {}, ...children) {
-  const el = document.createElement(tag);
-  Object.keys(attrs).forEach(name =>
-    attrs[name] != null && el.setAttribute(name, attrs[name]));
-  children.forEach(child => el.appendChild(child));
-  return el;
 }

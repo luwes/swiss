@@ -1,4 +1,3 @@
-
 export function property(value, options) {
   const config = {
     value,

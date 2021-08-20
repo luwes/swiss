@@ -8,8 +8,7 @@ export const PropsMixin = (CE, { props = {} }) => {
     CE.defineProp = defineProp;
   }
 
-  Object.keys(props)
-    .forEach((key) => CE.defineProp(key, props[key]));
+  Object.keys(props).forEach((key) => CE.defineProp(key, props[key]));
 
   return setup;
 };
@@ -26,9 +25,11 @@ function defineProp(key, config) {
     get() {
       return this.getProp(key);
     },
-    set: config.set && function(value) {
-      this.set(key, value);
-    },
+    set:
+      config.set &&
+      function (value) {
+        this.set(key, value);
+      },
     enumerable: true,
     configurable: true,
   };
@@ -42,7 +43,6 @@ function setup(element) {
 
   let ignoreAttributeChange;
   let ignorePropChange;
-
 
   function set(name, value) {
     const oldValue = getProp(name);
@@ -92,7 +92,7 @@ function setup(element) {
   }
 
   function _connected() {
-    Object.keys(propConfigs).forEach(name => {
+    Object.keys(propConfigs).forEach((name) => {
       _attributeChanged(name, null, element.getAttribute(name));
     });
   }
@@ -107,7 +107,10 @@ function setup(element) {
 
       const propName = camelCase(name);
       const config = propConfigs[propName];
-      element[propName] = (config.fromAttribute || fromAttribute)(value, config);
+      element[propName] = (config.fromAttribute || fromAttribute)(
+        value,
+        config
+      );
 
       ignorePropChange = false;
     }
