@@ -2,6 +2,16 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.2.0 - 2020-05-13
+
+### Added
+
+- Added cache arg for easy prop defaults in get
+
+### Fixed
+
+- Fixed custom element built-in extends
+
 ## 2.1.0 - 2020-10-17
 
 ### Added
