@@ -1,4 +1,5 @@
 import { completeAssign, kebabCase } from './utils.js';
+export { completeAssign } from './utils.js';
 
 /**
  * Quick and dirty way to add default mixins.
