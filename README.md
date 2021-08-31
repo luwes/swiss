@@ -128,7 +128,6 @@ const setup = (CE) => (el) => {
   }
 
   return {
-    ...props(el),
     attributeChanged
   };
 };
@@ -138,5 +137,4 @@ export const PlxPreview = define('plx-preview', {
   props,
   setup,
 });
-
 ```

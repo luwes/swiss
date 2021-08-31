@@ -11,11 +11,17 @@ export const mixins = [];
 export function Element(def = {}, Base = HTMLElement) {
   const CE = class extends Base {
     static get observedAttributes() {
-      const props = def.props || {};
+      const isPropsFn = typeof def.props === 'function';
+      const propsKeys = isPropsFn
+        ? Object.getOwnPropertyNames(def.props())
+        : Object.keys(def.props || {});
 
-      CE.setups = [...CE.mixins, def.setup].map((mix) => mix && mix(CE, def));
+      CE.setups = [
+        isPropsFn && def.props,
+        ...[...CE.mixins, def.setup].map((mix) => mix && mix(CE, def)),
+      ];
 
-      return Object.keys(props).map(kebabCase);
+      return propsKeys.map(kebabCase);
     }
 
     constructor() {

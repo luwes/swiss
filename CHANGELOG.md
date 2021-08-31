@@ -2,6 +2,12 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.3.3 - 2020-08-31
+
+### Added
+
+- Automatically use passed `props` function for getters/setters.
+
 ## 2.3.0 - 2020-08-20
 
 ### Added
