@@ -4,20 +4,31 @@ export const StylesMixin = (CE, { styles, name }) => {
   const { base } = CE;
   CE.styles = styles;
 
-  return async (el) => {
+  return (el) => {
+    let isInit;
+
     // Await 1 tick here preventing this CustomElement error:
     // Uncaught DOMException: Failed to construct 'CustomElement': The result "must not have children"
-    await Promise.resolve();
+    setTimeout(addStyles);
 
-    if (styles) {
-      const selector =
-        base && base.extends ? `${base.extends}[is="${name}"]` : name;
-      const sheet = getStyle(el);
-      sheet.firstChild.data += styles(
-        selector,
-        base && base.styles ? base.styles(selector) : undefined
-      );
+    function addStyles() {
+      if (styles && !isInit) {
+        isInit = true;
+
+        const selector =
+          base && base.extends ? `${base.extends}[is="${name}"]` : name;
+        const sheet = getStyle(el);
+        sheet.firstChild.data += styles(
+          selector,
+          base && base.styles ? base.styles(selector) : undefined
+        );
+      }
     }
+
+    return {
+      connected: addStyles,
+      attributeChanged: addStyles,
+    };
   };
 };
 
