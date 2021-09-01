@@ -10,11 +10,12 @@ test('define returns a function', (t) => {
 });
 
 test('custom element lifecycle callbacks work', (t) => {
-  const customLifecycle = () => el => {
-    el.connected = spy();
-    el.disconnected = spy();
-    el.attributeChanged = spy();
-    return {};
+  const customLifecycle = () => () => {
+    return {
+      connected: spy(),
+      disconnected: spy(),
+      attributeChanged: spy()
+    };
   };
 
   const cheese = element('s-cheese', {

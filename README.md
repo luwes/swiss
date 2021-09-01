@@ -56,7 +56,11 @@ function setup(CE, options) {
     // el is an instance of your custom element.
     // anything that is returned in the object literal is mixed in the element.
     return {
-      yell: () => console.log('Whahaaa')
+      yell: () => console.log('Whahaaa'),
+
+      attributeChanged(name, oldValue, newValue) {},
+      connected() {},
+      disconnected() {}
     }
   };
 }

@@ -91,13 +91,13 @@ function setup(element) {
     }
   }
 
-  function _connected() {
+  function connected() {
     Object.keys(propConfigs).forEach((name) => {
-      _attributeChanged(name, null, element.getAttribute(name));
+      attributeChanged(name, null, element.getAttribute(name));
     });
   }
 
-  function _attributeChanged(name, oldValue, value) {
+  function attributeChanged(name, oldValue, value) {
     if (ignoreAttributeChange) {
       return;
     }
@@ -121,7 +121,7 @@ function setup(element) {
     set,
     getProp,
     setProp,
-    _connected,
-    _attributeChanged,
+    connected,
+    attributeChanged,
   };
 }

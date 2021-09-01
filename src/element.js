@@ -26,29 +26,32 @@ export function Element(def = {}, Base = HTMLElement) {
 
     constructor() {
       super();
+      this._mixins = [];
       CE.setups.forEach((setup) => {
-        completeAssign(this, setup && setup(this));
+        let tmp;
+        setup && this._mixins.push((tmp = setup(this) || {}));
+        completeAssign(this, tmp);
       });
     }
 
     connectedCallback() {
-      this._connected && this._connected();
-      this.connected && this.connected();
+      this._mixins.forEach((c) => c.connected && c.connected());
     }
 
     disconnectedCallback() {
-      this.disconnected && this.disconnected();
+      this._mixins.forEach((c) => c.disconnected && c.disconnected());
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
-      this._attributeChanged &&
-        this._attributeChanged(attr, oldValue, newValue);
-      this.attributeChanged && this.attributeChanged(attr, oldValue, newValue);
+      this._mixins.forEach(
+        (c) =>
+          c.attributeChanged && c.attributeChanged(attr, oldValue, newValue)
+      );
     }
   };
 
   CE.base = Base;
-  CE.mixins = [...mixins];
+  CE.mixins = [...mixins, ...def.mixins];
   return CE;
 }
 

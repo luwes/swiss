@@ -11,20 +11,6 @@ const terserPlugin = terser({
     passes: 2,
     drop_console: production,
   },
-  mangle: {
-    properties: {
-      regex: /^_\w/,
-    },
-  },
-  nameCache: {
-    props: {
-      cname: 6,
-      props: {
-        $_connected: '__c',
-        $_attributeChanged: '__a',
-      },
-    },
-  },
 });
 
 const config = {

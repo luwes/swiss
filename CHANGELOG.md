@@ -2,6 +2,13 @@
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 2.4.0 - 2020-09-01
+
+### Added
+
+- Call API methods `connected`, `disconnected`, `attributeChanged` of each mixin instead of potentially overwriting them on assign.
+- Expose all mixin API's via `element._mixins[index]`.
+
 ## 2.3.3 - 2020-08-31
 
 ### Added
