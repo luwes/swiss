@@ -27,6 +27,7 @@ export function Element(def = {}, Base = HTMLElement) {
     constructor() {
       super();
       this._mixins = [];
+
       CE.setups.forEach((setup) => {
         let tmp;
         setup && this._mixins.push((tmp = setup(this) || {}));
@@ -51,7 +52,7 @@ export function Element(def = {}, Base = HTMLElement) {
   };
 
   CE.base = Base;
-  CE.mixins = [...mixins, ...def.mixins];
+  CE.mixins = [...mixins];
   return CE;
 }
 
