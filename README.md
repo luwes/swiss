@@ -2,7 +2,7 @@
 
 [![Version](https://img.shields.io/npm/v/swiss.svg?color=success&style=flat-square)](https://www.npmjs.com/package/swiss)
 [![codecov](https://img.shields.io/codecov/c/github/luwes/swiss.svg?style=flat-square&color=success)](https://codecov.io/gh/luwes/swiss)
-![Badge size](http://img.badgesize.io/https://unpkg.com/swiss@latest/module/swiss.js?compression=gzip&label=gzip&style=flat-square&version=2)
+![Badge size](http://img.badgesize.io/https://unpkg.com/swiss@latest/dist/swiss.js?compression=gzip&label=gzip&style=flat-square&version=2)
 
 **npm**: `npm i swiss`  
 **cdn**: https://unpkg.com/swiss
